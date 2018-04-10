@@ -1,0 +1,104 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+            <h4 class="page-title">Invoice</h4>
+        </div>
+    </div>
+    <div class="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="text-center"><strong>Invoice # <span id="warranties_inv">{{invoice_no}}</span><input type="text" id="txt_warranties_inv" value="{{invoice_no}}" data-value="{{id}}" style="display: none; position: absolute; top: -2px; left: 657px; width: 6%;"></strong></div>
+                                    <hr style="border-top: 1px solid #dcdcdc; margin: 10px 0;" />
+                                    <address style="font-size: 13px; margin-bottom: 10px;">
+                                        <strong>
+                                            Capitol Starter Service Corporation
+                                            <br>6230 Getty Drive
+                                            <br>Sherwood, AR 72117
+                                            <br>Phone: 501-835-4449 Fax: 501-835-5814
+                                        </strong>
+                                    </address>
+                                    <span style="font-size: 13px;"><strong>Date: {{dateFormat order_date "MM/DD/YY"}}</strong></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-left">
+                                    <address style="font-size: 13px; margin: 10px 0;">
+                                        {{name}}
+                                        <br>{{person_name}}
+                                        <br>{{street}}
+                                        <br>{{city}}
+                                        <br>{{phone}}
+                                        <br>{{fax}}
+                                    </address>
+                                    <hr style="border-top: 1px solid #dcdcdc; margin: 10px 0;" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <address style="font-size: 13px;">
+                                        Number of components on P.O: {{number_of_components}}
+                                        <br> Ship Date: {{dateFormat bill_date "MM/DD/YY"}}
+                                        <br> Freight Bill # {{f_bill}}
+                                        <br> P.O. # {{order_id}}
+                                    </address>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Quantity</strong></td>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Components</strong></td>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Price</strong></td>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Sub Total</strong></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each orders}}
+                                                <tr>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;">{{this.qty}}</td>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;">{{this.description}}</td>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;">${{this.price}}</td>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;">${{total_price this.price this.qty}}</td>
+                                                </tr>
+                                                {{/each}}
+                                                <tr>
+                                                    <td class="no-line"></td>
+                                                    <td class="no-line"></td>
+                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Total</strong></td>
+                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>${{sub_total}}</strong></td>
+                                                </tr>
+                                                {{#if float}}
+                                                <tr>
+                                                    <td class="no-line"></td>
+                                                    <td class="no-line"></td>
+                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Tax</strong></td>
+                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;">8.5%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="no-line"></td>
+                                                    <td class="no-line"></td>
+                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Total</strong></td>
+                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>${{total_taxed_value}}</strong></td>
+                                                </tr>
+                                                {{/if}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="hidden-print">
+                                        <div class="pull-right">
+                                            <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

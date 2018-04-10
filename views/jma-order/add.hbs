@@ -1,0 +1,99 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+        </div>
+    </div>
+    <div class="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <h4 class="m-t-0 m-b-0">Add JMA Order</h4>
+                            <div class="row">
+                                <form class="" name="frmJMAOrder" id="frmJMAOrder" method="POST" action="/jma-orders/add" novalidate="">
+                                    <div class="col-md-6">
+                                        <div class="m-t-20">
+                                            <div class="form-group">
+                                                <label>JMA PO</label>
+                                                <div>
+                                                    <input type="text" id="jmapo" name="jmapo" class="form-control jmapo" required="required" data-parsley-required-message="Please enter JMA po of the product"
+                                                    placeholder="Please enter JMA po of the product">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="m-t-20">
+                                            <div class="form-group">
+                                                <label>PO Number</label>
+                                                <div>
+                                                    <input type="text" id="po" name="po" class="form-control po" required="required" data-parsley-required-message="Please enter po number of the product"
+                                                    placeholder="Please enter po number of the product">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table" id="jma-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Part Number</th>
+                                                <th>Quantity</th>
+                                                <th>Location</th>
+                                                <th>Customer</th>
+                                                <th>Order Date</th>
+                                                <th>Due Date</th>
+                                                <th>Shipping Cost</th>
+                                                <th>Core Return Date</th>
+                                                <th>Comment</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="qty" name="qty[]" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="location" name="location[]" class="form-control location" required="required" data-parsley-required-message="Please enter location" placeholder="Please enter location">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="customer" name="customer[]" class="form-control customer" required="required" data-parsley-required-message="Please enter customer name" placeholder="Please enter customer name">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date">
+                                                </td>
+                                                <!-- <td>
+                                                    <input type="text" id="serial_no" name="serial_no[]" class="form-control serial_no" required="required" data-parsley-required-message="Please enter serial no" placeholder="Please enter serial no">
+                                                </td> -->
+                                                <td>
+                                                    <input type="text" id="s_cost" name="s_cost[]" class="form-control s_cost" placeholder="Please enter shipping cost">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="core_ret_date" name="core_ret_date[]" class="form-control core_ret_date" required="required" data-parsley-required-message="Please enter core return date" placeholder="Please enter core return date">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="comment" name="comment[]" class="form-control"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment">
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:void(0)" class="add"><i class="ion-plus-circled add_data_jma"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light" id="btn-submit-jma" style="display:block;"> Submit </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>

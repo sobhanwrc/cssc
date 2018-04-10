@@ -1,0 +1,69 @@
+<div class="table-responsive">
+                                    <table class="table" id="warranty-table">
+                                        <thead>
+                                            <tr>
+                                                <th>PN</th>
+                                                <th>Location</th>
+                                                <th>Managers</th>
+                                                <th>Serial No</th>
+                                                <th>Freight Bill</th>
+                                                <th>Order Date</th>
+                                                <th>Due Date</th>
+                                                <th>Qty</th>
+                                                <th>Date Shipped</th>
+                                                <th>Date Returned</th>
+                                                <th>Date Reported</th>
+                                                <th>Date Ready</th>
+                                                <th>Comment</th>
+                                                <th>Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <td>
+                                                <input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product">
+                                            </td>
+                                            <td>
+                                                <select class="form-control location" name="location[]" required="required"></select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control managers" name="managers[]" required="required"></select>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="serial_no" name="serial_no[]" class="form-control" required="required" data-parsley-required-message="Please enter serial no of the product" placeholder="Please enter serial no of the product">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="f_bill" name="f_bill[]" class="form-control" required="required" data-parsley-required-message="Please enter freight bill of the product" placeholder="Please enter freight bill of the product">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="qty" name="qty[]" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="ship_date" name="ship_date[]" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="ret_date" name="ret_date[]" class="form-control ret_date" required="required" data-parsley-required-message="Please enter date returned" placeholder="Please enter date returned">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="rep_date" name="rep_date[]" class="form-control rep_date" required="required" data-parsley-required-message="Please enter date reported" placeholder="Please enter date reported">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="ready_date" name="ready_date[]" class="form-control ready_date" required="required" data-parsley-required-message="Please enter date ready" placeholder="Please enter date ready">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="comment" name="comment[]" class="form-control comment" data-parsley-required-message="Please enter comment" placeholder="Please enter comment">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="details" name="details[]" class="form-control details" data-parsley-required-message="Please enter details" placeholder="Please enter details">
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="add"><i class="ion-plus-circled add_waranties_data"></i></a>
+                                            </td>
+                                        </tbody>
+                                    </table>
+                                </div>

@@ -1,0 +1,181 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+        </div>
+    </div>
+    <div class="page-content-wrapper ">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <h4 class="m-t-0 m-b-0">Add Warranty</h4>
+                            <form class="" name="frmWarranty" id="frmWarranty" method="POST" action="/warranties/add" novalidate="">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="m-t-20">
+                                            <div class="form-group">
+                                                <label>PO Number</label>
+                                                <div>
+                                                    <input type="text" id="warr_po" name="po" class="form-control" required="required" data-parsley-required-message="Please enter po number of the product"
+                                                    placeholder="Please enter po number of the product">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Starts Warranty form -->
+                                <div class="warranty_form" id="warranty_form">
+                                    <div class="warranty_form_left">
+                                        <div class="box">
+                                            <div class="row">
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Part Number</label>
+                                                        <div>
+                                                            <input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Location</label>
+                                                        <div>
+                                                            <select class="form-control location" name="location[]" required="required">
+                                                                <option value="">Please select location</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Managers</label>
+                                                        <div>
+                                                            <select class="form-control managers" name="managers[]" required="required">
+                                                                <option value="">Please select manager</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Serial No#</label>
+                                                        <div>
+                                                            <input type="text" id="serial_no" name="serial_no[]" class="form-control"  placeholder="Please enter serial no of the product">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Freight Bill#</label>
+                                                        <div>
+                                                            <input type="text" id="f_bill" name="f_bill[]" class="form-control" placeholder="Please enter freight bill of the product">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Order Date</label>
+                                                        <div>
+                                                            <input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Due Date</label>
+                                                        <div>
+                                                            <input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Qty</label>
+                                                        <div>
+                                                            <input type="text" id="qty" name="qty[]" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Date Shipped</label>
+                                                        <div>
+                                                            <input type="text" id="ship_date" name="ship_date[]" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Date Returned</label>
+                                                        <div>
+                                                            <input type="text" id="ret_date" name="ret_date[]" class="form-control ret_date" required="required" data-parsley-required-message="Please enter date returned" placeholder="Please enter date returned">
+                                                        </div>
+                                                    </div>
+                                                </div>  
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Date Reported</label>
+                                                        <div>
+                                                            <input type="text" id="rep_date" name="rep_date[]" class="form-control rep_date" required="required" data-parsley-required-message="Please enter date reported" placeholder="Please enter date reported">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Date Ready</label>
+                                                        <div>
+                                                            <input type="text" id="ready_date" name="ready_date[]" class="form-control ready_date" required="required" data-parsley-required-message="Please enter date ready" placeholder="Please enter date ready">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Comment</label>
+                                                        <div>
+                                                            <textarea id="comment" name="comment[]" class="form-control comment" data-parsley-required-message="Please enter comment" placeholder="Please enter comment"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Details</label>
+                                                        <div>
+                                                            <textarea id="details" name="details[]" class="form-control details" data-parsley-required-message="Please enter details" placeholder="Please enter details"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-20">
+                                                    <div class="form-group">
+                                                        <label>Status</label>
+                                                        <div>
+                                                            <select class="form-control" name="invoice_status" id="invoice_status" required="required">
+                                                                <option value="1">Burnt</option>
+                                                                <option value="2">No Defects Found</option>
+                                                                <option value="3">Warranty Expired</option>
+                                                                <option value="4">Honored</option>
+                                                                <option value="5">Others</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="warranty_form_right">
+                                        <a href="javascript:void(0)" class="add"><i class="ion-plus-circled add_waranties_data"></i></a>
+                                        <a href="javascript:void(0)" class="remove-warranty" style="visibility: hidden;"><i class="ion-minus-circled"></i></a>
+                                    </div>
+                                </div>
+                                <!-- Ends Warranty form -->
+
+                                <button type="submit" class="btn btn-primary waves-effect waves-light" id="btn-submit-warranty" style="display:block;"> Submit </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+        </div>
+    </div>
+    <div class="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <h4 class="m-t-0 m-b-0">Purchase Order # {{results.0.po}}</h4>
+                            <div class="row">
+                                <form class="" name="frmJMAEditOrder" id="frmJMAEditOrder" method="POST" action="/jma-orders/edit/{{jmaorder_id}}" novalidate="">
+                                    <div class="col-sm-6 col-xs-12">
+                                        <div class="m-t-20">
+                                            <div class="form-group">
+                                                <label>JMA PO</label>
+                                                <div>
+                                                    <input type="text" id="jmapo" name="jmapo" class="form-control" required="required" data-parsley-required-message="Please enter JMA PO" placeholder="Please enter JMA PO" value="{{results.0.jmapo}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Part Number</label>
+                                                <div>
+                                                    <input type="hidden" id="po" value="{{results.0.po}}">
+                                                    <input type="hidden" id="row_id" value="{{jmaorder_id}}">
+                                                    <input type="hidden" name="curr_status" value="{{results.0.status}}">
+                                                    <input type="text" id="pn" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="{{results.0.pn}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Order Date</label>
+                                                <div>
+                                                    <input type="text" id="order_date" name="order_date" class="form-control datepicker" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="{{dateFormat results.0.ordered "MM-DD-YYYY"}}">
+                                                </div>
+                                            </div>
+                                            <!-- <div class="form-group">
+                                                <label>Serial no</label>
+                                                <div>
+                                                    <input type="text" id="serial_no" name="serial_no" class="form-control" required="required" data-parsley-required-message="Please enter serial no" placeholder="Please enter serial no" value="{{results.0.serial}}">
+                                                </div>
+                                            </div> -->
+                                            <div class="form-group">
+                                                <label>Quantity</label>
+                                                <div>
+                                                    <input type="text" id="qty" name="qty" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="{{results.0.qty}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Shipping Cost</label>
+                                                <div>
+                                                    <input type="text" id="s_cost" name="s_cost" class="form-control" placeholder="Please enter shipping cost" value="{{results.0.shipping_cost}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-xs-12">
+                                        <div class="m-t-20">
+                                            <div class="form-group">
+                                                <label>Customer</label>
+                                                <div>
+                                                    <input type="text" id="customer" name="customer" class="form-control" required="required" data-parsley-required-message="Please enter customer name" placeholder="Please enter customer name" value="{{results.0.customer}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Location</label>
+                                                <div>
+                                                    <input type="text" name="location" class="form-control location" required="required" data-parsley-required-message="Please enter location" placeholder="Please enter location" value="{{results.0.location}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Due Date</label>
+                                                <div>
+                                                    <input type="text" id="due_date" name="due_date" class="form-control datepicker" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="{{dateFormat results.0.due "MM-DD-YYYY"}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Freight Bill #</label>
+                                                <div>
+                                                    <input type="text" id="f_bill" name="f_bill" value ="{{results.0.freight_bill}}" class="form-control" data-parsley-required-message="Please enter Freight Bill" placeholder="Please enter Freight Bill">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Core Return Date</label>
+                                                <div>
+                                                    <input type="text" id="core_ret_date" name="core_ret_date" class="form-control datepicker" required="required" data-parsley-required-message="Please enter core return date" placeholder="Please enter core return date" {{#if (ne results.0.core_returned '0000-00-00 00:00:00')}} value="{{dateFormat results.0.core_returned "MM-DD-YYYY"}}" {{/if}}>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <div class="btn-group">
+                                                    <button type="submit" class="btn btn-primary waves-effect waves-light"> Update </button>
+                                                    {{#if_eq results.0.status '2'}}
+                                                    <button type="button" id="jmaorder_completed" data-ship-status="{{results.0.status}}" class="btn btn-primary waves-effect waves-light"> Complete </button>
+                                                    {{/if_eq}}
+                                                    {{#if_eq results.0.status '3'}}
+                                                    <button type="button" id="jmaorder_completed" data-ship-status="{{results.0.status}}" class="btn btn-primary waves-effect waves-light"> Complete </button>
+                                                    {{/if_eq}}
+                                                    <a title="Delete" href="/jma-orders/delete/{{jmaorder_id}}/" onclick="return confirm('Do you really want to delete the current record ?');"><button type="button" class="btn btn-primary waves-effect waves-light"> Delete </button></a>
+                                                    <!-- <a title="Packing List" id="packing_jma" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a> -->
+                                                    <a title="Invoice" id="invoice_jma" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>
+                                                    <a title="Delivery Confirmation" id="delivery_jma" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

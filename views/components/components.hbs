@@ -1,0 +1,90 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+        </div>
+    </div>
+    <div class="page-content-wrapper ">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <h4 class="m-b-30 m-t-0 pull-left">Components List</h4>
+                            <div class="btn-group dropdown-btn-group pull-right">
+                                <a href="/components/add">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light">Add Part No</button>
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+                            <form class="form-inline m-b-30" role="form" name="filterorder" id="filterorder" method="POST" action="/components" novalidate="">
+                                <div class="form-group">
+                                    <label class="sr-only" for="part_no">Part No.</label>
+                                    {{!-- <input type="text" value="{{part_no}}" class="form-control" name="part_no" id="part_no" placeholder="Enter part no" > --}}
+                                    <select class="selectpicker form-control part_no" name="part_no" data-live-search="true" title="All Components">
+                                        <!-- <option value="all">All Components</option> -->
+                                        {{#each part_nos}}
+                                            <option value="{{this.pn}}" {{#if_eq this.pn ../part_no}}selected="selected"{{/if_eq}}>{{this.pn}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                                <div class="form-group m-l-10">
+                                    <button type="submit" class="btn btn-success waves-effect waves-light m-l-10">Submit</button>
+                                    <a href="/components"><button type="button"class="btn btn-success waves-effect waves-light m-l-10 clear_filter_components">Clear</button></a>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    {{#if message}}
+                                        <div class="alert alert-success">{{message}}</div>
+                                    {{/if}}
+                                    <table id="componentTable" class="table table-striped table-bordered others">
+                                        <thead>
+                                            <tr>
+                                                <th>Sl No</th>
+                                                <th>Part Number</th>
+                                                <th>Description</th>
+                                                <th>Price</th>
+                                                <th>Code</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each orders}}
+                                            {{!-- <tr>
+                                                <td>{{inc @index}}</td>
+                                                <td>{{this.pn}}</td>
+                                                <td>{{this.description}}</td>
+                                                <td>{{this.price}}</td>
+                                                <td>{{this.j}}</td>
+                                            </tr> --}}
+                                            <tr>
+                                                <td>{{inc @index}}</td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.pn}}
+                                                    <input type="text" class="pn txt1" value="{{this.pn}}" style="display:none;position: absolute;top: 7px;width: 83%;">   
+                                                </td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.description}}
+                                                    <input type="text" class="description txt1" value="{{this.description}}" style="display:none;position: absolute;top: 7px;width: 83%;">   
+                                                </td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.price}}
+                                                    <input type="text" class="price txt1" value="{{this.price}}" style="display:none;position: absolute;top: 7px;width: 83%;">   
+                                                </td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.j}}
+                                                    <input type="text" class="j txt1" value="{{this.j}}" style="display:none;position: absolute;top: 7px;width: 83%;">   
+                                                </td>
+                                                <td>
+                                                    <a title="Edit" href="/components/edit/{{this.id}}/"><button type="button" class="btn waves-effect btn-default edit-btn"> <i class="fa fa-edit"></i> </button></a>
+                                                    {{!--  <a title="Delete" href="/components/delete/{{this.id}}/" onclick="return confirm('Do you really want to delete the current admin ?');"><button type="button" class="btn waves-effect btn-default delete-btn"> <i class="fa fa-remove"></i> </button></a> --}}
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

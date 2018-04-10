@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>CSSC</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta content="CSSC" name="description" />
+        <meta content="CSSC" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" /> {{!--
+        <link rel="shortcut icon" href="/assets/images/favicon.ico"> --}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+        <link rel="stylesheet" href="/assets/plugins/morris/morris.css">
+        <link href="/assets/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css" rel="stylesheet" type="text/css" media="screen">
+        <!-- Datatable  Styles-->
+        <link href="/assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/plugins/datatables/buttons.bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/plugins/datatables/fixedHeader.bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/plugins/datatables/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/plugins/datatables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/plugins/datatables/scroller.bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <!--<link href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css" rel="stylesheet" type="text/css" />-->
+        <!-- ...Datatable  Styles-->
+        <link rel="stylesheet" type="text/css" href="/assets/plugins/timepicker/bootstrap-timepicker.min.css">
+        <link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+        <link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
+        <link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" /> -->
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="/assets/css/icons.css" rel="stylesheet" type="text/css">
+        <link href="/assets/css/style.css" rel="stylesheet" type="text/css">
+        <link href="/assets/css/bootstrap-select.css" rel="stylesheet" type="text/css">
+    </head>
+
+    <body class="fixed-left">
+        <div id="wrapper">
+            {{> header }} {{> sidebar }}
+            <div class="content-page">
+                {{{body}}}
+                <footer class="footer"> © 2016 - 2017 CSSC - All Rights Reserved. </footer>
+            </div>
+        </div>
+
+        <div id="myOrderModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="" name="frmPlaceOrder" id="frmPlaceOrder" method="POST" action="" novalidate="" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Place Order</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="text" name="po" id="po" class="form-control" placeholder="Enter Purchase order No" required data-parsley-required-message="Please enter purchase order no"
+                            />
+                            <textarea name="comment" id="comment" class="form-control" placeholder="Enter comments" required data-parsley-required-message="Please enter comment"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close </button>
+                            <button type="submit" class="btn btn-primary">Save changes </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="myJMAModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="" name="frmPlaceJMA" id="frmPlaceJMA" method="POST" action="" novalidate="" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Place JMA Order</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="text" name="po_jma" id="po_jma" class="form-control" placeholder="Enter Purchase order No" required data-parsley-required-message="Please enter purchase order no"
+                            />
+                            <textarea name="comment_jma" id="comment_jma" class="form-control" placeholder="Enter comments" required data-parsley-required-message="Please enter comment"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close </button>
+                            <button type="submit" class="btn btn-primary">Save changes </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="myWarrantyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="" name="frmPlaceWarranty" id="frmPlaceWarranty" method="POST" action="" novalidate="" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Place Warranty</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="text" name="po_wrr" id="po_wrr" class="form-control" placeholder="Enter Purchase order No" required data-parsley-required-message="Please enter purchase order no"
+                            />
+                            <textarea name="comment_wrr" id="comment_wrr" class="form-control" placeholder="Enter comments" required data-parsley-required-message="Please enter comment"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close </button>
+                            <button type="submit" class="btn btn-primary">Save changes </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>
+        <script src="/assets/js/modernizr.min.js"></script>
+        <script src="/assets/js/detect.js"></script>
+        <script src="/assets/js/fastclick.js"></script>
+        <script src="/assets/js/jquery.slimscroll.js"></script>
+        <script src="/assets/js/jquery.blockUI.js"></script>
+        <script src="/assets/js/waves.js"></script>
+        <script src="/assets/js/wow.min.js"></script>
+        <script src="/assets/js/jquery.nicescroll.js"></script>
+        <script src="/assets/js/jquery.scrollTo.min.js"></script>
+        <script src="/assets/js/bootstrap-select.js"></script>
+        <!-- Datatable Script -->
+        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <script src="/assets/plugins/datatables/dataTables.bootstrap.js"></script>
+        <script src="/assets/plugins/datatables/dataTables.responsive.min.js"></script>
+        <script src="/assets/plugins/datatables/responsive.bootstrap.min.js"></script>
+        <!--<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
+        <script src="/assets/js/dataTables.editor.min.js"></script>-->
+        <!-- ...Datatable Script -->
+        <script src="/assets/plugins/morris/morris.min.js"></script>
+        <script src="/assets/plugins/raphael/raphael-min.js"></script>
+        <script src="/assets/plugins/RWD-Table-Patterns/dist/js/rwd-table.min.js" type="text/javascript"></script>
+        <script src="/assets/plugins/timepicker/bootstrap-timepicker.js"></script>
+        <script src="/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+        <script src="/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+        <script src="/assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script>
+        <script src="/assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>-->
+        <script src="/assets/pages/dashborad.js"></script>
+        <script src="/assets/js/app.js"></script>
+        <script type="text/javascript" src="/assets/plugins/parsleyjs/parsley.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
+        <script type="text/javascript">
+        var order_arr = [];
+        var jma_order_arr = [];
+        var warranty_arr = [];
+        var editor;
+        $(document).ready(function () {
+            /*var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    // document.getElementById("demo").innerHTML = this.responseText;
+                    console.log(JSON.parse(this.responseText));
+                    // $('.part_no').text("");
+                    $.each(JSON.parse(this.responseText), function (value, key) {
+                        $('.part_no').append($("<option></option>").attr("value", key.value).text(key.label));
+                    });
+                }
+            };
+            xhttp.open("GET", "/get-part_no", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send();*/
+            $('form').parsley();
+            $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+                $(".alert").slideUp(500);
+            });
+            $('#example').dataTable();
+            $("#datatable-filter").dataTable();
+            $("#datatable_1").dataTable();
+            $(".others").dataTable();
+            $('#datatable').dataTable();
+            $(".datepicker").datepicker({
+                autoclose: !0,
+                format: "mm-dd-yyyy"
+            });
+            var date = new Date();
+            date.setDate(date.getDate() + 10);
+            var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+            var current_date = $.datepicker.formatDate('mm-dd-yy', new Date());
+            var current_plus_seven_date = dateMsg;
+            $('.order_date').val(current_date);
+            $('.ship_date').val(current_date);
+            $('.ret_date').val(current_date);
+            $('.rep_date').val(current_date);
+            $('.ready_date').val(current_date);
+            $('.due_date').val(current_plus_seven_date);
+            $('.core_ret_date').val(current_date);
+
+            var count = 1;
+
+            $(document).on("click", ".add", function (e) {
+                $("#order-table > tbody").append('<tr>' +
+                    '<td><input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product"></td>' +
+                    '<td><input type="text" id="qty" name="qty[]" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity"></td>' +
+                    '<td><select class="form-control location" name="location[]" required="required"></select></td>' +
+                    '<td><select class="form-control managers" name="managers[]" required="required"></select></td>' +
+                    '<td><input type="text" id="order_date" name="order_date[]" class="form-control  order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date"></td>' +
+                    '<td><input type="text" id="due_date" name="due_date[]" class="form-control datepicker due_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter due date"></td>' +
+                    '<td><input type="text" id="ship_date" name="ship_date[]" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date"></td>' +
+                    '<td><input type="text" id="comment" name="comment[]" class="form-control" data-parsley-required-message="Please enter comment" placeholder="Please enter comment"></td>' +
+                    '<td><a href="javascript:void(0)" class="add"><i class="ion-plus-circled add_data"></i></a> ' +
+                    '<a href="javascript:void(0)" class="remove"><i class="ion-minus-circled"></i></a></td>' +
+                    '</tr>');
+
+                var date = new Date();
+                date.setDate(date.getDate() + 10);
+                var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+                var current_date = $.datepicker.formatDate('mm-dd-yy', new Date());
+                var current_plus_seven_date = dateMsg;
+                $('.order_date').val(current_date);
+                $('.ship_date').val(current_date);
+                $('.due_date').val(current_plus_seven_date);
+                $("#po").trigger("keyup");
+            });
+
+            $(document).on("click", ".add_waranties_data", function (e) {
+                count = count + 1;
+                $("#warranty_form").append('<div id="div-'+count+'" class="warranty_form_left"><div class="box"><div class="row">' +
+                    '<div class="col-20"><div class="form-group"><label>Part Number</label><div><input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Location</label><div><select class="form-control location" name="location[]" required="required"><option value="">Please select location</option></select></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Managers</label><div><select class="form-control managers" name="managers[]" required="required"><option value="">Please select manager</option></select></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Serial No#</label><div><input type="text" id="serial_no" name="serial_no[]" class="form-control"  placeholder="Please enter serial no of the product"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Freight Bill#</label><div><input type="text" id="f_bill" name="f_bill[]" class="form-control" placeholder="Please enter freight bill of the product"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Order Date</label><div><input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Due Date</label><div><input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Qty</label><div><input type="text" id="qty" name="qty[]" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Date Shipped</label><div><input type="text" id="ship_date" name="ship_date[]" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Date Returned</label><div><input type="text" id="ret_date" name="ret_date[]" class="form-control ret_date" required="required" data-parsley-required-message="Please enter date returned" placeholder="Please enter date returned"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Date Reported</label><div><input type="text" id="rep_date" name="rep_date[]" class="form-control rep_date" required="required" data-parsley-required-message="Please enter date reported" placeholder="Please enter date reported"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Date Ready</label><div><input type="text" id="ready_date" name="ready_date[]" class="form-control ready_date" required="required" data-parsley-required-message="Please enter date ready" placeholder="Please enter date ready"></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Comment</label><div><textarea id="comment" name="comment[]" class="form-control comment" data-parsley-required-message="Please enter comment" placeholder="Please enter comment"></textarea></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Details</label><div><textarea id="details" name="details[]" class="form-control details" data-parsley-required-message="Please enter details" placeholder="Please enter details"></textarea></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Status</label><div><select class="form-control" name="invoice_status" id="invoice_status" required="required"><option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option></select></div></div></div>' +
+                    '</div></div></div>');
+                
+                $('.remove-warranty').css('visibility', 'visible');
+                var date = new Date();
+                date.setDate(date.getDate() + 10);
+                var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+                var current_date = $.datepicker.formatDate('mm-dd-yy', new Date());
+                var current_plus_seven_date = dateMsg;
+                $('.order_date').val(current_date);
+                $('.due_date').val(current_plus_seven_date);
+                $('.ship_date').val(current_date);
+                $('.ret_date').val(current_date);
+                $('.rep_date').val(current_date);
+                $('.ready_date').val(current_date);
+                $("#po").trigger("keyup");
+            });
+
+            $(document).on("click", ".remove-warranty", function (e) {
+                /*warranty_arr.splice($(this).closest("tr").index(), 1);
+                $(this).closest("tr").remove();
+                if ($('#warranty-table > tbody > tr').length == 0) {
+                    $("#btn-submit-warranty").css('display', 'none');
+                }*/
+                if (count != 1) {
+                    $('#div-'+count).remove();
+                    count = count - 1;
+                }
+                if (count == 1) $('.remove-warranty').css('visibility', 'hidden');
+            });
+
+            $(document).on("click", ".add_data_jma", function (e) {
+                $('#jma-table > tbody').append('<tr>' +
+                    '<td><input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product"></td>' +
+                    '<td><input type="text" id="qty" name="qty[]" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity"></td>' +
+                    '<td><select class="form-control location" name="location[]" required="required"></select></td>' +
+                    '<td><select class="form-control managers" name="managers[]" required="required"></select></td>' +
+                    '<td><input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date"></td>' +
+                    '<td><input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date"></td>' +
+                    '<td><input type="text" id="s_cost" name="s_cost[]" class="form-control s_cost" placeholder="Please enter shipping cost"></td>' +
+                    '<td><input type="text" id="core_ret_date" name="core_ret_date[]" class="form-control core_ret_date" required="required" data-parsley-required-message="Please enter core return date" placeholder="Please enter core return date"></td>' +
+                    '<td><input type="text" id="comment" name="comment[]" class="form-control"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment"></td>' +
+                    '<td><a href="javascript:void(0)" class="add"><i class="ion-plus-circled add_data_jma"></i></a> ' +
+                    '<a href="javascript:void(0)" class="remove-jma"><i class="ion-minus-circled"></i></a></td>' +
+                    '</tr>');
+
+                var date = new Date();
+                date.setDate(date.getDate() + 10);
+                var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
+                var current_date = $.datepicker.formatDate('mm-dd-yy', new Date());
+                var current_plus_seven_date = dateMsg;
+                $('.order_date').val(current_date);
+                $('.due_date').val(current_plus_seven_date);
+                $('.core_ret_date').val(current_date);
+            });
+
+            $(document).on("click", "#packing", function (e) {
+                if ($('#f_bill').val() == "") {
+                    window.location.href = "/orders/packing/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                } else {
+                    window.location.href = "/orders/packing/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                }
+            });
+
+            $(document).on("click", "#invoice", function (e) {
+                if ($('#f_bill').val() == "") {
+                    window.location.href = "/orders/invoice/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                } else {
+                    window.location.href = "/orders/invoice/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                }
+            });
+
+            $(document).on("click", "#delivery", function (e) {
+                if ($('#f_bill').val() == "") {
+                    window.location.href = "/orders/delivery/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                } else {
+                    window.location.href = "/orders/delivery/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                }
+            });
+
+            $(document).on("click", "#packing_jma", function (e) {
+                if ($('#f_bill').val() == "") {
+                    window.location.href = "/jma-orders/packing/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                } else {
+                    window.location.href = "/jma-orders/packing/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                }
+            });
+
+            $(document).on("click", "#invoice_jma", function (e) {
+                if ($('#f_bill').val() == "") {
+                    window.location.href = "/jma-orders/invoice/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                } else {
+                    window.location.href = "/jma-orders/invoice/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                }
+            });
+
+            $(document).on("click", "#delivery_jma", function (e) {
+                if ($('#f_bill').val() == "") {
+                    window.location.href = "/jma-orders/delivery/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                } else {
+                    window.location.href = "/jma-orders/delivery/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                }
+            });
+
+            $(document).on("click", "#packing_warranties", function (e) {
+                if ($('#f_bill').val() == "") {
+                    window.location.href = "/warranties/packing/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                } else {
+                    window.location.href = "/warranties/packing/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                }
+            });
+
+            $(document).on("click", "#invoice_warranties", function (e) {
+                if ($('#invoice_status').val() == "4") {
+                    window.location.href = "/warranties/honored/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                } else {
+                    if ($('#f_bill').val() == "") {
+                        window.location.href = "/warranties/invoice/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                    } else {
+                        window.location.href = "/warranties/invoice/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                    }
+                }
+            });
+
+            $(document).on("click", "#delivery_warranties", function (e) {
+                if ($('#invoice_status').val() == "4") {
+                    window.location.href = "/warranties/honored/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                }
+                else {
+                    if ($('#f_bill').val() == "") {
+                        window.location.href = "/warranties/delivery/" + $('#po').val() + "/" + $('#row_id').val() + "/";
+                    } else {
+                        window.location.href = "/warranties/delivery/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
+                    }
+                }
+            });
+
+            $(document).on("click", "#order_completed", function (e) {
+                if ($(this).attr('data-ship-status') == '2') {
+                    alert('please shiped the order first');
+                } else {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "POST",
+                        url: "/complete_order",
+                        data: {
+                            id: $("#row_id").val()
+                        },
+                        success: function (response) {
+                            if (response === "1") {
+                                window.location.href = "/orders";
+                            }
+                            else {
+                                alert("error");
+                            }
+                        },
+                        error: function (xhr) {
+
+                        }
+                    });
+                }
+            });
+
+            $(document).on("click", "#jmaorder_completed", function (e) {
+                if ($(this).attr('data-ship-status') == '2') {
+                    alert('please shiped the order first');
+                } else {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "POST",
+                        url: "/complete_jma_order",
+                        data: {
+                            id: $("#row_id").val()
+                        },
+                        success: function (response) {
+                            if (response === "1") {
+                                window.location.href = "/jma-orders";
+                            }
+                            else {
+                                alert("error");
+                            }
+                        },
+                        error: function (xhr) {
+
+                        }
+                    });
+                }
+            });
+
+            $(document).on("click", "#warranties_completed", function (e) {
+                if ($(this).attr('data-ship-status') == '2') {
+                    alert('please shiped the order first');
+                } else {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "POST",
+                        url: "/complete_warranties_order",
+                        data: {
+                            id: $("#row_id").val()
+                        },
+                        success: function (response) {
+                            if (response === "1") {
+                                window.location.href = "/warranties";
+                            }
+                            else {
+                                alert("error");
+                            }
+                        },
+                        error: function (xhr) {
+
+                        }
+                    });
+                }
+            });
+
+            $("#frmUsers").submit(function (e) {
+                e.preventDefault();
+                if ($(this).parsley().isValid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/add-user-ajax",
+                        data: $("#frmUsers").serialize(),
+                        beforeSend: function () {
+                            $(".btn-primary").prop('value', 'Saving...');
+                        },
+                        success: function (response) {
+                            if (response === "1") {
+                                alert("Username already taken");
+                            }
+                            else if (response === "2") {
+                                window.location.href = "/users";
+                            }
+                            $(".btn-primary").prop('value', 'Add');
+                        },
+                        error: function (xhr) {
+                            $(".btn-primary").prop('value', 'Add');
+                        }
+                    });
+                }
+            });
+
+            $("#frmUserEdit").submit(function (e) {
+                e.preventDefault();
+                if ($(this).parsley().isValid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/edit-user-ajax",
+                        data: $("#frmUserEdit").serialize(),
+                        beforeSend: function () {
+                            $(".btn-primary").prop('value', 'Saving...');
+                        },
+                        success: function (response) {
+                            if (response === "2") {
+                                window.location.href = "/users";
+                            }
+                            else if (response === "0") {
+                                alert("Username already taken");
+                            }
+                            else {
+                                alert("Please try again");
+                            }
+                            $(".btn-primary").prop('value', 'Add');
+                        },
+                        error: function (xhr) {
+                            $(".btn-primary").prop('value', 'Add');
+                        }
+                    });
+                }
+            });
+
+            $("#frmChangePass").validate({
+                rules: {
+                    old_pass: {
+                        required: true
+                    },
+                    new_pass: {
+                        required: true
+                    },
+                    renew_pass: {
+                        required: true,
+                        equalTo: "#new_pass"
+                    }
+                },
+                messages: {
+                    old_pass: {
+                        required: "Please enter old password"
+                    },
+                    new_pass: {
+                        required: "Please enter new password"
+                    },
+                    renew_pass: {
+                        required: "Please enter confirm password",
+                        equalTo: "new password and confirm password must be same"
+                    }
+                },
+                submitHandler:function(form) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/change-pass-ajax",
+                        data: {
+                            id: $("#user_id").val(),
+                            oldpassword: $("#old_pass").val(),
+                            newpassword: $("#new_pass").val()
+                        },
+                        success:function(response) {
+                            if (response === "2") {
+                                window.location.href = "/users";
+                            }
+                            else if (response === "0") {
+                                alert("Old password didn't match");
+                            }
+                            else {
+                                alert("Please try again");
+                            }
+                        },
+                        error: function(xhr) {
+                            alert("Please try again");
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on("click", "#locationTable > tbody > tr > td", function (e) {
+            $(this).find("input:text").css("display", "block");
+            $(this).siblings().find("input:text").hide();
+        });
+
+        $(document).on("click", "#locationTable > tbody > tr", function (e) {
+            $(this).siblings().find("input:text").hide();
+        });
+
+        $(document).on("click", "#componentTable > tbody > tr > td", function (e) {
+            $(this).find("input:text").css("display", "block");
+            $(this).siblings().find("input:text").hide();
+        });
+
+        $(document).on("click", "#componentTable > tbody > tr", function (e) {
+            $(this).siblings().find("input:text").hide();
+        });
+
+        $(document).on("click", "#order_inv", function (e) {
+            $("#txt_order_inv").css("display", "block");
+        });
+
+        $(document).on("keydown", "#txt_order_inv", function (e) {
+            if (e.keyCode == 13) {
+                var flag = 0;
+                var id = $(this).data('value');
+                var value = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "/update-order-invoice",
+                    data: { id: id, value: value },
+                    async: false,
+                    success: function (response) {
+                        if (response == 1) {
+                            flag = 1;
+                        } else if (response == 0) {
+                            var r = alert("Invoice No already assigned to another order!");
+                            $(this).val(value);
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr) {
+                        flag = 0;
+                    }
+                });
+                if (flag == 1) {
+                    $("#order_inv").text($(this).val());
+                    $(this).hide();
+                    window.location.reload();
+                }
+            }
+        });
+
+        $(document).on("click", "#jmaorder_inv", function (e) {
+            $("#txt_jmaorder_inv").css("display", "block");
+        });
+
+        $(document).on("keydown", "#txt_jmaorder_inv", function (e) {
+            if (e.keyCode == 13) {
+                var flag = 0;
+                var id = $(this).data('value');
+                var value = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "/update-jmaorder-invoice",
+                    data: { id: id, value: value },
+                    async: false,
+                    success: function (response) {
+                        if (response == 1) {
+                            flag = 1;
+                        } else if (response == 0) {
+                            var r = alert("Invoice No already assigned to another JMA order!");
+                            $(this).val(value);
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr) {
+                        flag = 0;
+                    }
+                });
+                if (flag == 1) {
+                    $("#jmaorder_inv").text($(this).val());
+                    $(this).hide();
+                    window.location.reload();
+                }
+            }
+        });
+
+        $(document).on("click", "#warranties_inv", function (e) {
+            $("#txt_warranties_inv").css("display", "block");
+        });
+
+        $(document).on("keydown", "#txt_warranties_inv", function (e) {
+            if (e.keyCode == 13) {
+                var flag = 0;
+                var id = $(this).data('value');
+                var value = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "/update-warranties-invoice",
+                    data: { id: id, value: value },
+                    async: false,
+                    success: function (response) {
+                        if (response == 1) {
+                            flag = 1;
+                        } else if (response == 0) {
+                            var r = alert("Invoice No already assigned to another warranties!");
+                            $(this).val(value);
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr) {
+                        flag = 0;
+                    }
+                });
+                if (flag == 1) {
+                    $("#warranties_inv").text($(this).val());
+                    $(this).hide();
+                    window.location.reload();
+                }
+            }
+        });
+
+        $(document).on("keydown", ".txt", function (e) {
+            if (e.keyCode == 13) {
+                var flag = 0;
+                var id = $(this).closest('td').data('value');
+                var value = $(this).val();
+                var class_name = $(this).attr('class').split(" ");
+                $.ajax({
+                    type: "POST",
+                    url: "/update-location",
+                    data: { id: id, value: value, class_name: class_name[0] },
+                    async: false,
+                    success: function (response) {
+                        if (response == 1) {
+                            flag = 1;
+                        }
+                    },
+                    error: function (xhr) {
+                        flag = 0;
+                    }
+                });
+
+                if (flag == 1) {
+                    $(this).closest("td").text($(this).val());
+                    $(this).hide();
+                }
+            }
+        });
+
+        $(document).on("keydown", ".txt1", function (e) {
+            if (e.keyCode == 13) {
+                var flag = 0;
+                var id = $(this).closest('td').data('value');
+                var value = $(this).val();
+                var class_name = $(this).attr('class').split(" ");
+                $.ajax({
+                    type: "POST",
+                    url: "/update-components",
+                    data: { id: id, value: value, class_name: class_name[0] },
+                    async: false,
+                    success: function (response) {
+                        if (response == 1) {
+                            flag = 1;
+                        }
+                    },
+                    error: function (xhr) {
+                        flag = 0;
+                    }
+                });
+
+                if (flag == 1) {
+                    $(this).closest("td").text($(this).val());
+                    $(this).hide();
+                }
+            }
+        });
+
+        $(document).on("click", ".remove", function (e) {
+            order_arr.splice($(this).closest("tr").index(), 1);
+            $(this).closest("tr").remove();
+            if ($('#order-table > tbody > tr').length == 0) {
+                $("#btn-submit").css('display', 'none');
+            }
+        });
+
+        $(document).on("click", ".remove-jma", function (e) {
+            jma_order_arr.splice($(this).closest("tr").index(), 1);
+            $(this).closest("tr").remove();
+            if ($('#jma-table > tbody > tr').length == 0) {
+                $("#btn-submit-jma").css('display', 'none');
+            }
+        });
+
+        $(document).on("focus", ".pn", function (e) {
+            $(this).autocomplete({
+                source: "/get-product-no",
+                minLength: 2,
+                /*change: function (event, ui) {
+                    if (!ui.item) {
+                        alert("Please select part no");
+                        $(this).val("");
+                    }
+                },*/
+                focus: function (event, ui) {
+                    this.value = ui.item.label;
+                    // Prevent other event from not being execute
+                    event.preventDefault();
+                },
+                select: function (event, ui) {
+                    this.value = ui.item.label;
+                    event.preventDefault();
+                }
+            });
+        });
+
+        $(document).on("keyup", "#po", function (e) {
+        //$("#po").keyup(function (e) {
+            //if(this.value.length =='2') {
+            if (e.which == 8 || e.which == 46) {
+                if (this.value.length == "0") {
+                    $('.location').text("");
+                    $('.managers').text("");
+                } else {
+                    var mystr = this.value;
+                    var substr = mystr.substr(0, 2);
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // console.log(JSON.parse(this.responseText));
+                            $('.location').text("");
+                            $('.managers').text("");
+                            $.each(JSON.parse(this.responseText), function (value, key) {
+                                $('.location').append($("<option></option>").attr("value", key.value).text(key.label));
+                                $('.managers').append($("<option></option>").attr("value", key.manager).text(key.manager));
+                            });
+                        }
+                    };
+                    xhttp.open("POST", "/get-location-order", true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send("ln=" + substr.toUpperCase());
+                }
+            } else {
+                var mystr = this.value;
+                var substr = mystr.substr(0, 2);
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // document.getElementById("demo").innerHTML = this.responseText;
+                        //console.log(JSON.parse(this.responseText));
+                        $('.location').text("");
+                        $('.managers').text("");
+                        $.each(JSON.parse(this.responseText), function (value, key) {
+                            $('.location').append($("<option></option>").attr("value", key.value).text(key.label));
+                            $('.managers').append($("<option></option>").attr("value", key.manager).text(key.manager));
+                        });
+                    }
+                };
+                xhttp.open("POST", "/get-location-order", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("ln=" + substr.toUpperCase());
+            }
+            //}
+        });
+
+        $(document).on("keyup", "#warr_po", function (e) {
+        //$("#po").keyup(function (e) {
+            //if(this.value.length =='2') {
+            if (e.which == 8 || e.which == 46) {
+                if (this.value.length == "0") {
+                    $('.location').text("");
+                    $('.managers').text("");
+                } else {
+                    var mystr = this.value;
+                    var substr = mystr.substr(0, 2);
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // console.log(JSON.parse(this.responseText));
+                            $('.location').text("");
+                            $('.managers').text("");
+                            $.each(JSON.parse(this.responseText), function (value, key) {
+                                $('.location').append($("<option></option>").attr("value", key.value).text(key.label));
+                                $('.managers').append($("<option></option>").attr("value", key.manager).text(key.manager));
+                            });
+                        }
+                    };
+                    xhttp.open("POST", "/get-location-warranty", true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send("ln=" + substr.toUpperCase());
+                }
+            } else {
+                var mystr = this.value;
+                var substr = mystr.substr(0, 2);
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // document.getElementById("demo").innerHTML = this.responseText;
+                        //console.log(JSON.parse(this.responseText));
+                        $('.location').text("");
+                        $('.managers').text("");
+                        $.each(JSON.parse(this.responseText), function (value, key) {
+                            $('.location').append($("<option></option>").attr("value", key.value).text(key.label));
+                            $('.managers').append($("<option></option>").attr("value", key.manager).text(key.manager));
+                        });
+                    }
+                };
+                xhttp.open("POST", "/get-location-warranty", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("ln=" + substr.toUpperCase());
+            }
+            //}
+        });
+
+        $(document).on("focus", ".order_date", function (e) {
+            $(this).datepicker({
+                autoclose: !0,
+                changeYear: true,
+                format: "mm-dd-yyyy",
+            });
+        });
+
+        $(document).on("focus", ".due_date", function (e) {
+            $(this).datepicker({
+                autoclose: !0,
+                changeYear: true,
+                format: "mm-dd-yyyy",
+            });
+        });
+
+        $(document).on("focus", ".ship_date", function (e) {
+            $(this).datepicker({
+                autoclose: !0,
+                changeYear: true,
+                format: "mm-dd-yyyy"
+            });
+        });
+
+        $(document).on("focus", ".ret_date", function (e) {
+            $(this).datepicker({
+                autoclose: !0,
+                changeYear: true,
+                format: "mm-dd-yyyy",
+            });
+        });
+
+        $(document).on("focus", ".rep_date", function (e) {
+            $(this).datepicker({
+                autoclose: !0,
+                changeYear: true,
+                format: "mm-dd-yyyy",
+            });
+        });
+
+        $(document).on("focus", ".ready_date", function (e) {
+            $(this).datepicker({
+                autoclose: !0,
+                changeYear: true,
+                format: "mm-dd-yyyy",
+            });
+        });
+
+        $('.clear_filter').click(function (e) {
+            window.location.href = "/orders";
+        });
+
+        $('.clear_complete_filter').click(function (e) {
+            window.location.href = "/complete";
+        });
+
+        $('.clear_complete_warranties_filter').click(function (e) {
+            window.location.href = "/complete-warranties";
+        });
+
+        $('.clear_jma_filter').click(function (e) {
+            window.location.href = "/jma-orders";
+        });
+
+        $('.clear_warranty_filter').click(function (e) {
+            window.location.href = "/warranties";
+        });
+
+        $('.clear_filter_components').click(function (e) {
+            window.location.href = "/components";
+        });
+    </script>
+    </body>
+</html>

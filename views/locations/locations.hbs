@@ -1,0 +1,75 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+        </div>
+    </div>
+    <div class="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <div class="btn-toolbar">
+                                <div>
+                                    <h4 class="m-b-0 m-t-0 pull-left">Locations List</h4>
+                                    <div class="btn-group dropdown-btn-group pull-right">
+                                        <a href="/locations/add">
+                                            <button type="button" class="btn btn-primary waves-effect waves-light">Add Location</button>
+                                        </a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    {{#if message}}
+                                    <div class="alert alert-success">{{message}}</div>
+                                    {{/if}}
+                                    <table id="locationTable" class="table table-striped table-bordered others">
+                                        <thead>
+                                            <tr>
+                                                <th>Sl No</th>
+                                                <th>Code</th>
+                                                <th>Person Name</th>
+                                                <th>Contact</th>
+                                                <th>Street</th>
+                                                <th>City</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each orders}}
+                                            <tr>
+                                                <td>{{inc @index}}</td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.init}}
+                                                    <input type="text" class="init txt" value="{{this.init}}" style="display: none; position: absolute; top: 7px; width: 83%;">
+                                                </td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.person}}
+                                                    <input type="text" class="person txt" value="{{this.person}}" style="display: none; position: absolute; top: 7px; width: 83%;">
+                                                </td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.phone}}
+                                                    <input type="text" class="phone txt" value="{{this.phone}}" style="display: none; position: absolute; top: 7px; width: 83%;">
+                                                </td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.street}}
+                                                    <input type="text" class="street txt" value="{{this.street}}" style="display: none; position: absolute; top: 7px; width: 83%;">
+                                                </td>
+                                                <td data-value="{{this.id}}" style="position: relative;">{{this.city}}
+                                                    <input type="text" class="city txt" value="{{this.city}}" style="display: none; position: absolute; top: 7px; width: 83%;">
+                                                </td>
+                                                <td>
+                                                    <a title="Edit" href="/locations/edit/{{this.id}}"><button type="button" class="btn waves-effect btn-default edit-btn"> <i class="fa fa-edit"></i> </button></a>
+                                                    <a title="Delete" href="/locations/delete/{{this.id}}" onclick="return confirm('Do you really want to delete the current record ?');"><button type="button" class="btn waves-effect btn-danger delete-btn"> <i class="fa fa-trash"></i> </button></a>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

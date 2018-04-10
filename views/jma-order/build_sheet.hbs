@@ -1,0 +1,71 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+            <h4 class="page-title">Invoice</h4>
+        </div>
+    </div>
+    <div class="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-body">
+                                            {{#each orders}}
+                                            <p class="text-center"><strong>{{@key}}</strong></p>
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <td><strong>Purchase Order</strong></td>
+                                                            <td><strong>Part No</strong></td>
+                                                            <td><strong>Comp #</strong></td>
+                                                            <td class="text-center"><strong>Ordered</strong></td>
+                                                            <td class="text-center"><strong>Due Date</strong></td>
+                                                            <td class="text-center qn"><strong>Quantity</strong></td>
+                                                        </tr>
+                                                    </thead>
+                                                    {{#each this}}
+                                                    {{#if this.po}}
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{this.po}}</td>
+                                                            <td>{{this.pn}}</td>
+                                                            <td>{{this.n_comp}}</td>
+                                                            <td class="text-center">{{dateFormat this.ordered "MM-DD-YYYY"}}</td>
+                                                            <td class="text-center">{{dateFormat this.due "MM-DD-YYYY"}}</td>
+                                                            <td class="text-center">{{this.qty}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                    {{/if}}
+                                                    {{/each}}
+                                                    <tr>
+                                                        <td class="thick-line text-center"><strong>Total PO Quantity</strong></td>
+                                                        <td class="thick-line"></td>
+                                                        <td class="thick-line"></td>
+                                                        <td class="thick-line"></td>
+                                                        <td class="thick-line"></td>
+                                                        <td class="thick-line text-center"><strong>{{this.qty}}</strong></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            {{/each}} 
+                                            <div class="hidden-print">
+                                                <div class="pull-right">
+                                                    <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

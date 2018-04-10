@@ -1,0 +1,86 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+        </div>
+    </div>
+    <div class="page-content-wrapper ">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <h4 class="m-t-0 m-b-0">Add Order</h4>
+                            <div class="row">
+                                <form class="" name="frmAddOrder" id="frmAddOrder" method="POST" action="/orders/add" novalidate="">
+                                    <div class="col-sm-6 col-xs-12">
+                                        <div class="m-t-20">
+                                            <div class="form-group">
+                                                <label>PO Number</label>
+                                                <div>
+                                                    <input type="text" id="po" name="po" class="form-control" required="required" data-parsley-required-message="Please enter po number of the product"
+                                                    placeholder="Please enter po number of the product">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table" id="order-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Part Number</th>
+                                                <th>Quantity</th>
+                                                <th>Location</th>
+                                                <th>Managers</th>
+                                                <th>Order Date</th>
+                                                <th>Due Date</th>
+                                                <th style="width: 10%;">Ship Date</th>
+                                                <th>Comment</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product"
+                                                    placeholder="Please enter part number of the product">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="qty" name="qty[]" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity">
+                                                </td>
+                                                <!-- <td>
+                                                    <input type="text" id="location" name="location[]" class="form-control location" required="required" data-parsley-required-message="Please enter location"
+                                                    placeholder="Please enter location">
+                                                </td> -->
+                                                <td>
+                                                    <select class="form-control location" name="location[]" required="required"></select>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control managers" name="managers[]" required="required"></select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="ship_date" name="ship_date[]" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date">
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="comment" name="comment[]" class="form-control"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment">
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:void(0)" class="add"><i class="ion-plus-circled add_data"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light" id="btn-submit" style="display:block;"> Submit </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

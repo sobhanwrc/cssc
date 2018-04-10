@@ -1,0 +1,78 @@
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+            <h4 class="page-title">Packing List</h4>
+        </div>
+    </div>
+    <div class="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="width: 310px;">
+                                        <div class="text-center"><strong>Packing List</strong></div>
+                                        <hr style="border-top: 1px solid #dcdcdc; margin: 5px 0;" />
+                                        <address style="font-size: 13px; margin-bottom: 5px;">
+                                            <strong>
+                                                Capitol Starter Service Corporation
+                                                <br>6230 Getty Drive
+                                                <br>Sherwood, AR 72117
+                                                <br>Phone: 501-835-4449 Fax: 501-835-5814
+                                            </strong>
+                                        </address>
+                                        <span style="font-size: 13px;"><strong>Date: {{dateFormat order_date "MM/DD/YY"}}</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 text-left">
+                                    <div style="width: 310px;">
+                                        <address style="font-size: 13px; margin: 5px 0;">
+                                            {{name}}
+                                            <br>{{person_name}}
+                                            <br>{{street}}
+                                            <br>{{city}}
+                                            <br>{{phone}} {{fax}}
+                                        </address>
+                                        <hr style="border-top: 1px solid #dcdcdc; margin: 5px 0;" />
+                                        <h5 style="margin: 5px 0;">PO# - {{order_id}}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="table-responsive" style="width: 300px;">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td class="text-center" style="padding: 2px 8px; font-size: 13px;"><strong>Quantity</strong></td>
+                                                    <td class="text-center" style="padding: 2px 8px; font-size: 13px;"><strong>Product</strong></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each orders}}
+                                                <tr>
+                                                    <td class="text-center" style="padding: 2px 8px; font-size: 13px;">{{this.qty}}</td>
+                                                    <td class="text-center" style="padding: 2px 8px; font-size: 13px;">{{this.description}}</td>
+                                                </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="hidden-print">
+                                        <div class="pull-right">
+                                            <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
