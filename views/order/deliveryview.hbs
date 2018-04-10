@@ -52,8 +52,9 @@
                                                 <tr>
                                                     <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Quantity</strong></td>
                                                     <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Components</strong></td>
-                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Price</strong></td>
-                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Sub Total</strong></td>
+
+                                                    <!--<td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Price</strong></td>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Sub Total</strong></td>-->
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -61,30 +62,11 @@
                                                 <tr>
                                                     <td class="text-center" style="padding: 4px 8px; font-size: 13px;">{{this.qty}}</td>
                                                     <td class="text-center" style="padding: 4px 8px; font-size: 13px;">{{this.description}}</td>
-                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;">${{this.price}}</td>
-                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;">${{total_price this.price this.qty}}</td>
+                                                    <!--<td class="text-center" style="padding: 4px 8px; font-size: 13px;">${{this.price}}</td>
+                                                    <td class="text-center" style="padding: 4px 8px; font-size: 13px;">${{total_price this.price this.qty}}</td>-->
                                                 </tr>
                                                 {{/each}}
-                                                <tr>
-                                                    <td class="no-line"></td>
-                                                    <td class="no-line"></td>
-                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Total</strong></td>
-                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>${{sub_total}}</strong></td>
-                                                </tr>
-                                                {{#if float}}
-                                                <tr>
-                                                    <td class="no-line"></td>
-                                                    <td class="no-line"></td>
-                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Tax</strong></td>
-                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;">8.5%</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="no-line"></td>
-                                                    <td class="no-line"></td>
-                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>Total</strong></td>
-                                                    <td class="no-line text-center" style="padding: 4px 8px; font-size: 13px;"><strong>${{total_taxed_value}}</strong></td>
-                                                </tr>
-                                                {{/if}}
+                                                
                                             </tbody>
                                         </table>
                                     </div>
