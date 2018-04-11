@@ -145,6 +145,44 @@
         <script type="text/javascript" src="/assets/plugins/parsleyjs/parsley.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
         <script type="text/javascript">
+    $(document).ready(function() {
+// $('#orderlist').DataTable( { 
+//  "columns": [ ],
+//   "order": [[1, 'asc']]
+// } );
+
+
+    // var table = $('#orderlist').DataTable( {
+    //     "columns": [
+    //         {
+    //             "className":      'details-control',
+    //             "orderable":      false,
+    //             "data":           null,
+    //             "defaultContent": ''
+    //         }
+    //     ],
+    //     "order": [[1, 'asc']]
+    // } );
+     
+    // Add event listener for opening and closing details
+//     $('#datatable tbody').on('click', 'td.details-control', function () {
+//         var tr = $(this).closest('tr');
+//         var row = table.row( tr );
+ 
+//         if ( row.child.isShown() ) {
+//             // This row is already open - close it
+//             row.child.hide();
+//             tr.removeClass('shown');
+//         }
+//         else {
+//             // Open this row
+//             row.child( format(row.data()) ).show();
+//             tr.addClass('shown');
+//         }
+//     } );
+// } );
+</script>
+        <script type="text/javascript">
         var order_arr = [];
         var jma_order_arr = [];
         var warranty_arr = [];
@@ -173,6 +211,52 @@
             $("#datatable_1").dataTable();
             $(".others").dataTable();
             $('#datatable').dataTable();
+            /* Formatting function for row details - modify as you need */
+function format ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>Nasir</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extension number:</td>'+
+            '<td>Sid</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
+           var table= $('#orderlist').DataTable( {
+        "columns": [
+            {
+                "className":      'details-control',
+                "orderable":      false,                
+                "defaultContent": ''
+            }
+        ],
+        "order": [[1, 'asc']]
+    } );
+
+            $('#orderlist tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+
+
             $(".datepicker").datepicker({
                 autoclose: !0,
                 format: "mm-dd-yyyy"
@@ -944,5 +1028,123 @@
             window.location.href = "/components";
         });
     </script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var total_po_result;
+        
+        function format (total_po_result) {
+            var arr = JSON.parse(total_po_result);
+            var output_arr = [];
+            output_arr += '<div class="details-container">'+
+                        '<table class="table" id="order-table">'+
+                        '<thead>'+
+                            '<tr>'+
+                                '<th>Part Number</th>'+
+                                '<th>Quantity</th>'+
+                                '<th>Location</th>'+
+                                '<th>Managers</th>'+
+                                '<th>Order Date</th>'+
+                                '<th>Due Date</th>'+
+                                '<th style="width: 10%;">Ship Date</th>'+
+                                '<th>Freight Bill</th>'+
+                                '<th>Comment</th>'+
+                                '<th>Action</th>'+
+                            '</tr>'+
+                        '</thead>'+
+                        '<tbody>';
+            $.each(arr, function (key, val) {
+                output_arr += '<tr>'+
+                    '<td>'+
+                        '<input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value='+val['pn']+'>' +
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" id="qty" name="qty[]" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value='+val['qty']+'>'+
+                    '</td>'+
+                    '<td>'+
+                        '<select class="form-control location" name="location[]" required="required"></select>'+
+                    '</td>'+
+                    '<td>'+
+                        '<select class="form-control managers" name="managers[]" required="required"></select>'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value='+getFormattedDate(val['ordered'])+'>'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value='+getFormattedDate(val['due'])+'>'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" id="ship_date" name="ship_date[]" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value='+getFormattedDate(val['shipped'])+'>'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" id="freight_bill" name="freight_bill[]" class="form-control"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value='+val['freight_bill']+'>'+
+                    '</td>'+
+                    '<td>'+
+                        '<input type="text" id="comment" name="comment[]" class="form-control"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value='+val['comment']+'>'+
+                    '</td>'+
+                    '<td>'+
+                        '<a href="javascript:void(0)" class="add"><i class="ion-plus-circled add_data"></i></a>'+
+                    '</td>'+
+                '</tr>';
+            });
+            output_arr += '</tbody>'+
+                  '</table>'+
+
+                  '</div>';
+            console.log("output_arr=" + output_arr);
+            //return output_arr;
+              $('.details-row').html(output_arr);
+              $('.output-data').html(output_arr);
+        };
+        $('.datatables tr td').last().addClass('details-control');
+
+       $('.datatables').DataTable();
+ 
+
+         $(document).on("click", ".remove-control", function(e) {
+            $('.details-row').remove();
+              $(this).removeClass("remove-control");
+              $(this).addClass("details-control");
+         });
+
+        $(document).on("click", ".details-control", function(e) {
+            var order_po = $(this).data('po');
+            var flagBool = false;
+            $.ajax({
+                type: "GET",
+                url: "/orders/details/" + order_po,
+                async: false,
+                success: function (response) {
+                    total_po_result = response;
+                    flagBool = true;
+
+                },
+                error: function (xhr) {
+                    alert('error');
+                },
+                complete: function () {
+                  format(total_po_result);
+                  flagBool = true;
+                }
+            });
+            if(flagBool) {
+                 $(this).parent().addClass("shown");
+                 $(this).removeClass("details-control").addClass('remove-control');
+                $(this).closest("tbody").append("<tr class='details-row'><td colspan='3'>"+ $('.output-data').html() + "</td></tr>");
+            }
+        });
+ 
+    });
+
+    function getFormattedDate(date1) {
+        var date = new Date(date1);
+        var year = date.getFullYear();
+        var month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+        var day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+        return month + '-' + day + '-' + year;
+    }
+</script>
     </body>
 </html>

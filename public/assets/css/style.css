@@ -4163,3 +4163,11 @@ File: Responsive
     display: none !important;
   }
 }
+
+td.details-control {
+    background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.remove-control {
+    background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+}

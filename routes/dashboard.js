@@ -88,7 +88,7 @@ module.exports = function (app, connection) {
 
 	app.get('/orders', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		var sql = "SELECT * FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY ORDER BY `id` DESC";
+		var sql = "SELECT po,count(id),sum(qty) as qty FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -1006,6 +1006,13 @@ module.exports = function (app, connection) {
 			res.render('jma-order/edit', { layout: 'dashboard', results: results, jmaorder_id: req.params['id'] });
 		});
 	});
+
+	app.get('/orders/details/:po', function (req, res) {
+	  var sql = "SELECT * FROM orders as o, locations as l WHERE o.location = l.sum AND o.po = '" + req.params['po'] + "'";
+	  connection.query(sql, function (err, results) {
+	   sendJSON(res, 200, results);
+	  });
+ 	});
 
 	app.get('/orders/edit/:id', function (req, res) {
 		var sql = "SELECT * FROM orders o, locations l WHERE o.location = l.sum AND o.id = '" + req.params['id'] + "'";
