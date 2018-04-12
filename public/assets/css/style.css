@@ -2996,6 +2996,33 @@ File: Pages
 
 /*Ends css on 2018-03-09*/
 
+/*Starts css on 2018-04-12*/
+
+td.details-control {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.remove-control {
+    background: url('../images/details_close.png') no-repeat center center;
+    cursor: pointer;
+}
+
+.details-row .details-container .table > tbody > tr > td, 
+.details-row .details-container .table > tbody > tr > th, 
+.details-row .details-container .table > tfoot > tr > td,
+.details-row .details-container .table > tfoot > tr > th, 
+.details-row .details-container .table > thead > tr > td, 
+.details-row .details-container .table > thead > tr > th
+  {
+    width: 70px !important;
+}
+
+.details-row .details-container .form-control {
+  width: 110px !important;
+}
+
+/*Ends css on 2018-04-12*/
+
   /*ENDS NEW STYLE CSS ON DATE 29/01/18*/
 
   @media only screen and (min-width: 1170px) {
@@ -4164,10 +4191,4 @@ File: Responsive
   }
 }
 
-td.details-control {
-    background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
-    cursor: pointer;
-}
-tr.shown td.remove-control {
-    background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
-}
+
