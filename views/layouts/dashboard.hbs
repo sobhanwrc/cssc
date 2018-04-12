@@ -373,16 +373,20 @@
                 }
             });
 
-            $(document).on("click", "#order_completed", function (e) {
+            $(document).on("click", ".order_completed", function (e) {
+                var row_id = $(this).data('row_id');
+                alert (row_id);
+                return false;
                 if ($(this).attr('data-ship-status') == '2') {
-                    alert('please shiped the order first');
+                    alert('Please shiped the order first');
+                    return false;
                 } else {
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
                         url: "/complete_order",
                         data: {
-                            id: $("#row_id").val()
+                            id: row_id
                         },
                         success: function (response) {
                             if (response === "1") {
@@ -956,7 +960,6 @@
                             '<table class="table" id="order-table">'+
                             '<thead>'+
                                 '<tr>'+
-                                    '<th>Action</th>'+
                                     '<th>Part Number</th>'+
                                     '<th>Quantity</th>'+
                                     '<th>Location</th>'+
@@ -966,14 +969,16 @@
                                     '<th style="width: 10%;">Ship Date</th>'+
                                     '<th>Freight Bill</th>'+
                                     '<th>Comment</th>'+
+                                    '<th>Action</th>'+
                                 '</tr>'+
                             '</thead>'+
                             '<tbody>';
                 $.each(arr, function (key, val) {
+                    if(val['status'] != 4){
+                        var complete = '<a title="Complete" class="btn btn-primary btn-sm order_completed" data-row_id='+val['id']+' data-ship-status='+val['status']+' href="javascript:void(0)"><i class="fa fa-check" aria-hidden="true"></i></a>';
+
+                    }
                     output_arr += '<tr>'+
-                        '<td>'+
-                            '<input type="checkbox" id="order_check" name="order_check">' +
-                        '</td>'+
                         '<td>'+
                             '<input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value='+val['pn']+'>' +
                         '</td>'+
@@ -1001,15 +1006,17 @@
                         '<td>'+
                             '<input type="text" id="comment" name="comment[]" class="form-control"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value='+val['comment']+'>'+
                         '</td>'+
+                        '<td>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_po"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            complete +
+                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete" id=""><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                        '</td>'+
                     '</tr>';
                 });
                 output_arr += '</tbody>'+
                     '</table>'+
                     '</div>'+
                     '<div class="btn-group">'+
-                        '<button type="submit" class="btn btn-primary waves-effect waves-light"> Update </button>'+
-                        '<button type="button" id="order_completed" data-ship-status="{{results.0.status}}" class="btn btn-primary waves-effect waves-light"> Complete </button>'+
-                        '<a title="Delete" href="/orders/delete/{{order_id}}/" onclick="return confirm("Do you really want to delete the current record ?");"><button type="button" class="btn btn-primary waves-effect waves-light"> Delete </button></a>'+
                         '<a title="Packing List" id="packing" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>'+
                         '<a title="Invoice" id="invoice" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>'+
                         '<a title="Delivery Confirmation" id="delivery" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>'+
@@ -1058,6 +1065,11 @@
                     $(this).closest("tr").after("<tr class='details-row'><td colspan='3'>"+ $('.output-data').html() + "</td></tr>");
                 }
             });
+
+            $(document).on('click', '.update_po', function () {
+                alert ('123');
+            });
+
         });
 
         function getFormattedDate(date1) {
