@@ -1101,7 +1101,15 @@
                             success: function (response) {
                                 console.log(response);
                                 if (response.success === "1") {
-                                    swal("Deleted!", "Record deleted successfully.", "success");
+                                    swal({   
+                                        title: "Thank You",   
+                                        text: "Deleted successfully!",   
+                                        type: "success",     
+                                        confirmButtonColor: "#DD6B55",   
+                                        confirmButtonText: "OK"
+                                    },  function(){
+                                        window.location.reload();                                     
+                                    });
                                 }
                                 else {
                                     alert("error");
