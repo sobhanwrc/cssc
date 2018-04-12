@@ -951,6 +951,9 @@
             
             function format (total_po_result) {
                 var arr = JSON.parse(total_po_result);
+                var arr_1 = JSON.parse(total_po_result).splice(-1);
+                var location_list = '';
+                arr.splice(-1);
                 var output_arr = [];
                 output_arr += '<div class="details-container">'+
                             '<table class="table" id="order-table">'+
@@ -970,6 +973,9 @@
                             '</thead>'+
                             '<tbody>';
                 $.each(arr, function (key, val) {
+                    for(var i=0;i<arr_1.length;i++) {
+                        location_list+='<option value="'+arr_1[i].value+'">'+arr_1[i].value+'</option>';
+                    }
                     output_arr += '<tr>'+
                         '<td>'+
                             '<input type="checkbox" id="order_check" name="order_check">' +
@@ -981,7 +987,9 @@
                             '<input type="text" id="qty" name="qty[]" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value='+val['qty']+'>'+
                         '</td>'+
                         '<td>'+
-                            '<select class="form-control location" name="location[]" required="required"></select>'+
+                            '<select class="form-control location" name="location[]" required="required">'+
+                                location_list+
+                            '</select>'+
                         '</td>'+
                         '<td>'+
                             '<select class="form-control managers" name="managers[]" required="required"></select>'+
@@ -1038,9 +1046,9 @@
                     url: "/orders/details/" + order_po,
                     async: false,
                     success: function (response) {
+                        console.log(response);
                         total_po_result = response;
                         flagBool = true;
-
                     },
                     error: function (xhr) {
                         alert('error');
