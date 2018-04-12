@@ -1176,8 +1176,12 @@ module.exports = function (app, connection) {
 	app.get('/orders/delete/:id', function (req, res) {
 		sql = "DELETE FROM orders WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			req.flash('orderMessage', 'Order deleted successfully');
-			res.redirect('/orders');
+			if(results){
+				res.json({
+					success: "1"
+				});
+			}
+			
 		});
 	});
 
