@@ -952,7 +952,6 @@
             function format (total_po_result) {
                 var arr = JSON.parse(total_po_result);
                 var arr_1 = JSON.parse(total_po_result).splice(-1);
-                var location_list = '';
                 arr.splice(-1);
                 var output_arr = [];
                 output_arr += '<div class="details-container">'+
@@ -973,8 +972,13 @@
                             '</thead>'+
                             '<tbody>';
                 $.each(arr, function (key, val) {
-                    for(var i=0;i<arr_1.length;i++) {
-                        location_list+='<option value="'+arr_1[i].value+'">'+arr_1[i].value+'</option>';
+                    var location_list = '';
+                    var manager_list = '';
+                    for(var i = 0; i < arr_1.length; i++) {
+                        location_list += '<option value="'+arr_1[i].value+'">'+arr_1[i].label+'</option>';
+                    }
+                    for(var i = 0; i < arr_1.length; i++) {
+                        manager_list += '<option value="'+arr_1[i].manager+'">'+arr_1[i].manager+'</option>';
                     }
                     output_arr += '<tr>'+
                         '<td>'+
@@ -992,7 +996,9 @@
                             '</select>'+
                         '</td>'+
                         '<td>'+
-                            '<select class="form-control managers" name="managers[]" required="required"></select>'+
+                            '<select class="form-control managers" name="managers[]" required="required">'+
+                                manager_list+
+                            '</select>'+
                         '</td>'+
                         '<td>'+
                             '<input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value='+getFormattedDate(val['ordered'])+'>'+
