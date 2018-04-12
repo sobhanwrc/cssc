@@ -88,7 +88,7 @@ module.exports = function (app, connection) {
 
 	app.get('/orders', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		var sql = "SELECT po,count(id),sum(qty) as qty FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		var sql = "SELECT po, count(id), sum(qty) as qty, invoice_no FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -516,12 +516,8 @@ module.exports = function (app, connection) {
 		}
 	});
 
-	app.get('/orders/packing/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE orders SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
-		sql = "SELECT p.description, p.pn, o.po, o.qty, o.ordered, o.location, l.name, l.street, l.city, l.person, l.phone, l.fax FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id1'] + "' AND o.id = '" + req.params['id3'] + "'";
+	app.get('/orders/packing/:id', function (req, res) {
+		sql = "SELECT p.description, p.pn, o.po, o.qty, o.ordered, o.location, l.name, l.street, l.city, l.person, l.phone, l.fax FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
 			order_date = results[0].ordered;
 			person_name = results[0].person;
@@ -530,18 +526,14 @@ module.exports = function (app, connection) {
 			city = results[0].city;
 			phone = results[0].phone;
 			fax = results[0].fax;
-			res.render('order/printingview', { layout: 'dashboard', orders: results, order_date: order_date, person_name: person_name,name: name, street: street, city: city, phone: phone, fax: fax, f_bill: req.params['id2'], order_id: req.params['id1'] });
+			res.render('order/printingview', { layout: 'dashboard', orders: results, order_date: order_date, person_name: person_name,name: name, street: street, city: city, phone: phone, fax: fax, order_id: req.params['id'] });
 		});
 	});
 
-	app.get('/orders/invoice/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE orders SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
+	app.get('/orders/invoice/:id', function (req, res) {
 		var sql1 = "SELECT max(invoice_no) as max_inv FROM orders";
 		connection.query(sql1, function (err, max_res) {
-			var sql2 = "SELECT invoice_no FROM orders WHERE id = '" + req.params['id3'] + "'";
+			var sql2 = "SELECT invoice_no FROM orders WHERE po = '" + req.params['id'] + "'";
 			connection.query(sql2, function (err, inv_res) {
 				var new_inv;
 				if (inv_res[0].invoice_no == 0) {
@@ -550,9 +542,9 @@ module.exports = function (app, connection) {
 				else {
 					new_inv = inv_res[0].invoice_no;
 				}
-				var sql3 = "UPDATE orders SET invoice_no = '" + new_inv + "' WHERE id = '" + req.params['id3'] + "'";
+				var sql3 = "UPDATE orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function(req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id1'] + "' AND o.id = '" + req.params['id3'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -578,21 +570,17 @@ module.exports = function (app, connection) {
 						phone = results[0].phone;
 						fax = results[0].fax;
 						invoice_no = results[0].invoice_no;
-						res.render('order/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components:number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, f_bill: req.params['id2'], order_id: req.params['id1'], id: req.params['id3'] });
+						res.render('order/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components:number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
 		});
 	});
 
-	app.get('/orders/delivery/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE orders SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
+	app.get('/orders/delivery/:id', function (req, res) {
 		var sql1 = "SELECT max(invoice_no) as max_inv FROM orders";
 		connection.query(sql1, function (err, max_res) {
-			var sql2 = "SELECT invoice_no FROM orders WHERE id = '" + req.params['id3'] + "'";
+			var sql2 = "SELECT invoice_no FROM orders WHERE po = '" + req.params['id'] + "'";
 			connection.query(sql2, function (err, inv_res) {
 				var new_inv;
 				if (inv_res[0].invoice_no == 0) {
@@ -600,9 +588,9 @@ module.exports = function (app, connection) {
 				} else {
 					new_inv = inv_res[0].invoice_no;
 				}
-				var sql3 = "UPDATE orders SET invoice_no = '" + new_inv + "' WHERE id = '" + req.params['id3'] + "'";
+				var sql3 = "UPDATE orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id1'] + "' AND o.id = '" + req.params['id3'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -628,7 +616,7 @@ module.exports = function (app, connection) {
 						phone = results[0].phone;
 						fax = results[0].fax;
 						invoice_no = results[0].invoice_no;
-						res.render('order/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components:number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, f_bill: req.params['id2'], order_id: req.params['id1'], id: req.params['id3'] });
+						res.render('order/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components:number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});

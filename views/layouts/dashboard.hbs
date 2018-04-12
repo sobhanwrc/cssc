@@ -292,28 +292,19 @@
                 $('.core_ret_date').val(current_date);
             });
 
-            $(document).on("click", "#packing", function (e) {
-                if ($('#f_bill').val() == "") {
-                    window.location.href = "/orders/packing/" + $('#po').val() + "/" + $('#row_id').val() + "/";
-                } else {
-                    window.location.href = "/orders/packing/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
-                }
+            $(document).on("click", ".packing", function (e) {
+                var order_po = $(this).data('po');
+                window.location.href = "/orders/packing/" + order_po + "/";
             });
 
-            $(document).on("click", "#invoice", function (e) {
-                if ($('#f_bill').val() == "") {
-                    window.location.href = "/orders/invoice/" + $('#po').val() + "/" + $('#row_id').val() + "/";
-                } else {
-                    window.location.href = "/orders/invoice/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
-                }
+            $(document).on("click", ".invoice", function (e) {
+                var order_po = $(this).data('po');
+                window.location.href = "/orders/invoice/" + order_po + "/";
             });
 
-            $(document).on("click", "#delivery", function (e) {
-                if ($('#f_bill').val() == "") {
-                    window.location.href = "/orders/delivery/" + $('#po').val() + "/" + $('#row_id').val() + "/";
-                } else {
-                    window.location.href = "/orders/delivery/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
-                }
+            $(document).on("click", ".delivery", function (e) {
+                var order_po = $(this).data('po');
+                window.location.href = "/orders/delivery/" + order_po + "/";
             });
 
             $(document).on("click", "#packing_jma", function (e) {
@@ -953,7 +944,7 @@
         $(document).ready(function() {
             var total_po_result;
             
-            function format (total_po_result) {
+            function format (total_po_result, order_po, inv_no) {
                 var arr = JSON.parse(total_po_result);
                 var arr_1 = JSON.parse(total_po_result).splice(-1);
                 arr.splice(-1);
@@ -984,8 +975,7 @@
                     for(var i = 0; i < arr_1.length; i++) {
                         manager_list += '<option value="'+arr_1[i].manager+'">'+arr_1[i].manager+'</option>';
                     }
-                    
-                    if(val['status'] != 4){
+                    if(val['status'] != 4) {
                         var complete = '<a title="Complete" class="btn btn-primary btn-sm order_completed" data-row_id='+val['id']+' data-ship-status='+val['status']+' href="javascript:void(0)"><i class="fa fa-check" aria-hidden="true"></i></a>';
                     }
                     output_arr += '<tr>'+
@@ -1031,13 +1021,14 @@
                     '</table>'+
                     '</div>'+
                     '<div class="btn-group">'+
-                        '<a title="Packing List" id="packing" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>'+
-                        '<a title="Invoice" id="invoice" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>'+
-                        '<a title="Delivery Confirmation" id="delivery" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>'+
+                        '<a title="Packing List" class="packing" data-po='+order_po+' href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>'+
+                        '<a title="Invoice" class="invoice" data-po='+order_po+'><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>'+
+                        '<a title="Delivery Confirmation" class="delivery" data-po='+order_po+'><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>'+
                     '</div>';
                 $('.details-row').html(output_arr);
                 $('.output-data').html(output_arr);
             };
+
             $('.datatables tr').each(function(index, val) {
                 $(this).find('td').last().addClass('details-control');
             });
@@ -1045,7 +1036,6 @@
             $('.datatables').DataTable();
      
             $(document).on("click", ".remove-control", function(e) {
-
                 $('.details-row').remove(); 
                 $(this).removeClass("remove-control");
                 $(this).addClass("details-control");
@@ -1067,7 +1057,7 @@
                         alert('error');
                     },
                     complete: function () {
-                        format(total_po_result);
+                        format(total_po_result, order_po);
                         flagBool = true;
                     }
                 });
