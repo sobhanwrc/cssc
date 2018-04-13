@@ -98,7 +98,7 @@ module.exports = function (app, connection) {
 	});
 
 	app.get('/jma-orders', function (req, res) {
-		var sql = "SELECT po, jmapo, count(id), sum(qty) as qty FROM jmaview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY ORDER BY `id` DESC";
+		var sql = "SELECT po, jmapo, count(id), sum(qty) as qty FROM jmaview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -109,7 +109,7 @@ module.exports = function (app, connection) {
 
 	app.get('/warranties', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		var sql = "SELECT * FROM warrantyview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY ORDER BY `id` DESC";
+		var sql = "SELECT po, count(id), sum(qty) as qty FROM warrantyview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -738,11 +738,6 @@ module.exports = function (app, connection) {
 						order_date = results[0].ordered;
 						bill_date = results[0].due;
 						person_name = results[0].customer;
-						//name = results[0].name;
-						// street = results[0].street;
-						// city = results[0].city;
-						// phone = results[0].phone;
-						// fax = results[0].fax;
 						location = results[0].location;
 						invoice_no = results[0].invoice_no;
 						shipping_cost = parseFloat(results[0].shipping_cost).toFixed(2);
@@ -789,11 +784,6 @@ module.exports = function (app, connection) {
 						order_date = results[0].ordered;
 						bill_date = results[0].due;
 						person_name = results[0].customer;
-						//name = results[0].name;
-						// street = results[0].street;
-						// city = results[0].city;
-						// phone = results[0].phone;
-						// fax = results[0].fax;
 						location = results[0].location;
 						invoice_no = results[0].invoice_no;
 						shipping_cost = parseFloat(results[0].shipping_cost).toFixed(2);
@@ -833,12 +823,8 @@ module.exports = function (app, connection) {
 		});
 	});
 
-	app.get('/warranties/packing/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE warranties SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
-		sql = "SELECT p.description, p.pn, o.po, o.qty, o.ordered, o.location, l.name, l.street, l.city, l.person, l.phone, l.fax FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id1'] + "' AND o.id = '" + req.params['id3'] + "'";
+	app.get('/warranties/packing/:id', function (req, res) {
+		sql = "SELECT p.description, p.pn, o.po, o.qty, o.ordered, o.location, l.name, l.street, l.city, l.person, l.phone, l.fax FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
 			order_date = results[0].ordered;
 			person_name = results[0].person;
@@ -847,18 +833,14 @@ module.exports = function (app, connection) {
 			city = results[0].city;
 			phone = results[0].phone;
 			fax = results[0].fax;
-			res.render('warranties/printingview', { layout: 'dashboard', orders: results, order_date: order_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, f_bill: req.params['id2'], order_id: req.params['id1'] });
+			res.render('warranties/printingview', { layout: 'dashboard', orders: results, order_date: order_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, order_id: req.params['id'] });
 		});
 	});
 
-	app.get('/warranties/invoice/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE warranties SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
+	app.get('/warranties/invoice/:id', function (req, res) {
 		var sql1 = "SELECT max(invoice_no) as max_inv FROM warranties";
 		connection.query(sql1, function (err, max_res) {
-			var sql2 = "SELECT invoice_no FROM warranties WHERE id = '" + req.params['id3'] + "'";
+			var sql2 = "SELECT invoice_no FROM warranties WHERE po = '" + req.params['id'] + "'";
 			connection.query(sql2, function (err, inv_res) {
 				var new_inv;
 				if (inv_res[0].invoice_no == 0) {
@@ -866,9 +848,9 @@ module.exports = function (app, connection) {
 				} else {
 					new_inv = inv_res[0].invoice_no;
 				}
-				var sql3 = "UPDATE warranties SET invoice_no = '" + new_inv + "' WHERE id = '" + req.params['id3'] + "'";
+				var sql3 = "UPDATE warranties SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id1'] + "' AND o.id = '" + req.params['id3'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -894,21 +876,17 @@ module.exports = function (app, connection) {
 						phone = results[0].phone;
 						fax = results[0].fax;
 						invoice_no = results[0].invoice_no;
-						res.render('warranties/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, f_bill: req.params['id2'], order_id: req.params['id1'], id: req.params['id3'] });
+						res.render('warranties/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
 		});
 	});
 
-	app.get('/warranties/delivery/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE warranties SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
+	app.get('/warranties/delivery/:id', function (req, res) {
 		var sql1 = "SELECT max(invoice_no) as max_inv FROM warranties";
 		connection.query(sql1, function (err, max_res) {
-			var sql2 = "SELECT invoice_no FROM warranties WHERE id = '" + req.params['id3'] + "'";
+			var sql2 = "SELECT invoice_no FROM warranties WHERE po = '" + req.params['id'] + "'";
 			connection.query(sql2, function (err, inv_res) {
 				var new_inv;
 				if (inv_res[0].invoice_no == 0) {
@@ -916,9 +894,9 @@ module.exports = function (app, connection) {
 				} else {
 					new_inv = inv_res[0].invoice_no;
 				}
-				var sql3 = "UPDATE warranties SET invoice_no = '" + new_inv + "' WHERE id = '" + req.params['id3'] + "'";
+				var sql3 = "UPDATE warranties SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id1'] + "' AND o.id = '" + req.params['id3'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -944,7 +922,7 @@ module.exports = function (app, connection) {
 						phone = results[0].phone;
 						fax = results[0].fax;
 						invoice_no = results[0].invoice_no;
-						res.render('warranties/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, f_bill: req.params['id2'], order_id: req.params['id1'], id: req.params['id3'] });
+						res.render('warranties/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
@@ -1060,6 +1038,21 @@ module.exports = function (app, connection) {
 		});
 	});
 
+	app.get('/warranties/details/:po', function (req, res) {
+	  	var sql = "SELECT l.*, w.* FROM warranties as w, locations as l WHERE w.location = l.sum AND w.po = '" + req.params['po'] + "'";
+	  	connection.query(sql, function (err, results) {
+	  		var mystr = req.params['po'];
+            var substr = mystr.substr(0, 2);
+	  		var sql1 = "SELECT DISTINCT(o.location), l.* FROM warranties o, locations l WHERE l.sum = o.location AND o.po LIKE '" + substr + "%'";
+			connection.query(sql1, function (err1, res1) {
+				for (i in res1) {
+					results.push({ "label": res1[i].street + ", " + res1[i].city + ", " + res1[i].sum, "value": res1[i].sum, "manager": res1[i].person });
+				}
+	   			sendJSON(res, 200, results);
+	   		});
+	  	});
+ 	});
+
 	app.get('/warranties/edit/:id', function (req, res) {
 		sql = "SELECT * FROM warranties w, locations l WHERE w.location = l.sum AND w.id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
@@ -1096,7 +1089,7 @@ module.exports = function (app, connection) {
 		new_due_date = due_date[2] + "-" + due_date[0] + "-" + due_date[1];
 		ship_date = req.body.ship_date.split("-");
 		new_ship_date = ship_date[2] + "-" + ship_date[0] + "-" + ship_date[1];
-		sql = "UPDATE orders SET pn = '" + req.body.pn + "', freight_bill = '" + req.body.f_bill + "', ordered = '" + new_order_date + "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "'";
+		sql = "UPDATE orders SET pn = '" + req.body.pn + "', freight_bill = '" + req.body.f_bill + "', ordered = '" + new_order_date + "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', comment = '" + req.body.comment + "'";
 		if (req.body.curr_status != 4 && req.body.f_bill != '') {
 			sql += ", status = 3";
 		}
@@ -1106,7 +1099,11 @@ module.exports = function (app, connection) {
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-orders');
 			} else {
-				res.redirect('/orders');
+				if(results){
+					res.json({
+						success: 1
+					});
+				}
 			}
 		});
 	});

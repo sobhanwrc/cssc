@@ -1,4 +1,6 @@
 <div class="content">
+    <div id="LoadingImage" class="loading-anim" style="display:none;">Loading&#8230;</div>
+    <div class="output-data" style="display:none;"></div>
     <div class="">
         <div class="page-header-title">
         </div>
@@ -40,60 +42,25 @@
                                     <a href="/warranties"><button type="button"class="btn btn-success waves-effect waves-light m-l-10 clear_warranty_filter">Clear</button></a>
                                 </div>
                             </form>
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    {{#if message}}
-                                        <div class="alert alert-success">{{message}}</div>
-                                    {{/if}}
-                                    <table id="datatable_1" class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Purchase Order</th>
-                                                <th>Part No</th>
-                                                <th>Location</th>
-                                                <th>No. of Parts</th>
-                                                <th>Order Date</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{#each orders}}
-                                            <tr>
-                                                <td>{{this.po}}</td>
-                                                <td>{{this.pn}}</td>
-                                                <td>{{this.location}}</td>
-                                                <td>{{this.qty}}</td>
-                                                <td>{{dateFormat this.ordered "MM-DD-YYYY"}}</td>
-                                                {{#if (and (eq this.status '1')(eq this.freight_bill ''))}}
-                                                    <td>In Process</td>
-                                                {{/if}}
-                                                {{#if (and (eq this.status '2')(eq this.freight_bill ''))}}
-                                                    <td>In Process</td>
-                                                {{/if}}
-                                                {{#if (and (eq this.status '3')(eq this.freight_bill ''))}}
-                                                    <td>Shipped</td>
-                                                {{/if}}
-                                                {{#if (and (eq this.status '3')(ne this.freight_bill ''))}}
-                                                    <td>Shipped</td>
-                                                {{/if}}
-                                                {{#if (eq this.status '4')}}
-                                                    <td>Completed</td>
-                                                {{/if}}
-                                                <td>
-                                                    <a title="Edit" href="/warranties/edit/{{this.id}}/"><button type="button" class="btn waves-effect btn-default edit-btn"> <i class="fa fa-edit"></i> </button></a>
-                                                    {{!-- <a title="Delete" href="/orders/delete/{{this.id}}/" onclick="return confirm('Do you really want to delete the current admin ?');"><button type="button" class="btn waves-effect btn-default delete-btn"> <i class="fa fa-remove"></i> </button></a> --}}
-                                                    {{!-- <a title="completed" href="/orders/complete/{{this.id}}/"><button type="button" class="btn waves-effect btn-default edit-btn"> <i class="glyphicon glyphicon-check"></i> </button></a> --}}
-                                                </td>
-                                            </tr>
-                                            {{/each}}
-                                        </tbody>
-                                    </table>
-                                    {{#if sub_total}}
-                                        <p><strong>Total:{{sub_total}}</strong></p>
-                                    {{/if}}
-                                </div>
+                            <div class="">
+                                <table class="table table-striped table-hover datatables warr-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Purchase Orders</th>
+                                            <th>No. of Parts</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each orders}}
+                                        <tr>
+                                            <td>{{this.po}}</td>
+                                            <td>{{this.qty}}</td>
+                                            <td data-po="{{this.po}}"></td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

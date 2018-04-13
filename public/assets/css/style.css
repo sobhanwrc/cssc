@@ -3016,6 +3016,15 @@ tr.shown td.remove-control-jma {
     cursor: pointer;
 }
 
+td.details-control-warr {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.remove-control-warr {
+    background: url('../images/details_close.png') no-repeat center center;
+    cursor: pointer;
+}
+
 .details-row .details-container .table > tbody > tr > td, 
 .details-row .details-container .table > tbody > tr > th, 
 .details-row .details-container .table > tfoot > tr > td,

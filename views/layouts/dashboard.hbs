@@ -239,7 +239,7 @@
                     '<div class="col-20"><div class="form-group"><label>Date Ready</label><div><input type="text" id="ready_date" name="ready_date[]" class="form-control ready_date" required="required" data-parsley-required-message="Please enter date ready" placeholder="Please enter date ready"></div></div></div>' +
                     '<div class="col-20"><div class="form-group"><label>Comment</label><div><textarea id="comment" name="comment[]" class="form-control comment" data-parsley-required-message="Please enter comment" placeholder="Please enter comment"></textarea></div></div></div>' +
                     '<div class="col-20"><div class="form-group"><label>Details</label><div><textarea id="details" name="details[]" class="form-control details" data-parsley-required-message="Please enter details" placeholder="Please enter details"></textarea></div></div></div>' +
-                    '<div class="col-20"><div class="form-group"><label>Status</label><div><select class="form-control" name="invoice_status" id="invoice_status" required="required"><option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option></select></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Status</label><div><select class="form-control" name="invoice_status" id="invoice_status" required="required"><option value="">Select One</option><option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option></select></div></div></div>' +
                     '</div></div></div>');
                 
                 $('.remove-warranty').css('visibility', 'visible');
@@ -325,37 +325,25 @@
                 window.location.href = "/jma-orders/delivery/" + jma_order_po + "/";
             });
 
-            $(document).on("click", "#packing_warranties", function (e) {
-                if ($('#f_bill').val() == "") {
-                    window.location.href = "/warranties/packing/" + $('#po').val() + "/" + $('#row_id').val() + "/";
-                } else {
-                    window.location.href = "/warranties/packing/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
-                }
+            $(document).on("click", ".packing_warranties", function (e) {
+                var warr_po = $(this).data('po');
+                window.location.href = "/warranties/packing/" + warr_po + "/";
             });
 
-            $(document).on("click", "#invoice_warranties", function (e) {
-                if ($('#invoice_status').val() == "4") {
+            $(document).on("click", ".invoice_warranties", function (e) {
+                var warr_po = $(this).data('po');
+                /*if ($('#invoice_status').val() == "4") {
                     window.location.href = "/warranties/honored/" + $('#po').val() + "/" + $('#row_id').val() + "/";
-                } else {
-                    if ($('#f_bill').val() == "") {
-                        window.location.href = "/warranties/invoice/" + $('#po').val() + "/" + $('#row_id').val() + "/";
-                    } else {
-                        window.location.href = "/warranties/invoice/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
-                    }
-                }
+                }*/
+                window.location.href = "/warranties/invoice/" + warr_po + "/";
             });
 
-            $(document).on("click", "#delivery_warranties", function (e) {
-                if ($('#invoice_status').val() == "4") {
+            $(document).on("click", ".delivery_warranties", function (e) {
+                var warr_po = $(this).data('po');
+                /*if ($('#invoice_status').val() == "4") {
                     window.location.href = "/warranties/honored/" + $('#po').val() + "/" + $('#row_id').val() + "/";
-                }
-                else {
-                    if ($('#f_bill').val() == "") {
-                        window.location.href = "/warranties/delivery/" + $('#po').val() + "/" + $('#row_id').val() + "/";
-                    } else {
-                        window.location.href = "/warranties/delivery/" + $('#po').val() + "/" + $('#f_bill').val() + "/" + $('#row_id').val() + "/";
-                    }
-                }
+                }*/
+                window.location.href = "/warranties/delivery/" + warr_po + "/";
             });
 
             $(document).on("click", ".order_completed", function (e) {
@@ -376,7 +364,15 @@
                         success: function (response) {
                             if (response === "1") {
                                 $("#LoadingImage").hide();
-                                window.location.href = "/orders";
+                                swal({   
+                                    title: "Thank You",   
+                                    text: "Order completed successfully!",   
+                                    type: "success",     
+                                    confirmButtonColor: "#DD6B55",   
+                                    confirmButtonText: "OK"
+                                },  function(){
+                                    window.location.reload();                                     
+                                });
                             }
                             else {
                                 alert("error");
@@ -939,13 +935,15 @@
         $(document).ready(function() {
             var total_po_result;
             var total_jmapo_result;
+            var total_warrpo_result;
             
             function format(total_po_result, order_po) {
                 var arr = JSON.parse(total_po_result);
                 var arr_1 = JSON.parse(total_po_result).splice(-1);
                 arr.splice(-1);
                 var output_arr = [];
-                output_arr += '<div class="details-container table-responsive">'+
+                output_arr += '<form name="order_list_edit" id="order_list_edit" method="post" action="">'+ 
+                            '<div class="details-container">'+
                             '<table class="table" id="order-table">'+
                             '<thead>'+
                                 '<tr>'+
@@ -982,7 +980,7 @@
                             '<input type="text" id="pn" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="qty" name="qty" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
+                            '<input type="text" id="qty" name="qty" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
                         '</td>'+
                         '<td>'+
                             '<select class="form-control location" name="location" required="required">'+
@@ -1004,17 +1002,18 @@
                             '<input type="text" id="ship_date" name="ship_date" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value="'+getFormattedDate(val['shipped'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="f_bill" name="f_bill" class="form-control"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
+                            '<input type="text" id="f_bill" name="f_bill" class="form-control f_bill"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="comment" name="comment" class="form-control"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
+                            '<input type="text" id="comment" name="comment" class="form-control comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_po"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_po" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
-                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-row_id="'+val['id']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
-                    '</tr>';
+                    '</tr>'+
+                    '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">';
                 });
                 output_arr += '</tbody>'+
                     '</table>'+
@@ -1023,7 +1022,8 @@
                         '<a title="Packing List" class="packing" data-po="'+order_po+'" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>'+
                         '<a title="Invoice" class="invoice" data-po="'+order_po+'"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>'+
                         '<a title="Delivery Confirmation" class="delivery" data-po="'+order_po+'"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>'+
-                    '</div>';
+                    '</div>'+
+                    '</form>';
                 $('.details-row').html(output_arr);
                 $('.output-data').html(output_arr);
             };
@@ -1098,9 +1098,178 @@
                     '</table>'+
                     '</div>'+
                     '<div class="btn-group">'+
-                        '<a title="Packing List" class="packing_jma" data-po="'+jma_order_po+'" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>'+
                         '<a title="Invoice" class="invoice_jma" data-po="'+jma_order_po+'"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>'+
                         '<a title="Delivery Confirmation" class="delivery_jma" data-po="'+jma_order_po+'"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>'+
+                    '</div>';
+                $('.details-row').html(output_arr);
+                $('.output-data').html(output_arr);
+            };
+
+            function format_warr(total_warrpo_result, warr_po) {
+                var arr = JSON.parse(total_warrpo_result);
+                var arr_1 = JSON.parse(total_warrpo_result).splice(-1);
+                arr.splice(-1);
+                var output_arr = [];
+                $.each(arr, function (key, val) {
+                    var location_list = '';
+                    var manager_list = '';
+                    for (var i = 0; i < arr_1.length; i++) {
+                        location_list += '<option value="'+arr_1[i].value+'">'+arr_1[i].label+'</option>';
+                    }
+                    for (var i = 0; i < arr_1.length; i++) {
+                        manager_list += '<option value="'+arr_1[i].manager+'">'+arr_1[i].manager+'</option>';
+                    }
+                    var complete;
+                    if (val['status'] != 4) {
+                        complete = '<a title="Complete" class="btn btn-primary btn-sm order_completed" data-row_id="'+val['id']+'" data-ship-status="'+val['status']+'" href="javascript:void(0)"><i class="fa fa-check" aria-hidden="true"></i></a>';
+                    } else {
+                        complete = '';
+                    }
+                    output_arr += '<div class="warranty_form" id="warranty_form"><div class="warranty_form_left">'+
+                            '<div class="box">'+
+                                '<div class="row">'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Part Number</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Location</label>'+
+                                            '<div>'+
+                                                '<select class="form-control location" name="location[]" required="required" style="width: 95%">'+
+                                                    location_list+
+                                                '</select>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Managers</label>'+
+                                            '<div>'+
+                                                '<select class="form-control managers" name="managers[]" required="required" style="width: 95%">'+
+                                                    manager_list+
+                                                '</select>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Serial No#</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="serial_no" name="serial_no" class="form-control"  placeholder="Please enter serial no of the product" value="'+val['serial_no']+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Freight Bill#</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="f_bill" name="f_bill" class="form-control" placeholder="Please enter freight bill of the product" value="'+val['freight_bill']+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Order Date</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="order_date" name="order_date[]" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Due Date</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Qty</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="qty" name="qty[]" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Date Shipped</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="ship_date" name="ship_date[]" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value="'+getFormattedDate(val['shipped'])+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Date Returned</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="ret_date" name="ret_date[]" class="form-control ret_date" required="required" data-parsley-required-message="Please enter date returned" placeholder="Please enter date returned" value="'+getFormattedDate(val['returned'])+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Date Reported</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="rep_date" name="rep_date[]" class="form-control rep_date" required="required" data-parsley-required-message="Please enter date reported" placeholder="Please enter date reported" value="'+getFormattedDate(val['reported'])+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Date Ready</label>'+
+                                            '<div>'+
+                                                '<input type="text" id="ready_date" name="ready_date[]" class="form-control ready_date" required="required" data-parsley-required-message="Please enter date ready" placeholder="Please enter date ready" value="'+getFormattedDate(val['ready'])+'">'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Comment</label>'+
+                                            '<div>'+
+                                                '<textarea id="comment" name="comment[]" class="form-control comment" data-parsley-required-message="Please enter comment" placeholder="Please enter comment">'+val['comment']+'</textarea>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Details</label>'+
+                                            '<div>'+
+                                                '<textarea id="details" name="details[]" class="form-control details" data-parsley-required-message="Please enter details" placeholder="Please enter details">'+val['itemcomment']+'</textarea>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-20">'+
+                                        '<div class="form-group">'+
+                                            '<label>Status</label>'+
+                                            '<div>'+
+                                                '<select class="form-control" name="invoice_status" id="invoice_status" required="required">'+
+                                                    '<option value="">Select One</option>'+
+                                                    '<option value="1">Burnt</option>'+
+                                                    '<option value="2">No Defects Found</option>'+
+                                                    '<option value="3">Warranty Expired</option>'+
+                                                    '<option value="4">Honored</option>'+
+                                                    '<option value="5">Others</option>'+
+                                                '</select>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<div class="warranty_form_right">'+
+                        '</div>'+
+                    '</div>';
+                });
+                output_arr += '<div class="btn-group">'+
+                        '<a title="Packing List" class="packing_warranties" data-po="'+warr_po+'" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>'+
+                        '<a title="Invoice" class="invoice_warranties" data-po="'+warr_po+'"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>'+
+                        '<a title="Delivery Confirmation" class="delivery_warranties" data-po="'+warr_po+'"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>'+
                     '</div>';
                 $('.details-row').html(output_arr);
                 $('.output-data').html(output_arr);
@@ -1112,6 +1281,10 @@
 
             $('.jma-order-table tr').each(function(index, val) {
                 $(this).find('td').last().addClass('details-control-jma');
+            });
+
+            $('.warr-table tr').each(function(index, val) {
+                $(this).find('td').last().addClass('details-control-warr');
             });
 
             $('.datatables').DataTable();
@@ -1185,6 +1358,41 @@
                 }
             });
 
+            $(document).on("click", ".remove-control-warr", function(e) {
+                $('.details-row').remove(); 
+                $(this).removeClass("remove-control-warr");
+                $(this).addClass("details-control-warr");
+            });
+
+            $(document).on("click", ".details-control-warr", function(e) {
+                var warr_po = $(this).data('po');
+                var flagBool = false;
+                $.ajax({
+                    type: "GET",
+                    url: "/warranties/details/" + warr_po,
+                    async: false,
+                    success: function (response) {
+                        console.log(response);
+                        total_warrpo_result = response;
+                        flagBool = true;
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    },
+                    complete: function () {
+                        format_warr(total_warrpo_result, warr_po);
+                        flagBool = true;
+                    }
+                });
+                if (flagBool) {
+                   $(".remove-control-warr").removeClass('remove-control-warr').addClass("details-control-warr");
+                    $('.details-row').remove();
+                    $(this).parent().addClass("shown");
+                    $(this).removeClass("details-control-warr").addClass('remove-control-warr');
+                    $(this).closest("tr").after("<tr class='details-row'><td colspan='3'>"+ $('.output-data').html() + "</td></tr>");
+                }
+            });
+
             $(document).on('click', '.delete', function () {
                 var row_id = $(this).data('row_id');
                 if (row_id) {
@@ -1201,7 +1409,6 @@
                             type: "GET",
                             url: "/orders/delete/" + row_id,
                             success: function (response) {
-                                console.log(response);
                                 if (response.success === "1") {
                                     swal({   
                                         title: "Thank You",   
@@ -1224,8 +1431,77 @@
                 }
             });
 
+            /********Data Field*********/
+             var qty, pn, location, managers, order_date, due_date, ship_date, f_bill, comment;   
+            /**********End****************/
+            $(document).on('change', '.pn', function(){
+                pn = $(this).val();
+            });
+            $(document).on('change', '.qty', function(){
+                qty = $(this).val();
+            });
+            $(document).on('change', '.location', function(){
+                location = $(this).val();
+            });
+            $(document).on('change', '.managers', function(){
+                managers = $(this).val();
+            });
+            $(document).on('change', '.order_date', function(){
+                order_date = $(this).val();
+            });
+            $(document).on('change', '.due_date', function(){
+                due_date = $(this).val();
+            });
+            $(document).on('change', '.ship_date', function(){
+                ship_date = $(this).val();
+            });
+            $(document).on('change', '.f_bill', function(){
+                f_bill = $(this).val();
+            });
+            $(document).on('change', '.comment', function(){
+                comment = $(this).val();
+            });
+            
             $(document).on('click', '.update_po', function () {
-                alert ('123');
+                var row_id = $(this).data('row_id');
+                var curr_status = $(".curr_status").val();
+                
+                $("#LoadingImage").show();
+                $.ajax({
+                    type: 'POST',
+                    url: '/orders/edit/' + row_id,
+                    data:{
+                        pn : pn, 
+                        qty: qty,
+                        location: location,
+                        managers: managers,
+                        order_date: order_date,
+                        due_date: due_date,
+                        ship_date: ship_date,
+                        f_bill: f_bill,
+                        comment: comment,
+                        curr_status: curr_status
+                    },
+                    success: function (response){
+                        if (response.success === 1) {
+                            swal({   
+                                title: "Thank You",   
+                                text: "Record updated successfully!",   
+                                type: "success",     
+                                confirmButtonColor: "#DD6B55",   
+                                confirmButtonText: "OK"
+                            },  function(){
+                                window.location.reload();                                     
+                            });
+                        }
+                        else {
+                            alert("error");
+                        }
+
+                    },
+                    error: function (xhr) {
+                    }   
+                });
             });
         });
 
