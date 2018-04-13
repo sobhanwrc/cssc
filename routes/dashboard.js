@@ -1103,7 +1103,7 @@ module.exports = function (app, connection) {
 		new_due_date = due_date[2] + "-" + due_date[0] + "-" + due_date[1];
 		ship_date = req.body.ship_date.split("-");
 		new_ship_date = ship_date[2] + "-" + ship_date[0] + "-" + ship_date[1];
-		sql = "UPDATE orders SET pn = '" + req.body.pn + "', freight_bill = '" + req.body.f_bill + "', ordered = '" + new_order_date + "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "'";
+		sql = "UPDATE orders SET pn = '" + req.body.pn + "', freight_bill = '" + req.body.f_bill + "', ordered = '" + new_order_date + "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', comment = '" + req.body.comment + "'";
 		if (req.body.curr_status != 4 && req.body.f_bill != '') {
 			sql += ", status = 3";
 		}
@@ -1113,7 +1113,11 @@ module.exports = function (app, connection) {
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-orders');
 			} else {
-				res.redirect('/orders');
+				if(results){
+					res.json({
+						success: 1
+					});
+				}
 			}
 		});
 	});
