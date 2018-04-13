@@ -996,35 +996,35 @@
                     }
                     output_arr += '<tr>'+
                         '<td>'+
-                            '<input type="text" id="pn" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
+                            '<input type="text" id="pn_'+val['id']+'" data-row_id="'+val['id']+'" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="qty" name="qty" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
+                            '<input type="text" id="qty_'+val['id']+'" name="qty" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<select class="form-control location" name="location" required="required">'+
+                            '<select class="form-control location" id="location_'+val['id']+'" name="location" required="required">'+
                                 location_list+
                             '</select>'+
                         '</td>'+
                         '<td>'+
-                            '<select class="form-control managers" name="managers" required="required">'+
+                            '<select class="form-control managers" id="managers_'+val['id']+'" name="managers" required="required">'+
                                 manager_list+
                             '</select>'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="order_date" name="order_date" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
+                            '<input type="text" id="order_date_'+val['id']+'" name="order_date" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="due_date" name="due_date" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
+                            '<input type="text" id="due_date_'+val['id']+'" name="due_date" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="ship_date" name="ship_date" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value="'+getFormattedDate(val['shipped'])+'">'+
+                            '<input type="text" id="ship_date_'+val['id']+'" name="ship_date" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value="'+getFormattedDate(val['shipped'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="f_bill" name="f_bill" class="form-control f_bill"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
+                            '<input type="text" id="f_bill_'+val['id']+'" name="f_bill" class="form-control f_bill"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="comment" name="comment" class="form-control comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
+                            '<input type="text" id="comment_'+val['id']+'" name="comment" class="form-control comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
                             '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_po" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
@@ -1162,21 +1162,31 @@
             $(document).on('click', '.update_po', function () {
                 var row_id = $(this).data('row_id');
                 var curr_status = $(".curr_status").val();
+                var old_pn_value = $("#pn_"+row_id).val();
+                var old_qty_value = $("#qty_"+row_id).val();
+                var old_location_value = $("#location_"+row_id).val();
+                var old_managers_value = $("#managers_"+row_id).val();
+                var old_order_date_value = $("#order_date_"+row_id).val();
+                var old_due_date_value = $("#due_date_"+row_id).val();
+                var old_ship_date_value = $("#ship_date_"+row_id).val();
+                var old_f_bill_value = $("#f_bill_"+row_id).val();
+                var old_comment_value = $("#comment_"+row_id).val();
+
                 
                 $("#LoadingImage").show();
                 $.ajax({
                     type: 'POST',
                     url: '/orders/edit/' + row_id,
                     data:{
-                        pn : pn, 
-                        qty: qty,
-                        location: location,
-                        managers: managers,
-                        order_date: order_date,
-                        due_date: due_date,
-                        ship_date: ship_date,
-                        f_bill: f_bill,
-                        comment: comment,
+                        pn : (typeof pn === "undefined" ? old_pn_value : pn), 
+                        qty: (typeof qty === "undefined" ? old_qty_value : qty),
+                        location: (typeof location === "undefined" ? old_location_value : location),
+                        managers: (typeof managers === "undefined" ? old_managers_value : managers),
+                        order_date: (typeof order_date === "undefined" ? old_order_date_value : order_date),
+                        due_date: (typeof due_date === "undefined" ? old_due_date_value : due_date),
+                        ship_date: (typeof ship_date === "undefined" ? old_ship_date_value : ship_date),
+                        f_bill: (typeof f_bill === "undefined" ? old_f_bill_value : f_bill),
+                        comment: (typeof comment === "undefined" ? old_comment_value : comment),
                         curr_status: curr_status
                     },
                     success: function (response){
