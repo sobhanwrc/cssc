@@ -88,7 +88,7 @@ module.exports = function (app, connection) {
 
 	app.get('/orders', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		var sql = "SELECT po, count(id), sum(qty) as qty, invoice_no FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		var sql = "SELECT po, count(id), sum(qty) as qty FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -98,7 +98,7 @@ module.exports = function (app, connection) {
 	});
 
 	app.get('/jma-orders', function (req, res) {
-		var sql = "SELECT * FROM jmaview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY ORDER BY `id` DESC";
+		var sql = "SELECT po, jmapo, count(id), sum(qty) as qty FROM jmaview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -687,13 +687,8 @@ module.exports = function (app, connection) {
 		});
 	});
 	
-	app.get('/jma-orders/packing/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE jma_orders SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
-		//sql = "SELECT p.description, p.pn, o.po, o.qty, o.ordered, o.location, l.name, l.street, l.city, l.person, l.phone, l.fax FROM products p, jma_orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id1'] + "'";
-		sql = "SELECT p.description, p.pn, o.po, o.qty, o.ordered, o.location, l.name, l.street, l.city, l.person, l.phone, l.fax FROM products p INNER JOIN jma_orders o ON o.pn = p.pn LEFT OUTER JOIN locations l ON l.sum = o.location WHERE o.po = '" + req.params['id1'] + "'";
+	app.get('/jma-orders/packing/:id', function (req, res) {
+		sql = "SELECT p.description, p.pn, o.po, o.qty, o.ordered, o.location, l.name, l.street, l.city, l.person, l.phone, l.fax FROM products p INNER JOIN jma_orders o ON o.pn = p.pn LEFT OUTER JOIN locations l ON l.sum = o.location WHERE o.po = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
 			order_date = results[0].ordered;
 			//person_name = results[0].customer;
@@ -703,18 +698,14 @@ module.exports = function (app, connection) {
 			city = results[0].city;
 			phone = results[0].phone;
 			fax = results[0].fax;
-			res.render('jma-order/printingview', { layout: 'dashboard', orders: results, order_date: order_date, person_name: person_name,name: name, street: street, city: city, phone: phone, fax: fax, f_bill: req.params['id2'], order_id: req.params['id1'] });
+			res.render('jma-order/printingview', { layout: 'dashboard', orders: results, order_date: order_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, order_id: req.params['id'] });
 		});
 	});
 
-	app.get('/jma-orders/invoice/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE jma_orders SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
+	app.get('/jma-orders/invoice/:id', function (req, res) {
 		var sql1 = "SELECT max(invoice_no) as max_inv FROM jma_orders";
 		connection.query(sql1, function (err, max_res) {
-			var sql2 = "SELECT invoice_no FROM jma_orders WHERE id = '" + req.params['id3'] + "'";
+			var sql2 = "SELECT invoice_no FROM jma_orders WHERE po = '" + req.params['id'] + "'";
 			connection.query(sql2, function (err, inv_res) {
 				var new_inv;
 				if (inv_res[0].invoice_no == 0) {
@@ -722,9 +713,9 @@ module.exports = function (app, connection) {
 				} else {
 					new_inv = inv_res[0].invoice_no;
 				}
-				var sql3 = "UPDATE jma_orders SET invoice_no = '" + new_inv + "' WHERE id = '" + req.params['id3'] + "'";
+				var sql3 = "UPDATE jma_orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id1'] + "' AND o.id = '" + req.params['id3'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -755,21 +746,17 @@ module.exports = function (app, connection) {
 						location = results[0].location;
 						invoice_no = results[0].invoice_no;
 						shipping_cost = parseFloat(results[0].shipping_cost).toFixed(2);
-						res.render('jma-order/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, jma_po: results[0].jmapo, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, location: location, shipping_cost: shipping_cost, invoice_no: invoice_no, f_bill: req.params['id2'], order_id: req.params['id1'], id: req.params['id3'] });
+						res.render('jma-order/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, jma_po: results[0].jmapo, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, location: location, shipping_cost: shipping_cost, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
 		});
 	});
 
-	app.get('/jma-orders/delivery/:id1/:id2?/:id3', function (req, res) {
-		/*if (req.params['id2'] != undefined) {
-			var sql1 = "UPDATE jma_orders SET gid = 1, status = 3 WHERE id = '" + req.params['id3'] + "'";
-			connection.query(sql1);
-		}*/
+	app.get('/jma-orders/delivery/:id', function (req, res) {
 		var sql1 = "SELECT max(invoice_no) as max_inv FROM jma_orders";
 		connection.query(sql1, function (err, max_res) {
-			var sql2 = "SELECT invoice_no FROM jma_orders WHERE id = '" + req.params['id3'] + "'";
+			var sql2 = "SELECT invoice_no FROM jma_orders WHERE po = '" + req.params['id'] + "'";
 			connection.query(sql2, function (err, inv_res) {
 				var new_inv;
 				if (inv_res[0].invoice_no == 0) {
@@ -777,9 +764,9 @@ module.exports = function (app, connection) {
 				} else {
 					new_inv = inv_res[0].invoice_no;
 				}
-				var sql3 = "UPDATE jma_orders SET invoice_no = '" + new_inv + "' WHERE id = '" + req.params['id3'] + "'";
+				var sql3 = "UPDATE jma_orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id1'] + "' AND o.id = '" + req.params['id3'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -810,7 +797,7 @@ module.exports = function (app, connection) {
 						location = results[0].location;
 						invoice_no = results[0].invoice_no;
 						shipping_cost = parseFloat(results[0].shipping_cost).toFixed(2);
-						res.render('jma-order/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, jma_po: results[0].jmapo, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, location: location, shipping_cost: shipping_cost, invoice_no: invoice_no, f_bill: req.params['id2'], order_id: req.params['id1'], id: req.params['id3'] });
+						res.render('jma-order/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, jma_po: results[0].jmapo, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, location: location, shipping_cost: shipping_cost, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
@@ -987,8 +974,14 @@ module.exports = function (app, connection) {
 		});
 	});
 
+	app.get('/jma-orders/details/:po', function (req, res) {
+	  	var sql = "SELECT * FROM jma_orders WHERE po = '" + req.params['po'] + "'";
+	  	connection.query(sql, function (err, results) {
+	   		sendJSON(res, 200, results);
+	  	});
+ 	});
+
 	app.get('/jma-orders/edit/:id', function (req, res) {
-		//var sql = "SELECT * FROM jma_orders j, locations l WHERE j.location = l.sum AND j.id = '" + req.params['id'] + "'";
 		var sql = "SELECT * FROM jma_orders j LEFT OUTER JOIN locations l ON j.location = l.sum WHERE j.id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
 			res.render('jma-order/edit', { layout: 'dashboard', results: results, jmaorder_id: req.params['id'] });
