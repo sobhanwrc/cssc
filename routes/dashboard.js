@@ -172,7 +172,7 @@ module.exports = function (app, connection) {
 			new_due_date = due_date[2] + "-" + due_date[0] + "-" + due_date[1];
 			ship_date = req.body.ship_date[i].split("-");
 			new_ship_date = ship_date[2] + "-" + ship_date[0] + "-" + ship_date[1];
-			sql = "INSERT INTO orders SET n_comp = 1, status = 2, po = '" + req.body.po + "', pn = '" + req.body.pn[i] + "', qty = '" + req.body.qty[i] + "', location = '" + req.body.location[i] + "', ordered = '" + new_order_date + "', comment = '" + req.body.comment[i] + "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', freight_bill = ''";
+			sql = "INSERT INTO orders SET n_comp = 1, status = 2, po = '" + req.body.po + "', pn = '" + req.body.pn[i] + "', qty = '" + req.body.qty[i] + "', location = '" + req.body.location[i] + "', manager = '" + req.body.managers[i] + "', ordered = '" + new_order_date + "', comment = '" + req.body.comment[i] + "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', freight_bill = ''";
 			connection.query(sql);
 		}
 		req.flash('orderMessage', 'Order added successfully');
@@ -374,7 +374,7 @@ module.exports = function (app, connection) {
 			new_rep_date = rep_date[2] + "-" + rep_date[0] + "-" + rep_date[1];
 			ready_date = req.body.ready_date[i].split("-");
 			new_ready_date = ready_date[2] + "-" + ready_date[0] + "-" + ready_date[1];
-			var sql = "INSERT INTO warranties SET po = '" + req.body.po + "', pn = '" + req.body.pn[i] + "', qty = '" + req.body.qty[i] + "', location = '" + req.body.location[i] + "', ordered = '" + new_order_date + "', comment = '" + req.body.comment[i]+ "', itemcomment = '" + req.body.details[i]+ "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', returned = '" + new_ret_date + "', reported = '" + new_rep_date + "', ready = '" + new_ready_date + "', freight_bill = '" + req.body.f_bill[i] + "', serial_no = '" + req.body.serial_no[i] + "', invoice_status = '" + req.body.invoice_status + "'";
+			var sql = "INSERT INTO warranties SET po = '" + req.body.po + "', pn = '" + req.body.pn[i] + "', qty = '" + req.body.qty[i] + "', location = '" + req.body.location[i] + "', manager = '" + req.body.managers[i] + "', ordered = '" + new_order_date + "', comment = '" + req.body.comment[i]+ "', itemcomment = '" + req.body.details[i]+ "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', returned = '" + new_ret_date + "', reported = '" + new_rep_date + "', ready = '" + new_ready_date + "', freight_bill = '" + req.body.f_bill[i] + "', serial_no = '" + req.body.serial_no[i] + "', invoice_status = '" + req.body.invoice_status[i] + "'";
 			if (req.body.f_bill[i] != '') {
 				sql += ", status = 3";
 			} else {
@@ -1123,7 +1123,7 @@ module.exports = function (app, connection) {
 	});
 
 	app.post('/warranties/edit/:id', function (req, res) {
-		sql = "UPDATE warranties SET invoice_status = '" + req.body.invoice_status + "', serial_no = '" + req.body.serial_no + "', comment = '" + req.body.comment + "', itemcomment = '" + req.body.itemcomment + "', freight_bill = '" + req.body.f_bill + "', pn = '" + req.body.pn + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', location = '" + req.user.location + "', manager = '" + req.user.managers + "'";
+		sql = "UPDATE warranties SET invoice_status = '" + req.body.invoice_status + "', serial_no = '" + req.body.serial_no + "', comment = '" + req.body.comment + "', itemcomment = '" + req.body.itemcomment + "', freight_bill = '" + req.body.f_bill + "', pn = '" + req.body.pn + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', location = '" + req.body.location + "', manager = '" + req.body.managers + "'";
 		if (req.body.ready != 'invalid date') {
 			ready_date = req.body.ready.split("-");
 			new_ready_date = ready_date[2] + "-" + ready_date[0] + "-" + ready_date[1];
