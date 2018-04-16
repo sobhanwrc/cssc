@@ -909,55 +909,7 @@
             //}
         });
 
-        $(document).on("focus", ".order_date, .jma_order_date", function (e) {
-            $(this).datepicker({
-                autoclose: !0,
-                changeYear: true,
-                format: "mm-dd-yyyy",
-            });
-        });
-
-        $(document).on("focus", ".due_date, .jma_due_date", function (e) {
-            $(this).datepicker({
-                autoclose: !0,
-                changeYear: true,
-                format: "mm-dd-yyyy",
-            });
-        });
-
-        $(document).on("focus", ".ship_date", function (e) {
-            $(this).datepicker({
-                autoclose: !0,
-                changeYear: true,
-                format: "mm-dd-yyyy"
-            });
-        });
-
-        $(document).on("focus", ".ret_date", function (e) {
-            $(this).datepicker({
-                autoclose: !0,
-                changeYear: true,
-                format: "mm-dd-yyyy",
-            });
-        });
-
-        $(document).on("focus", ".core_ret_date, .jma_core_ret_date", function (e) {
-            $(this).datepicker({
-                autoclose: !0,
-                changeYear: true,
-                format: "mm-dd-yyyy",
-            });
-        });
-
-        $(document).on("focus", ".rep_date", function (e) {
-            $(this).datepicker({
-                autoclose: !0,
-                changeYear: true,
-                format: "mm-dd-yyyy",
-            });
-        });
-
-        $(document).on("focus", ".ready_date", function (e) {
+        $(document).on("focus", ".order_date, .jma_order_date, .due_date, .jma_due_date, .ship_date, .ret_date, .core_ret_date, .jma_core_ret_date, .rep_date, .ready_date", function (e) {
             $(this).datepicker({
                 autoclose: !0,
                 changeYear: true,
@@ -1183,6 +1135,21 @@
                     } else {
                         complete = '';
                     }
+                    var invoice_option;
+                    if (val['invoice_status'] == 1) {
+                        invoice_option = '<option value="1" selected>Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option>';
+                    } else if (val['invoice_status'] == 2) {
+                        invoice_option = '<option value="1">Burnt</option><option value="2" selected>No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option>';
+                    } else if (val['invoice_status'] == 3) {
+                        invoice_option = '<option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3" selected>Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option>';
+                    } else if (val['invoice_status'] == 4) {
+                        invoice_option = '<option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4" selected>Honored</option><option value="5">Others</option>';
+                    } else if (val['invoice_status'] == 5) {
+                        invoice_option = '<option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5" selected>Others</option>';
+                    } else {
+                        invoice_option = '<option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option>';
+                    }
+
                     output_arr += '<div class="warranty_form" id="warranty_form"><div class="warranty_form_left" style="width:92%;">'+
                             '<div class="box">'+
                                 '<div class="row">'+
@@ -1308,11 +1275,7 @@
                                             '<div>'+
                                                 '<select class="form-control invoice_status" name="invoice_status" id="invoice_status_'+val['id']+'" required="required">'+
                                                     '<option value="">Select One</option>'+
-                                                    '<option value="1">Burnt</option>'+
-                                                    '<option value="2">No Defects Found</option>'+
-                                                    '<option value="3">Warranty Expired</option>'+
-                                                    '<option value="4">Honored</option>'+
-                                                    '<option value="5">Others</option>'+
+                                                    invoice_option+
                                                 '</select>'+
                                             '</div>'+
                                         '</div>'+
@@ -1433,7 +1396,6 @@
                     url: "/warranties/details/" + warr_po,
                     async: false,
                     success: function (response) {
-                        console.log(response);
                         total_warrpo_result = response;
                         flagBool = true;
                     },
