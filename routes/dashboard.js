@@ -1186,16 +1186,26 @@ module.exports = function (app, connection) {
 	app.get('/jma-orders/delete/:id', function (req, res) {
 		sql = "DELETE FROM jma_orders WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			req.flash('orderMessage', 'JMA order deleted successfully');
-			res.redirect('/jma-orders');
+			// req.flash('orderMessage', 'JMA order deleted successfully');
+			// res.redirect('/jma-orders');
+			if(results){
+				res.json({
+					success: "1"
+				});
+			}
 		});
 	});
 
 	app.get('/warranties/delete/:id', function (req, res) {
 		sql = "DELETE FROM warranties WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			req.flash('orderMessage', 'Warranties deleted successfully');
-			res.redirect('/warranties');
+			// req.flash('orderMessage', 'Warranties deleted successfully');
+			// res.redirect('/warranties');
+			if(results){
+				res.json({
+					success: "1"
+				});
+			}
 		});
 	});
 

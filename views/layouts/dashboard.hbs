@@ -346,6 +346,7 @@
                 window.location.href = "/warranties/delivery/" + warr_po + "/";
             });
 
+            //order complete
             $(document).on("click", ".order_completed", function (e) {
                 var row_id = $(this).data('row_id');
                 if ($(this).attr('data-ship-status') == '2') {
@@ -384,21 +385,34 @@
                     });
                 }
             });
+            //end 
 
             $(document).on("click", ".jmaorder_completed", function (e) {
+                var row_id = $(this).data('row_id');
                 if ($(this).attr('data-ship-status') == '2') {
                     alert('please shiped the order first');
                 } else {
+                    $("#LoadingImage").show();
+
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
                         url: "/complete_jma_order",
                         data: {
-                            id: $("#row_id").val()
+                            id: row_id
                         },
                         success: function (response) {
                             if (response === "1") {
-                                window.location.href = "/jma-orders";
+                                $("#LoadingImage").hide();
+                                swal({   
+                                    title: "Thank You",   
+                                    text: "JMA Order completed successfully!",   
+                                    type: "success",     
+                                    confirmButtonColor: "#DD6B55",   
+                                    confirmButtonText: "OK"
+                                },  function(){
+                                    window.location.reload();                                     
+                                });
                             }
                             else {
                                 alert("error");
@@ -412,19 +426,31 @@
             });
 
             $(document).on("click", ".warranties_completed", function (e) {
+                var row_id = $(this).data('row_id');
                 if ($(this).attr('data-ship-status') == '2') {
                     alert('please shiped the order first');
                 } else {
+                    $("#LoadingImage").show();
+
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
                         url: "/complete_warranties_order",
                         data: {
-                            id: $("#row_id").val()
+                            id: row_id
                         },
                         success: function (response) {
                             if (response === "1") {
-                                window.location.href = "/warranties";
+                                $("#LoadingImage").hide();
+                                swal({   
+                                    title: "Thank You",   
+                                    text: "Warranties completed successfully!",   
+                                    type: "success",     
+                                    confirmButtonColor: "#DD6B55",   
+                                    confirmButtonText: "OK"
+                                },  function(){
+                                    window.location.reload();                                     
+                                });
                             }
                             else {
                                 alert("error");
@@ -1052,7 +1078,7 @@
                 $.each(arr, function (key, val) {
                     var complete;
                     if (val['status'] != 4) {
-                        complete = '<a title="Complete" class="btn btn-primary btn-sm order_completed" data-row_id="'+val['id']+'" data-ship-status="'+val['status']+'" href="javascript:void(0)"><i class="fa fa-check" aria-hidden="true"></i></a>';
+                        complete = '<a title="Complete" class="btn btn-primary btn-sm jmaorder_completed" data-row_id="'+val['id']+'" data-ship-status="'+val['status']+'" href="javascript:void(0)"><i class="fa fa-check" aria-hidden="true"></i></a>';
                     } else {
                         complete = '';
                     }
@@ -1090,7 +1116,7 @@
                         '<td>'+
                             '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_jma_po"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
-                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_jma_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
                     '</tr>';
                 });
@@ -1393,6 +1419,7 @@
                 }
             });
 
+            //order po section delete//
             $(document).on('click', '.delete', function () {
                 var row_id = $(this).data('row_id');
                 if (row_id) {
@@ -1430,6 +1457,87 @@
                     });
                 }
             });
+            //end
+
+            //jma po delete
+            $(document).on('click', '.delete_jma_po', function () {
+                var row_id = $(this).data('row_id');
+                if (row_id) {
+                    swal({
+                        title: "Do you really want to delete the current record ?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: false
+                    },
+                    function() {
+                        $.ajax({
+                            type: "GET",
+                            url: "/jma-orders/delete/" + row_id,
+                            success: function (response) {
+                                if (response.success === "1") {
+                                    swal({   
+                                        title: "Thank You",   
+                                        text: "Deleted successfully!",   
+                                        type: "success",     
+                                        confirmButtonColor: "#DD6B55",   
+                                        confirmButtonText: "OK"
+                                    },  function() {
+                                        window.location.reload();                                     
+                                    });
+                                } else {
+                                    alert("error");
+                                }
+                            },
+                            error: function (xhr) {
+
+                            }
+                        });
+                    });
+                }
+            });
+            //end
+
+            //warrenties po delete
+            $(document).on('click', '.delete_warrenties_po', function () {
+                var row_id = $(this).data('row_id');
+                if (row_id) {
+                    swal({
+                        title: "Do you really want to delete the current record ?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: false
+                    },
+                    function() {
+                        $.ajax({
+                            type: "GET",
+                            url: "/warranties/delete/" + row_id,
+                            success: function (response) {
+                                if (response.success === "1") {
+                                    swal({   
+                                        title: "Thank You",   
+                                        text: "Deleted successfully!",   
+                                        type: "success",     
+                                        confirmButtonColor: "#DD6B55",   
+                                        confirmButtonText: "OK"
+                                    },  function() {
+                                        window.location.reload();                                     
+                                    });
+                                } else {
+                                    alert("error");
+                                }
+                            },
+                            error: function (xhr) {
+
+                            }
+                        });
+                    });
+                }
+            });
+            //end
 
             /********Data Field*********/
              var qty, pn, location, managers, order_date, due_date, ship_date, f_bill, comment;   
