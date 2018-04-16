@@ -788,6 +788,29 @@
             });
         });
 
+        $(document).on("focus", ".jma_pn", function (e) {
+            $(this).autocomplete({
+                source: "/get-product-no",
+                minLength: 2,
+                /*change: function (event, ui) {
+                    if (!ui.item) {
+                        alert("Please select part no");
+                        $(this).val("");
+                    }
+                },*/
+                focus: function (event, ui) {
+                    this.value = ui.item.label;
+                    // Prevent other event from not being execute
+                    event.preventDefault();
+                },
+                select: function (event, ui) {
+                    this.value = ui.item.label;
+                    event.preventDefault();
+                }
+            });
+        });
+
+
         $(document).on("keyup", "#po", function (e) {
             //$("#po").keyup(function (e) {
             //if(this.value.length =='2') {
@@ -1084,41 +1107,42 @@
                     }
                     output_arr += '<tr>'+
                         '<td>'+
-                            '<input type="text" id="pn" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
+                            '<input type="text" id="pn_'+val['id']+'" name="pn" class="form-control jma_pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="qty" name="qty" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
+                            '<input type="text" id="qty_'+val['id']+'" name="qty" class="form-control jma_qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="location" name="location" class="form-control location" required="required" data-parsley-required-message="Please enter location" placeholder="Please enter location" value="'+val['location']+'">'+
+                            '<input type="text" id="location_'+val['id']+'" name="location" class="form-control jma_location" required="required" data-parsley-required-message="Please enter location" placeholder="Please enter location" value="'+val['location']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="customer" name="customer" class="form-control customer" required="required" data-parsley-required-message="Please enter customer name" placeholder="Please enter customer name" value="'+val['customer']+'">'+
+                            '<input type="text" id="customer_'+val['id']+'" name="customer" class="form-control jma_customer" required="required" data-parsley-required-message="Please enter customer name" placeholder="Please enter customer name" value="'+val['customer']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="order_date" name="order_date" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
+                            '<input type="text" id="order_date_'+val['id']+'" name="order_date" class="form-control jma_order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="due_date" name="due_date" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
+                            '<input type="text" id="due_date_'+val['id']+'" name="due_date" class="form-control jma_due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="s_cost" name="s_cost" class="form-control s_cost" placeholder="Please enter shipping cost" value="'+val['shipping_cost']+'">'+
+                            '<input type="text" id="s_cost_'+val['id']+'" name="s_cost" class="form-control jma_s_cost" placeholder="Please enter shipping cost" value="'+val['shipping_cost']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="core_ret_date" name="core_ret_date" class="form-control core_ret_date" required="required" data-parsley-required-message="Please enter core return date" placeholder="Please enter core return date" value="'+getFormattedDate(val['core_returned'])+'">'+
+                            '<input type="text" id="core_ret_date_'+val['id']+'" name="core_ret_date" class="form-control jma_core_ret_date" required="required" data-parsley-required-message="Please enter core return date" placeholder="Please enter core return date" value="'+getFormattedDate(val['core_returned'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="f_bill" name="f_bill" class="form-control"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
+                            '<input type="text" id="f_bill_'+val['id']+'" name="f_bill" class="form-control jma_f_bill"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="comment" name="comment" class="form-control"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
+                            '<input type="text" id="comment_'+val['id']+'" name="comment" class="form-control jma_comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_jma_po"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_jma_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_jma_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
-                    '</tr>';
+                    '</tr>'+
+                    '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">';
                 });
                 output_arr += '</tbody>'+
                     '</table>'+
@@ -1363,7 +1387,6 @@
                     url: "/jma-orders/details/" + jma_order_po,
                     async: false,
                     success: function (response) {
-                        console.log(response);
                         total_jmapo_result = response;
                         flagBool = true;
                     },
@@ -1540,7 +1563,7 @@
             //end
 
             /********Data Field*********/
-             var qty, pn, location, managers, order_date, due_date, ship_date, f_bill, comment;   
+             var qty, pn, location, managers, order_date, due_date, ship_date, f_bill, comment, jma_qty, jma_pn, jma_location, jma_customer, jma_order_date, jma_due_date, jma_s_cost, jma_core_ret_date, jma_f_bill, jma_comment;   
             /**********End****************/
             $(document).on('change', '.pn', function(){
                 pn = $(this).val();
@@ -1569,7 +1592,39 @@
             $(document).on('change', '.comment', function(){
                 comment = $(this).val();
             });
+
+            $(document).on('change', '.jma_pn', function(){
+                jma_pn = $(this).val();
+            });
+            $(document).on('change', '.jma_qty', function(){
+                qty = $(this).val();
+            });
+            $(document).on('change', '.jma_location', function(){
+                location = $(this).val();
+            });
+            $(document).on('change', '.jma_customer', function(){
+                managers = $(this).val();
+            });
+            $(document).on('change', '.jma_order_date', function(){
+                order_date = $(this).val();
+            });
+            $(document).on('change', '.jma_due_date', function(){
+                due_date = $(this).val();
+            });
+            $(document).on('change', '.jma_core_ret_date', function(){
+                jma_core_ret_date = $(this).val();
+            });
+            $(document).on('change', '.jma_s_cost', function(){
+                s_cost = $(this).val();
+            });
+            $(document).on('change', '.jma_f_bill', function(){
+                f_bill = $(this).val();
+            });
+            $(document).on('change', '.jma_comment', function(){
+                comment = $(this).val();
+            });
             
+            //update order po
             $(document).on('click', '.update_po', function () {
                 var row_id = $(this).data('row_id');
                 var curr_status = $(".curr_status").val();
@@ -1621,6 +1676,62 @@
                     }   
                 });
             });
+            //end 
+
+            //update jma po
+            $(document).on('click', '.update_jma_po', function () {
+                var row_id = $(this).data('row_id');
+                var curr_status = $(".curr_status").val();
+                var old_pn_value = $("#pn_"+row_id).val();
+                var old_qty_value = $("#qty_"+row_id).val();
+                var old_location_value = $("#location_"+row_id).val();
+                var old_customer_value = $("#customer_"+row_id).val();
+                var old_order_date_value = $("#order_date_"+row_id).val();
+                var old_due_date_value = $("#due_date_"+row_id).val();
+                var old_s_cost_value = $("#s_cost_"+row_id).val();
+                var old_core_ret_date_value = $("#core_ret_date_"+row_id).val();
+                var old_f_bill_value = $("#f_bill_"+row_id).val();
+                var old_comment_value = $("#comment_"+row_id).val();
+
+                $("#LoadingImage").show();
+                $.ajax({
+                    type: 'POST',
+                    url: '/jma-orders/edit/' + row_id,
+                    data:{
+                        pn : (typeof jma_pn === "undefined" ? old_pn_value : jma_pn), 
+                        qty: (typeof qty === "undefined" ? old_qty_value : qty),
+                        location: (typeof location === "undefined" ? old_location_value : location),
+                        customer: (typeof managers === "undefined" ? old_customer_value : managers),
+                        order_date: (typeof order_date === "undefined" ? old_order_date_value : order_date),
+                        due_date: (typeof due_date === "undefined" ? old_due_date_value : due_date),
+                        s_cost: (typeof s_cost === "undefined" ? old_s_cost_value : s_cost),
+                        core_ret_date: (typeof s_cost === "undefined" ? old_core_ret_date_value : jma_core_ret_date),
+                        f_bill: (typeof f_bill === "undefined" ? old_f_bill_value : f_bill),
+                        comment: (typeof comment === "undefined" ? old_comment_value : comment),
+                        curr_status: curr_status
+                    },
+                    success: function (response){
+                        if (response.success === 1) {
+                            swal({   
+                                title: "Thank You",   
+                                text: "Record updated successfully!",   
+                                type: "success",     
+                                confirmButtonColor: "#DD6B55",   
+                                confirmButtonText: "OK"
+                            },  function(){
+                                window.location.reload();                                     
+                            });
+                        }
+                        else {
+                            alert("error");
+                        }
+
+                    },
+                    error: function (xhr) {
+                    }   
+                });
+            });
+            //end
         });
 
         function getFormattedDate(date1) {
