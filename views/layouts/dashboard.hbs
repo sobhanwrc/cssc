@@ -909,7 +909,7 @@
             //}
         });
 
-        $(document).on("focus", ".order_date", function (e) {
+        $(document).on("focus", ".order_date, .jma_order_date", function (e) {
             $(this).datepicker({
                 autoclose: !0,
                 changeYear: true,
@@ -917,7 +917,7 @@
             });
         });
 
-        $(document).on("focus", ".due_date", function (e) {
+        $(document).on("focus", ".due_date, .jma_due_date", function (e) {
             $(this).datepicker({
                 autoclose: !0,
                 changeYear: true,
