@@ -365,15 +365,8 @@
                         success: function (response) {
                             if (response === "1") {
                                 $("#LoadingImage").hide();
-                                swal({   
-                                    title: "Thank You",   
-                                    text: "Order completed successfully!",   
-                                    type: "success",     
-                                    confirmButtonColor: "#DD6B55",   
-                                    confirmButtonText: "OK"
-                                },  function(){
-                                    window.location.reload();                                     
-                                });
+                                var msg = "Order completed successfully.";
+                                sweetalertCompletePopUp(msg);
                             }
                             else {
                                 alert("error");
@@ -404,15 +397,8 @@
                         success: function (response) {
                             if (response === "1") {
                                 $("#LoadingImage").hide();
-                                swal({   
-                                    title: "Thank You",   
-                                    text: "JMA Order completed successfully!",   
-                                    type: "success",     
-                                    confirmButtonColor: "#DD6B55",   
-                                    confirmButtonText: "OK"
-                                },  function(){
-                                    window.location.reload();                                     
-                                });
+                                var msg = "JMA Order completed successfully.";
+                                sweetalertCompletePopUp(msg);
                             }
                             else {
                                 alert("error");
@@ -442,15 +428,8 @@
                         success: function (response) {
                             if (response === "1") {
                                 $("#LoadingImage").hide();
-                                swal({   
-                                    title: "Thank You",   
-                                    text: "Warranties completed successfully!",   
-                                    type: "success",     
-                                    confirmButtonColor: "#DD6B55",   
-                                    confirmButtonText: "OK"
-                                },  function(){
-                                    window.location.reload();                                     
-                                });
+                                var msg = "Warranties completed successfully.";
+                                sweetalertCompletePopUp(msg);
                             }
                             else {
                                 alert("error");
@@ -1434,15 +1413,7 @@
                             url: "/orders/delete/" + row_id,
                             success: function (response) {
                                 if (response.success === "1") {
-                                    swal({   
-                                        title: "Thank You",   
-                                        text: "Deleted successfully!",   
-                                        type: "success",     
-                                        confirmButtonColor: "#DD6B55",   
-                                        confirmButtonText: "OK"
-                                    },  function() {
-                                        window.location.reload();                                     
-                                    });
+                                    sweetalertDeletePopUp();
                                 } else {
                                     alert("error");
                                 }
@@ -1474,15 +1445,7 @@
                             url: "/jma-orders/delete/" + row_id,
                             success: function (response) {
                                 if (response.success === "1") {
-                                    swal({   
-                                        title: "Thank You",   
-                                        text: "Deleted successfully!",   
-                                        type: "success",     
-                                        confirmButtonColor: "#DD6B55",   
-                                        confirmButtonText: "OK"
-                                    },  function() {
-                                        window.location.reload();                                     
-                                    });
+                                    sweetalertDeletePopUp();
                                 } else {
                                     alert("error");
                                 }
@@ -1514,15 +1477,7 @@
                             url: "/warranties/delete/" + row_id,
                             success: function (response) {
                                 if (response.success === "1") {
-                                    swal({   
-                                        title: "Thank You",   
-                                        text: "Deleted successfully!",   
-                                        type: "success",     
-                                        confirmButtonColor: "#DD6B55",   
-                                        confirmButtonText: "OK"
-                                    },  function() {
-                                        window.location.reload();                                     
-                                    });
+                                    sweetalertDeletePopUp();
                                 } else {
                                     alert("error");
                                 }
@@ -1650,15 +1605,7 @@
                     },
                     success: function (response){
                         if (response.success === 1) {
-                            swal({   
-                                title: "Thank You",   
-                                text: "Record updated successfully!",   
-                                type: "success",     
-                                confirmButtonColor: "#DD6B55",   
-                                confirmButtonText: "OK"
-                            },  function(){
-                                window.location.reload();                                     
-                            });
+                            sweetalertSuccessPopUp();
                         }
                         else {
                             alert("error");
@@ -1705,15 +1652,7 @@
                     },
                     success: function (response){
                         if (response.success === 1) {
-                            swal({   
-                                title: "Thank You",   
-                                text: "Record updated successfully!",   
-                                type: "success",     
-                                confirmButtonColor: "#DD6B55",   
-                                confirmButtonText: "OK"
-                            },  function(){
-                                window.location.reload();                                     
-                            });
+                            sweetalertSuccessPopUp();
                         }
                         else {
                             alert("error");
@@ -1771,15 +1710,7 @@
                     },
                     success: function (response){
                         if (response.success === 1) {
-                            swal({   
-                                title: "Thank You",   
-                                text: "Record updated successfully!",   
-                                type: "success",     
-                                confirmButtonColor: "#DD6B55",   
-                                confirmButtonText: "OK"
-                            },  function(){
-                                window.location.reload();                                     
-                            });
+                            sweetalertSuccessPopUp();
                         }
                         else {
                             alert("error");
@@ -1801,6 +1732,42 @@
             var day = date.getDate().toString();
             day = day.length > 1 ? day : '0' + day;
             return month + '-' + day + '-' + year;
+        }
+
+        function sweetalertSuccessPopUp () {
+            swal({   
+                title: "Thank You",   
+                text: "Record updated successfully!",   
+                type: "success",     
+                confirmButtonColor: "#DD6B55",   
+                confirmButtonText: "OK"
+            },  function(){
+                window.location.reload();                                     
+            });
+        }
+
+        function sweetalertDeletePopUp () {
+            swal({   
+                title: "Thank You",   
+                text: "Deleted successfully!",   
+                type: "success",     
+                confirmButtonColor: "#DD6B55",   
+                confirmButtonText: "OK"
+            },  function() {
+                window.location.reload();                                     
+            });
+        }
+
+        function sweetalertCompletePopUp (res) {
+            swal({   
+                title: "Thank You",   
+                text: res,   
+                type: "success",     
+                confirmButtonColor: "#DD6B55",   
+                confirmButtonText: "OK"
+            },  function(){
+                window.location.reload();                                     
+            });
         }
         </script>
     </body>
