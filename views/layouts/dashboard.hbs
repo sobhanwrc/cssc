@@ -918,6 +918,14 @@
             });
         });
 
+        $(document).on("focus", ".core_ret_date", function (e) {
+            $(this).datepicker({
+                autoclose: !0,
+                changeYear: true,
+                format: "mm-dd-yyyy",
+            });
+        });
+
         $(document).on("focus", ".rep_date", function (e) {
             $(this).datepicker({
                 autoclose: !0,
