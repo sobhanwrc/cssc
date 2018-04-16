@@ -200,7 +200,7 @@ module.exports = function (app, connection) {
 			if (req.body.part_no != "") {
 				sql += " AND `pn` LIKE '" + req.body.part_no + "%'";
 			}
-			sql += " ORDER BY `id` DESC";
+			sql += " GROUP BY `po` ORDER BY `id` DESC";
 
 			connection.query(sql, function (err, rows) {
 				for (i in rows) {
@@ -331,7 +331,7 @@ module.exports = function (app, connection) {
 			if (req.body.part_no != "") {
 				sql += " AND `pn` LIKE '" + req.body.part_no + "%'";
 			}
-			sql += " ORDER BY `id` DESC";
+			sql += " GROUP BY `po` ORDER BY `id` DESC";
 
 			connection.query(sql, function (err, rows) {
 				for (i in rows) {
@@ -392,7 +392,7 @@ module.exports = function (app, connection) {
 		var end_date = req.body.end_date.split("-");
 		var new_end_date = end_date[2] + "-" + end_date[0] + "-" + end_date[1];
 		var sub_total = 0;
-	  
+	  	
 		var sql = "SELECT * FROM warrantyview WHERE 1";
 		if (req.body.start_date != "") {
 	 		sql += " AND `ordered` >= '" + new_start_date + "'";
@@ -403,7 +403,7 @@ module.exports = function (app, connection) {
 		if (req.body.part_no != "") {
 	 		sql += " AND `pn` LIKE '" + req.body.part_no + "%'";
 		}
-		sql += " ORDER BY `id` DESC";
+		sql += " GROUP BY `po` ORDER BY `id` DESC";
 	  
 		connection.query(sql, function (err, rows) {
 			for (i in rows) { 
