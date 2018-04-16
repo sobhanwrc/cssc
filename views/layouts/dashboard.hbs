@@ -1179,11 +1179,11 @@
                     }
                     var complete;
                     if (val['status'] != 4) {
-                        complete = '<a title="Complete" class="btn btn-primary btn-sm order_completed" data-row_id="'+val['id']+'" data-ship-status="'+val['status']+'" href="javascript:void(0)"><i class="fa fa-check" aria-hidden="true"></i></a>';
+                        complete = '<a title="Complete" class="btn btn-primary btn-sm warr_order_completed" data-row_id="'+val['id']+'" data-ship-status="'+val['status']+'" href="javascript:void(0)"><i class="fa fa-check" aria-hidden="true"></i></a>';
                     } else {
                         complete = '';
                     }
-                    output_arr += '<div class="warranty_form" id="warranty_form"><div class="warranty_form_left">'+
+                    output_arr += '<div class="warranty_form" id="warranty_form"><div class="warranty_form_left" style="width:92%;">'+
                             '<div class="box">'+
                                 '<div class="row">'+
                                     '<div class="col-20">'+
@@ -1320,7 +1320,10 @@
                                 '</div>'+
                             '</div>'+
                         '</div>'+
-                        '<div class="warranty_form_right">'+
+                        '<div class="warranty_form_right" style="width:7%;">'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_warr_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            complete +
+                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_warr_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</div>'+
                     '</div>';
                 });
