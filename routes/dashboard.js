@@ -1095,7 +1095,7 @@ module.exports = function (app, connection) {
 		new_due_date = due_date[2] + "-" + due_date[0] + "-" + due_date[1];
 		ship_date = req.body.ship_date.split("-");
 		new_ship_date = ship_date[2] + "-" + ship_date[0] + "-" + ship_date[1];
-		sql = "UPDATE orders SET pn = '" + req.body.pn + "', freight_bill = '" + req.body.f_bill + "', ordered = '" + new_order_date + "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', comment = '" + req.body.comment + "'";
+		sql = "UPDATE orders SET pn = '" + req.body.pn + "', freight_bill = '" + req.body.f_bill + "', ordered = '" + new_order_date + "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', comment = '" + req.body.comment + "', location = '" + req.body.location + "', manager = '" + req.body.managers + "'";
 		if (req.body.curr_status != 4 && req.body.f_bill != '') {
 			sql += ", status = 3";
 		}
@@ -1123,7 +1123,7 @@ module.exports = function (app, connection) {
 	});
 
 	app.post('/warranties/edit/:id', function (req, res) {
-		sql = "UPDATE warranties SET invoice_status = '" + req.body.invoice_status + "', serial_no = '" + req.body.serial_no + "', comment = '" + req.body.comment + "', itemcomment = '" + req.body.itemcomment + "', freight_bill = '" + req.body.f_bill + "', pn = '" + req.body.pn + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "'";
+		sql = "UPDATE warranties SET invoice_status = '" + req.body.invoice_status + "', serial_no = '" + req.body.serial_no + "', comment = '" + req.body.comment + "', itemcomment = '" + req.body.itemcomment + "', freight_bill = '" + req.body.f_bill + "', pn = '" + req.body.pn + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', location = '" + req.user.location + "', manager = '" + req.user.managers + "'";
 		if (req.body.ready != 'invalid date') {
 			ready_date = req.body.ready.split("-");
 			new_ready_date = ready_date[2] + "-" + ready_date[0] + "-" + ready_date[1];
