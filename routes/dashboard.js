@@ -1061,15 +1061,13 @@ module.exports = function (app, connection) {
 	});
 
 	app.post('/jma-orders/edit/:id', function (req, res) {
-		// console.log(req.body);
-		// return false;
 		order_date = req.body.order_date.split("-");
 		new_order_date = order_date[2] + "-" + order_date[0] + "-" + order_date[1];
 		due_date = req.body.due_date.split("-");
 		new_due_date = due_date[2] + "-" + due_date[0] + "-" + due_date[1];
 		core_ret_date = req.body.core_ret_date.split("-");
 		new_core_ret_date = core_ret_date[2] + "-" + core_ret_date[0] + "-" + core_ret_date[1];
-		
+
 		sql = "UPDATE jma_orders SET pn = '" + req.body.pn + "', customer = '" + req.body.customer + "', location = '" + req.body.location + "', freight_bill = '" + req.body.f_bill + "', ordered = '" + new_order_date + "', due = '" + new_due_date + "', core_returned = '" + new_core_ret_date + "', qty = '" + req.body.qty + "', shipping_cost = '" + req.body.s_cost + "', n_comp = '" + req.user.id + "', comment = '" + req.body.comment + "'";
 
 		if (req.body.curr_status != 4 && req.body.f_bill != '') {
@@ -1166,7 +1164,11 @@ module.exports = function (app, connection) {
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-warranties');
 			} else {
-				res.redirect('/warranties');
+				if(results){
+					res.json({
+						success: 1
+					});
+				}
 			}
 		});
 	});
