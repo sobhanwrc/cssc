@@ -941,7 +941,7 @@
             });
         });
 
-        $(document).on("focus", ".core_ret_date", function (e) {
+        $(document).on("focus", ".core_ret_date, .jma_core_ret_date", function (e) {
             $(this).datepicker({
                 autoclose: !0,
                 changeYear: true,
@@ -1713,7 +1713,7 @@
                         order_date: (typeof order_date === "undefined" ? old_order_date_value : order_date),
                         due_date: (typeof due_date === "undefined" ? old_due_date_value : due_date),
                         s_cost: (typeof s_cost === "undefined" ? old_s_cost_value : s_cost),
-                        core_ret_date: (typeof s_cost === "undefined" ? old_core_ret_date_value : jma_core_ret_date),
+                        core_ret_date: (typeof jma_core_ret_date === "undefined" ? old_core_ret_date_value : jma_core_ret_date),
                         f_bill: (typeof f_bill === "undefined" ? old_f_bill_value : f_bill),
                         comment: (typeof comment === "undefined" ? old_comment_value : comment),
                         curr_status: curr_status
