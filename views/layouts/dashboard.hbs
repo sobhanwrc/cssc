@@ -950,21 +950,21 @@
                     var manager_list = '';
                     var location_selected;
                     var manager_selected;
-                    for (var i = 0; i < get_all_location.length; i++) {
-                        if (get_all_location[i].value == val['location']) {
+                    for (var i = 0; i < get_all_location_and_managers.length; i++) {
+                        if (get_all_location_and_managers[i].value == val['location']) {
                             location_selected = "selected";
                         } else {
                             location_selected = "";
                         }
-                        location_list += '<option value="'+get_all_location[i].value+'" '+location_selected+'>'+get_all_location[i].label+'</option>';
+                        location_list += '<option value="'+get_all_location_and_managers[i].value+'" '+location_selected+'>'+get_all_location_and_managers[i].label+'</option>';
                     }
-                    for (var i = 0; i < get_all_location.length; i++) {
-                        if (get_all_location[i].manager == val['manager']) {
+                    for (var i = 0; i < get_all_location_and_managers.length; i++) {
+                        if (get_all_location_and_managers[i].manager == val['manager']) {
                             manager_selected = "selected";
                         } else {
                             manager_selected = "";
                         }
-                        manager_list += '<option value="'+get_all_location[i].manager+'" '+manager_selected+'>'+get_all_location[i].manager+'</option>';
+                        manager_list += '<option value="'+get_all_location_and_managers[i].manager+'" '+manager_selected+'>'+get_all_location_and_managers[i].manager+'</option>';
                     }
                     var complete;
                     if (val['status'] != 4) {
@@ -1106,7 +1106,7 @@
 
             function format_warr(total_warrpo_result, warr_po) {
                 var all_location = fetchLocationWarr(warr_po);
-                var get_all_location = all_location.responseJSON;
+                var get_all_location_and_managers = all_location.responseJSON;
 
                 var arr = JSON.parse(total_warrpo_result);
                 var output_arr = [];
@@ -1115,21 +1115,21 @@
                     var manager_list = '';
                     var location_selected;
                     var manager_selected;
-                    for (var i = 0; i < get_all_location.length; i++) {
-                        if (get_all_location[i].value == val['location']) {
+                    for (var i = 0; i < get_all_location_and_managers.length; i++) {
+                        if (get_all_location_and_managers[i].value == val['location']) {
                             location_selected = "selected";
                         } else {
                             location_selected = "";
                         }
-                        location_list += '<option value="'+get_all_location[i].value+'" '+location_selected+'>'+get_all_location[i].label+'</option>';
+                        location_list += '<option value="'+get_all_location_and_managers[i].value+'" '+location_selected+'>'+get_all_location_and_managers[i].label+'</option>';
                     }
-                    for (var i = 0; i < get_all_location.length; i++) {
-                        if (get_all_location[i].manager == val['manager']) {
+                    for (var i = 0; i < get_all_location_and_managers.length; i++) {
+                        if (get_all_location_and_managers[i].manager == val['manager']) {
                             manager_selected = "selected";
                         } else {
                             manager_selected = "";
                         }
-                        manager_list += '<option value="'+get_all_location[i].manager+'" '+manager_selected+'>'+get_all_location[i].manager+'</option>';
+                        manager_list += '<option value="'+get_all_location_and_managers[i].manager+'" '+manager_selected+'>'+get_all_location_and_managers[i].manager+'</option>';
                     }
                     var complete;
                     if (val['status'] != 4) {
@@ -1331,7 +1331,6 @@
                     url: "/orders/details/" + order_po,
                     async: false,
                     success: function (response) {
-                        console.log(response);
                         total_po_result = response;
                         flagBool = true;
                     },
