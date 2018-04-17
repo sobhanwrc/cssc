@@ -542,8 +542,17 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function(req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no,o.freight_bill, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
+						var tempArray='';
+						results.forEach(function(val) {
+							if(val['freight_bill'] != ""){
+								tempArray += val['freight_bill']+", ";
+							}
+						});
+						var n=tempArray.lastIndexOf(",");
+    					var tempArray1=tempArray.substring(0,n);
+
 						sub_total = 0;
 						total_taxed_value = 0;
 						float = 0;
@@ -568,7 +577,7 @@ module.exports = function (app, connection) {
 						phone = results[0].phone;
 						fax = results[0].fax;
 						invoice_no = results[0].invoice_no;
-						res.render('order/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components:number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
+						res.render('order/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components:number_of_components, float: float, orders: results, f_bill: tempArray1, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
@@ -588,8 +597,17 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.freight_bill, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
+						var tempArray='';
+						results.forEach(function(val) {
+							if(val['freight_bill'] != ""){
+								tempArray += val['freight_bill']+", ";
+							}
+						});
+						var n=tempArray.lastIndexOf(",");
+    					var tempArray1=tempArray.substring(0,n);
+
 						sub_total = 0;
 						total_taxed_value = 0;
 						float = 0;
@@ -614,7 +632,7 @@ module.exports = function (app, connection) {
 						phone = results[0].phone;
 						fax = results[0].fax;
 						invoice_no = results[0].invoice_no;
-						res.render('order/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components:number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
+						res.render('order/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components:number_of_components, float: float, orders: results, f_bill: tempArray1, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
@@ -713,8 +731,17 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE jma_orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.freight_bill, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
+						var tempArray='';
+						results.forEach(function(val) {
+							if(val['freight_bill'] != ""){
+								tempArray += val['freight_bill']+", ";
+							}
+						});
+						var n=tempArray.lastIndexOf(",");
+    					var tempArray1=tempArray.substring(0,n);
+
 						sub_total = 0;
 						total_taxed_value = 0;
 						float = 0;
@@ -739,7 +766,7 @@ module.exports = function (app, connection) {
 						location = results[0].location;
 						invoice_no = results[0].invoice_no;
 						shipping_cost = parseFloat(results[0].shipping_cost).toFixed(2);
-						res.render('jma-order/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, jma_po: results[0].jmapo, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, location: location, shipping_cost: shipping_cost, invoice_no: invoice_no, order_id: req.params['id'] });
+						res.render('jma-order/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, f_bill: tempArray1, jma_po: results[0].jmapo, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, location: location, shipping_cost: shipping_cost, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
@@ -759,8 +786,17 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE jma_orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.freight_bill, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
+						var tempArray='';
+						results.forEach(function(val) {
+							if(val['freight_bill'] != ""){
+								tempArray += val['freight_bill']+", ";
+							}
+						});
+						var n=tempArray.lastIndexOf(",");
+    					var tempArray1=tempArray.substring(0,n);
+
 						sub_total = 0;
 						total_taxed_value = 0;
 						float = 0;
@@ -785,7 +821,7 @@ module.exports = function (app, connection) {
 						location = results[0].location;
 						invoice_no = results[0].invoice_no;
 						shipping_cost = parseFloat(results[0].shipping_cost).toFixed(2);
-						res.render('jma-order/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, jma_po: results[0].jmapo, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, location: location, shipping_cost: shipping_cost, invoice_no: invoice_no, order_id: req.params['id'] });
+						res.render('jma-order/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, f_bill: tempArray1, jma_po: results[0].jmapo, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, location: location, shipping_cost: shipping_cost, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
@@ -848,8 +884,17 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE warranties SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.freight_bill, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
+						var tempArray='';
+						results.forEach(function(val) {
+							if(val['freight_bill'] != ""){
+								tempArray += val['freight_bill']+", ";
+							}
+						});
+						var n=tempArray.lastIndexOf(",");
+    					var tempArray1=tempArray.substring(0,n);
+
 						sub_total = 0;
 						total_taxed_value = 0;
 						float = 0;
@@ -874,7 +919,7 @@ module.exports = function (app, connection) {
 						phone = results[0].phone;
 						fax = results[0].fax;
 						invoice_no = results[0].invoice_no;
-						res.render('warranties/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
+						res.render('warranties/invoiceview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, f_bill: tempArray1, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});
@@ -894,8 +939,17 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE warranties SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.freight_bill, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
+						var tempArray='';
+						results.forEach(function(val) {
+							if(val['freight_bill'] != ""){
+								tempArray += val['freight_bill']+", ";
+							}
+						});
+						var n=tempArray.lastIndexOf(",");
+    					var tempArray1=tempArray.substring(0,n);
+
 						sub_total = 0;
 						total_taxed_value = 0;
 						float = 0;
@@ -920,7 +974,7 @@ module.exports = function (app, connection) {
 						phone = results[0].phone;
 						fax = results[0].fax;
 						invoice_no = results[0].invoice_no;
-						res.render('warranties/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
+						res.render('warranties/deliveryview', { layout: 'dashboard', total_taxed_value: total_taxed_value, number_of_components: number_of_components, float: float, orders: results, f_bill: tempArray1, sub_total: parseFloat(sub_total).toFixed(2), order_date: order_date, bill_date: bill_date, person_name: person_name, name: name, street: street, city: city, phone: phone, fax: fax, invoice_no: invoice_no, order_id: req.params['id'] });
 					});
 				});
 			});

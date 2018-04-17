@@ -924,7 +924,7 @@
             
             function format(total_po_result, order_po) {
                 var all_location = fetchLocation(order_po);
-                var get_all_location = all_location.responseJSON;
+                var get_all_location_and_managers = all_location.responseJSON;
 
                 var arr = JSON.parse(total_po_result);
                 var output_arr = [];
