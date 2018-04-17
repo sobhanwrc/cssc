@@ -1307,6 +1307,7 @@
                     url: "/orders/details/" + order_po,
                     async: false,
                     success: function (response) {
+                        console.log(response);
                         total_po_result = response;
                         flagBool = true;
                     },
@@ -1610,7 +1611,6 @@
                         else {
                             alert("error");
                         }
-
                     },
                     error: function (xhr) {
                     }   
@@ -1657,7 +1657,6 @@
                         else {
                             alert("error");
                         }
-
                     },
                     error: function (xhr) {
                     }   
@@ -1715,10 +1714,9 @@
                         else {
                             alert("error");
                         }
-
                     },
                     error: function (xhr) {
-                    }   
+                    }
                 });
             });
             //end
@@ -1735,38 +1733,38 @@
         }
 
         function sweetalertSuccessPopUp () {
-            swal({   
-                title: "Thank You",   
-                text: "Record updated successfully!",   
-                type: "success",     
-                confirmButtonColor: "#DD6B55",   
+            swal({
+                title: "Thank You",
+                text: "Record updated successfully!",
+                type: "success",
+                confirmButtonColor: "#DD6B55",
                 confirmButtonText: "OK"
             },  function(){
-                window.location.reload();                                     
+                window.location.reload();
             });
         }
 
         function sweetalertDeletePopUp () {
-            swal({   
-                title: "Thank You",   
-                text: "Deleted successfully!",   
-                type: "success",     
-                confirmButtonColor: "#DD6B55",   
+            swal({
+                title: "Thank You",
+                text: "Deleted successfully!",
+                type: "success",
+                confirmButtonColor: "#DD6B55",
                 confirmButtonText: "OK"
             },  function() {
-                window.location.reload();                                     
+                window.location.reload();
             });
         }
 
         function sweetalertCompletePopUp (res) {
-            swal({   
-                title: "Thank You",   
-                text: res,   
-                type: "success",     
-                confirmButtonColor: "#DD6B55",   
+            swal({
+                title: "Thank You",
+                text: res,
+                type: "success",
+                confirmButtonColor: "#DD6B55",
                 confirmButtonText: "OK"
             },  function(){
-                window.location.reload();                                     
+                window.location.reload();
             });
         }
         </script>
