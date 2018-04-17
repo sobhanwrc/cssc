@@ -49,6 +49,7 @@
                                         <tr>
                                             <th>Purchase Orders</th>
                                             <th>No. of Parts</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -57,6 +58,20 @@
                                         <tr>
                                             <td>{{this.po}}</td>
                                             <td>{{this.qty}}</td>
+                                            <td>
+                                                {{#if_eq this.status '1'}}
+                                                    In Process
+                                                {{/if_eq}}
+                                                {{#if_eq this.status '2'}}
+                                                    In Process
+                                                {{/if_eq}}
+                                                {{#if_eq this.status '3'}}
+                                                    Shipped
+                                                {{/if_eq}}
+                                                {{#if_eq this.status '4'}}
+                                                    Completed
+                                                {{/if_eq}}
+                                            </td>
                                             <td data-po="{{this.po}}"></td>
                                         </tr>
                                         {{/each}}

@@ -88,7 +88,7 @@ module.exports = function (app, connection) {
 
 	app.get('/orders', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		var sql = "SELECT po, count(id), sum(qty) as qty FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		var sql = "SELECT po, count(id), sum(qty) as qty, status FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -98,7 +98,7 @@ module.exports = function (app, connection) {
 	});
 
 	app.get('/jma-orders', function (req, res) {
-		var sql = "SELECT po, jmapo, count(id), sum(qty) as qty FROM jmaview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		var sql = "SELECT po, jmapo, count(id), sum(qty) as qty, status FROM jmaview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -109,7 +109,7 @@ module.exports = function (app, connection) {
 
 	app.get('/warranties', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		var sql = "SELECT po, count(id), sum(qty) as qty FROM warrantyview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		var sql = "SELECT po, count(id), sum(qty) as qty, status FROM warrantyview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -462,10 +462,9 @@ module.exports = function (app, connection) {
 	}); */
 
 	app.post('/get-location-order', function (req, res) {
-		//res.send("SELECT sum FROM locations WHERE sum LIKE '%" + request['term'] + "%' ORDER BY sum LIMIT 15");
-		//connection.query("SELECT sum FROM locations WHERE sum LIKE '%" + request['term'] + "%' ORDER BY sum LIMIT 15", function (err, results) {
 		if (req.body.ln != "") {
-			var sql = "SELECT DISTINCT(o.location), l.* FROM orders o, locations l WHERE l.sum = o.location AND o.po LIKE '" + req.body.ln + "%'";
+			//var sql = "SELECT DISTINCT(o.location), l.* FROM orders o, locations l WHERE l.sum = o.location AND o.po LIKE '" + req.body.ln + "%'";
+			var sql = "SELECT * FROM locations WHERE init LIKE '" + req.body.ln + "%'";
 			connection.query(sql, function (err, results) {
 				if (err) {
 					console.log(err);
@@ -497,10 +496,9 @@ module.exports = function (app, connection) {
 	});
 
 	app.post('/get-location-warranty', function (req, res) {
-		//res.send("SELECT sum FROM locations WHERE sum LIKE '%" + request['term'] + "%' ORDER BY sum LIMIT 15");
-		//connection.query("SELECT sum FROM locations WHERE sum LIKE '%" + request['term'] + "%' ORDER BY sum LIMIT 15", function (err, results) {
 		if (req.body.ln != "") {
-			var sql = "SELECT DISTINCT(o.location), l.* FROM warranties o, locations l WHERE l.sum = o.location AND o.po LIKE '" + req.body.ln + "%'";
+			//var sql = "SELECT DISTINCT(o.location), l.* FROM warranties o, locations l WHERE l.sum = o.location AND o.po LIKE '" + req.body.ln + "%'";
+			var sql = "SELECT * FROM locations WHERE init LIKE '" + req.body.ln + "%'";
 			connection.query(sql, function (err, results) {
 				if (err) {
 					console.log(err);
@@ -1033,15 +1031,7 @@ module.exports = function (app, connection) {
 	app.get('/warranties/details/:po', function (req, res) {
 	  	var sql = "SELECT l.*, w.* FROM warranties as w, locations as l WHERE w.location = l.sum AND w.po = '" + req.params['po'] + "'";
 	  	connection.query(sql, function (err, results) {
-	  		var mystr = req.params['po'];
-            var substr = mystr.substr(0, 2);
-	  		var sql1 = "SELECT DISTINCT(o.location), l.* FROM warranties o, locations l WHERE l.sum = o.location AND o.po LIKE '" + substr + "%'";
-			connection.query(sql1, function (err1, res1) {
-				for (i in res1) {
-					results.push({ "label": res1[i].street + ", " + res1[i].city + ", " + res1[i].sum, "value": res1[i].sum, "manager": res1[i].person });
-				}
-	   			sendJSON(res, 200, results);
-	   		});
+   			sendJSON(res, 200, results);
 	  	});
  	});
 
@@ -1067,6 +1057,8 @@ module.exports = function (app, connection) {
 		}
 		sql += " WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
+			sql2 = "UPDATE orders SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.jma_order_po + "' AND status = 2";
+			connection.query(sql2);
 			req.flash('orderMessage', 'JMA order updated successfully');
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-jma-orders');
@@ -1093,6 +1085,8 @@ module.exports = function (app, connection) {
 		}
 		sql += " WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
+			sql2 = "UPDATE orders SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.order_po + "' AND status = 2";
+			connection.query(sql2);
 			req.flash('orderMessage', 'Order updated successfully');
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-orders');
@@ -1152,6 +1146,8 @@ module.exports = function (app, connection) {
 		sql += " WHERE id = '" + req.params['id'] + "'";
 
 		connection.query(sql, function (err, results) {
+			sql2 = "UPDATE warranties SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.warr_po + "' AND status = 2";
+			connection.query(sql2);
 			req.flash('orderMessage', 'Warranty updated successfully');
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-warranties');

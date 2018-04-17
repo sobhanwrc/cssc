@@ -6,8 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta content="CSSC" name="description" />
         <meta content="CSSC" name="author" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" /> {{!--
-        <link rel="shortcut icon" href="/assets/images/favicon.ico"> --}}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
         <link rel="stylesheet" href="/assets/plugins/morris/morris.css">
         <link href="/assets/plugins/RWD-Table-Patterns/dist/css/rwd-table.min.css" rel="stylesheet" type="text/css" media="screen">
@@ -346,7 +345,6 @@
                 window.location.href = "/warranties/delivery/" + warr_po + "/";
             });
 
-            //order complete
             $(document).on("click", ".order_completed", function (e) {
                 var row_id = $(this).data('row_id');
                 if ($(this).attr('data-ship-status') == '2') {
@@ -378,7 +376,6 @@
                     });
                 }
             });
-            //end 
 
             $(document).on("click", ".jmaorder_completed", function (e) {
                 var row_id = $(this).data('row_id');
@@ -931,8 +928,7 @@
 
                 var arr = JSON.parse(total_po_result);
                 var output_arr = [];
-                output_arr += '<form name="order_list_edit" id="order_list_edit" method="post" action="">'+ 
-                            '<div class="details-container">'+
+                output_arr += '<div class="details-container">'+
                             '<table class="table" id="order-table">'+
                             '<thead>'+
                                 '<tr>'+
@@ -952,11 +948,23 @@
                 $.each(arr, function (key, val) {
                     var location_list = '';
                     var manager_list = '';
+                    var location_selected;
+                    var manager_selected;
                     for (var i = 0; i < get_all_location.length; i++) {
-                        location_list += '<option value="'+get_all_location[i].value+'">'+get_all_location[i].label+'</option>';
+                        if (get_all_location[i].value == val['location']) {
+                            location_selected = "selected";
+                        } else {
+                            location_selected = "";
+                        }
+                        location_list += '<option value="'+get_all_location[i].value+'" '+location_selected+'>'+get_all_location[i].label+'</option>';
                     }
                     for (var i = 0; i < get_all_location.length; i++) {
-                        manager_list += '<option value="'+get_all_location[i].manager+'">'+get_all_location[i].manager+'</option>';
+                        if (get_all_location[i].manager == val['manager']) {
+                            manager_selected = "selected";
+                        } else {
+                            manager_selected = "";
+                        }
+                        manager_list += '<option value="'+get_all_location[i].manager+'" '+manager_selected+'>'+get_all_location[i].manager+'</option>';
                     }
                     var complete;
                     if (val['status'] != 4) {
@@ -1002,7 +1010,8 @@
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-row_id="'+val['id']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
                     '</tr>'+
-                    '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">';
+                    '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
+                    '<input type="hidden" name="order_po" class="order_po" value="'+order_po+'">';
                 });
                 output_arr += '</tbody>'+
                     '</table>'+
@@ -1011,8 +1020,7 @@
                         '<a title="Packing List" class="packing" data-po="'+order_po+'" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>'+
                         '<a title="Invoice" class="invoice" data-po="'+order_po+'"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>'+
                         '<a title="Delivery Confirmation" class="delivery" data-po="'+order_po+'"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>'+
-                    '</div>'+
-                    '</form>';
+                    '</div>';
                 $('.details-row').html(output_arr);
                 $('.output-data').html(output_arr);
             };
@@ -1077,12 +1085,13 @@
                             '<input type="text" id="comment_'+val['id']+'" name="comment" class="form-control jma_comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_jma_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-info btn-sm update_jma_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_jma_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
                     '</tr>'+
-                    '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">';
+                    '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
+                    '<input type="hidden" name="order_po" class="order_po" value="'+jma_order_po+'">';
                 });
                 output_arr += '</tbody>'+
                     '</table>'+
@@ -1096,18 +1105,31 @@
             };
 
             function format_warr(total_warrpo_result, warr_po) {
+                var all_location = fetchLocationWarr(warr_po);
+                var get_all_location = all_location.responseJSON;
+
                 var arr = JSON.parse(total_warrpo_result);
-                var arr_1 = JSON.parse(total_warrpo_result).splice(-1);
-                arr.splice(-1);
                 var output_arr = [];
                 $.each(arr, function (key, val) {
                     var location_list = '';
                     var manager_list = '';
-                    for (var i = 0; i < arr_1.length; i++) {
-                        location_list += '<option value="'+arr_1[i].value+'">'+arr_1[i].label+'</option>';
+                    var location_selected;
+                    var manager_selected;
+                    for (var i = 0; i < get_all_location.length; i++) {
+                        if (get_all_location[i].value == val['location']) {
+                            location_selected = "selected";
+                        } else {
+                            location_selected = "";
+                        }
+                        location_list += '<option value="'+get_all_location[i].value+'" '+location_selected+'>'+get_all_location[i].label+'</option>';
                     }
-                    for (var i = 0; i < arr_1.length; i++) {
-                        manager_list += '<option value="'+arr_1[i].manager+'">'+arr_1[i].manager+'</option>';
+                    for (var i = 0; i < get_all_location.length; i++) {
+                        if (get_all_location[i].manager == val['manager']) {
+                            manager_selected = "selected";
+                        } else {
+                            manager_selected = "";
+                        }
+                        manager_list += '<option value="'+get_all_location[i].manager+'" '+manager_selected+'>'+get_all_location[i].manager+'</option>';
                     }
                     var complete;
                     if (val['status'] != 4) {
@@ -1261,11 +1283,12 @@
                                         '</div>'+
                                     '</div>'+
                                     '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
+                                    '<input type="hidden" name="order_po" class="order_po" value="'+warr_po+'">'+
                                 '</div>'+
                             '</div>'+
                         '</div>'+
                         '<div class="warranty_form_right" style="width:7%;">'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_warr_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-info btn-sm update_warr_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_warr_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</div>'+
@@ -1325,7 +1348,7 @@
                     $('.details-row').remove();
                     $(this).parent().addClass("shown");
                     $(this).removeClass("details-control").addClass('remove-control');
-                    $(this).closest("tr").after("<tr class='details-row'><td colspan='3'>"+ $('.output-data').html() + "</td></tr>");
+                    $(this).closest("tr").after("<tr class='details-row'><td colspan='4'>"+ $('.output-data').html() + "</td></tr>");
                 }
             });
 
@@ -1359,7 +1382,7 @@
                     $('.details-row').remove();
                     $(this).parent().addClass("shown");
                     $(this).removeClass("details-control-jma").addClass('remove-control-jma');
-                    $(this).closest("tr").after("<tr class='details-row'><td colspan='4'>"+ $('.output-data').html() + "</td></tr>");
+                    $(this).closest("tr").after("<tr class='details-row'><td colspan='5'>"+ $('.output-data').html() + "</td></tr>");
                 }
             });
 
@@ -1393,11 +1416,10 @@
                     $('.details-row').remove();
                     $(this).parent().addClass("shown");
                     $(this).removeClass("details-control-warr").addClass('remove-control-warr');
-                    $(this).closest("tr").after("<tr class='details-row'><td colspan='3'>"+ $('.output-data').html() + "</td></tr>");
+                    $(this).closest("tr").after("<tr class='details-row'><td colspan='4'>"+ $('.output-data').html() + "</td></tr>");
                 }
             });
 
-            //order po section delete//
             $(document).on('click', '.delete', function () {
                 var row_id = $(this).data('row_id');
                 if (row_id) {
@@ -1427,9 +1449,7 @@
                     });
                 }
             });
-            //end
 
-            //jma po delete
             $(document).on('click', '.delete_jma_po', function () {
                 var row_id = $(this).data('row_id');
                 if (row_id) {
@@ -1459,9 +1479,7 @@
                     });
                 }
             });
-            //end
 
-            //warrenties po delete
             $(document).on('click', '.delete_warr_po', function () {
                 var row_id = $(this).data('row_id');
                 if (row_id) {
@@ -1491,11 +1509,11 @@
                     });
                 }
             });
-            //end
 
             /********Data Field*********/
              var qty, pn, location, managers, order_date, due_date, ship_date, f_bill, comment, jma_qty, jma_pn, jma_location, jma_customer, jma_order_date, jma_due_date, jma_s_cost, jma_core_ret_date, jma_f_bill, jma_comment;   
             /**********End****************/
+
             $(document).on('change', '.pn', function(){
                 pn = $(this).val();
             });
@@ -1523,7 +1541,6 @@
             $(document).on('change', '.comment', function(){
                 comment = $(this).val();
             });
-
             $(document).on('change', '.jma_pn', function(){
                 jma_pn = $(this).val();
             });
@@ -1554,7 +1571,6 @@
             $(document).on('change', '.jma_comment', function(){
                 comment = $(this).val();
             });
-
             $(document).on('change', '.serial_no', function(){
                 serial_no = $(this).val();
             });
@@ -1577,6 +1593,7 @@
             //update order po
             $(document).on('click', '.update_po', function () {
                 var row_id = $(this).data('row_id');
+                var order_po = $(".order_po").val();
                 var curr_status = $(".curr_status").val();
                 var old_pn_value = $("#pn_"+row_id).val();
                 var old_qty_value = $("#qty_"+row_id).val();
@@ -1588,7 +1605,6 @@
                 var old_f_bill_value = $("#f_bill_"+row_id).val();
                 var old_comment_value = $("#comment_"+row_id).val();
 
-                
                 $("#LoadingImage").show();
                 $.ajax({
                     type: 'POST',
@@ -1603,7 +1619,8 @@
                         ship_date: (typeof ship_date === "undefined" ? old_ship_date_value : ship_date),
                         f_bill: (typeof f_bill === "undefined" ? old_f_bill_value : f_bill),
                         comment: (typeof comment === "undefined" ? old_comment_value : comment),
-                        curr_status: curr_status
+                        curr_status: curr_status,
+                        order_po: order_po
                     },
                     success: function (response){
                         if (response.success === 1) {
@@ -1622,6 +1639,7 @@
             //update jma po
             $(document).on('click', '.update_jma_po', function () {
                 var row_id = $(this).data('row_id');
+                var order_po = $(".order_po").val();
                 var curr_status = $(".curr_status").val();
                 var old_pn_value = $("#pn_"+row_id).val();
                 var old_qty_value = $("#qty_"+row_id).val();
@@ -1649,7 +1667,8 @@
                         core_ret_date: (typeof jma_core_ret_date === "undefined" ? old_core_ret_date_value : jma_core_ret_date),
                         f_bill: (typeof f_bill === "undefined" ? old_f_bill_value : f_bill),
                         comment: (typeof comment === "undefined" ? old_comment_value : comment),
-                        curr_status: curr_status
+                        curr_status: curr_status,
+                        jma_order_po: order_po
                     },
                     success: function (response){
                         if (response.success === 1) {
@@ -1668,6 +1687,7 @@
             //update warrenties 
             $(document).on('click', '.update_warr_po', function () {
                 var row_id = $(this).data('row_id');
+                var order_po = $(".order_po").val();
                 var curr_status = $(".curr_status").val();
                 var old_pn_value = $("#pn_"+row_id).val();
                 var old_qty_value = $("#qty_"+row_id).val();
@@ -1706,7 +1726,8 @@
                         invoice_status: (typeof invoice_status === "undefined" ? old_invoice_status : invoice_status),
                         returned: (typeof ret_date === "undefined" ? old_ret_date : ret_date),
                         serial_no: (typeof serial_no === "undefined" ? old_serial_no : serial_no),
-                        curr_status: curr_status
+                        curr_status: curr_status,
+                        warr_po: order_po
                     },
                     success: function (response){
                         if (response.success === 1) {
@@ -1741,7 +1762,8 @@
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "OK"
             },  function(){
-                window.location.reload();
+                $("#LoadingImage").hide();
+                // window.location.reload();
             });
         }
 
@@ -1753,7 +1775,8 @@
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "OK"
             },  function() {
-                window.location.reload();
+                $("#LoadingImage").hide();
+                // window.location.reload();
             });
         }
 
@@ -1765,7 +1788,8 @@
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "OK"
             },  function(){
-                window.location.reload();
+                $("#LoadingImage").hide();
+                // window.location.reload();
             });
         }
 
@@ -1774,6 +1798,18 @@
             return $.ajax({
                 type: "POST",
                 url : "/get-location-order",
+                data: {
+                    ln: res
+                },
+                async: !1
+            });
+        }
+
+        function fetchLocationWarr (res) {
+            var res = res.substr(0, 2);
+            return $.ajax({
+                type: "POST",
+                url : "/get-location-warranty",
                 data: {
                     ln: res
                 },

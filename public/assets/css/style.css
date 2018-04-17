@@ -1418,26 +1418,30 @@ File: Components
 /* =============
    Buttons
    ============= */
-   .btn {
+  .btn {
     border-radius: 2px;
-    padding: 6px 14px;
+    margin-right: 5px;
+    /* padding: 6px 14px; */
   }
-  .btn-md {
+  .btn-sm {
+    margin-right: 1px;
+  }
+  /*  .btn-md {
     padding: 8px 18px;
-  }
-  .btn-group-lg > .btn,
+    } */
+  /* .btn-group-lg > .btn,
   .btn-lg {
     padding: 10px 16px !important;
     font-size: 16px;
-  }
-  .btn-group-sm > .btn,
+  } */
+  /* .btn-group-sm > .btn,
   .btn-sm {
     padding: 5px 10px !important;
-  }
-  .btn-group-xs > .btn,
+  } */
+  /* .btn-group-xs > .btn,
   .btn-xs {
     padding: 1px 5px !important;
-  }
+  } */
   .btn-group.open .dropdown-toggle {
     -webkit-box-shadow: 0 0 0 100px rgba(0, 0, 0, 0.1) inset;
     box-shadow: 0 0 0 100px rgba(0, 0, 0, 0.1) inset;
@@ -1486,7 +1490,7 @@ File: Components
     color: #fff;
   }
 
-  .btn-primary {
+  /* .btn-primary {
     background-color: #1976d2 !important;
     border: 1px solid #dae7f4 !important;
   }
@@ -1583,7 +1587,7 @@ File: Components
     background-color: #20262d !important;
     border: 1px solid #20262d !important;
     color: #ffffff;
-  }
+  } */
   .btn-link {
     color: #2a323c;
   }
@@ -3166,6 +3170,20 @@ tr.shown td.remove-control-warr {
 /*Ends loading-anim Animation*/
 
 /*Ends css on 2018-04-12*/
+
+/*Starts css on 2018-04-17*/
+
+.jma-order-table > tbody {
+    display: block;
+    overflow-x: auto;
+}
+.jma-order-table  > thead, .jma-order-table > tbody > tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+/*Ends css on 2018-04-17*/
 
   /*ENDS NEW STYLE CSS ON DATE 29/01/18*/
 
