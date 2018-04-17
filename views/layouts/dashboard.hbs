@@ -926,9 +926,10 @@
             var total_warrpo_result;
             
             function format(total_po_result, order_po) {
+                var all_location = fetchLocation(order_po);
+                var get_all_location = all_location.responseJSON;
+
                 var arr = JSON.parse(total_po_result);
-                var arr_1 = JSON.parse(total_po_result).splice(-1);
-                arr.splice(-1);
                 var output_arr = [];
                 output_arr += '<form name="order_list_edit" id="order_list_edit" method="post" action="">'+ 
                             '<div class="details-container">'+
@@ -951,11 +952,11 @@
                 $.each(arr, function (key, val) {
                     var location_list = '';
                     var manager_list = '';
-                    for (var i = 0; i < arr_1.length; i++) {
-                        location_list += '<option value="'+arr_1[i].value+'">'+arr_1[i].label+'</option>';
+                    for (var i = 0; i < get_all_location.length; i++) {
+                        location_list += '<option value="'+get_all_location[i].value+'">'+get_all_location[i].label+'</option>';
                     }
-                    for (var i = 0; i < arr_1.length; i++) {
-                        manager_list += '<option value="'+arr_1[i].manager+'">'+arr_1[i].manager+'</option>';
+                    for (var i = 0; i < get_all_location.length; i++) {
+                        manager_list += '<option value="'+get_all_location[i].manager+'">'+get_all_location[i].manager+'</option>';
                     }
                     var complete;
                     if (val['status'] != 4) {
@@ -1765,6 +1766,18 @@
                 confirmButtonText: "OK"
             },  function(){
                 window.location.reload();
+            });
+        }
+
+        function fetchLocation (res) {
+            var res = res.substr(0, 2);
+            return $.ajax({
+                type: "POST",
+                url : "/get-location-order",
+                data: {
+                    ln: res
+                },
+                async: !1
             });
         }
         </script>

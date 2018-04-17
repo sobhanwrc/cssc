@@ -969,15 +969,7 @@ module.exports = function (app, connection) {
 	app.get('/orders/details/:po', function (req, res) {
 	  	var sql = "SELECT l.*, o.* FROM orders as o, locations as l WHERE o.location = l.sum AND o.po = '" + req.params['po'] + "'";
 	  	connection.query(sql, function (err, results) {
-	  		var mystr = req.params['po'];
-            var substr = mystr.substr(0, 2);
-	  		var sql1 = "SELECT DISTINCT(o.location), l.* FROM orders o, locations l WHERE l.sum = o.location AND o.po LIKE '" + substr + "%'";
-			connection.query(sql1, function (err1, res1) {
-				for (i in res1) {
-					results.push({ "label": res1[i].street + ", " + res1[i].city + ", " + res1[i].sum, "value": res1[i].sum, "manager": res1[i].person });
-				}
-	   			sendJSON(res, 200, results);
-	   		});
+   			sendJSON(res, 200, results);
 	  	});
  	});
 
