@@ -916,7 +916,9 @@
         $('.clear_filter_components').click(function (e) {
             window.location.href = "/components";
         });
-
+        var tempArr = [];
+        var tempArrJMA = [];
+        var tempArrWarranties = [];
         $(document).ready(function() {
             var total_po_result;
             var total_jmapo_result;
@@ -928,7 +930,8 @@
 
                 var arr = JSON.parse(total_po_result);
                 var output_arr = [];
-                output_arr += '<div class="details-container">'+
+                tempArr = [];
+                output_arr += '<div class="details-container table-responsive">'+
                             '<table class="table" id="order-table">'+
                             '<thead>'+
                                 '<tr>'+
@@ -944,8 +947,9 @@
                                     '<th>Action</th>'+
                                 '</tr>'+
                             '</thead>'+
-                            '<tbody>';
+                            '<tbody id="mytbody">';
                 $.each(arr, function (key, val) {
+                    tempArr.push(val['id']);
                     var location_list = '';
                     var manager_list = '';
                     var location_selected;
@@ -1005,13 +1009,13 @@
                             '<input type="text" id="comment_'+val['id']+'" name="comment" class="form-control comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
+                            '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
+                            '<input type="hidden" name="order_po" class="order_po" value="'+order_po+'">'+
                             '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_po" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-row_id="'+val['id']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
-                    '</tr>'+
-                    '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
-                    '<input type="hidden" name="order_po" class="order_po" value="'+order_po+'">';
+                    '</tr>';
                 });
                 output_arr += '</tbody>'+
                     '</table>'+
@@ -1028,6 +1032,7 @@
             function format_jma(total_jmapo_result, jma_order_po) {
                 var arr = JSON.parse(total_jmapo_result);
                 var output_arr = [];
+                tempArrJMA = [];
                 output_arr += '<div class="details-container table-responsive">'+
                             '<table class="table" id="jma-order-table">'+
                             '<thead>'+
@@ -1047,6 +1052,7 @@
                             '</thead>'+
                             '<tbody>';
                 $.each(arr, function (key, val) {
+                    tempArrJMA.push(val['id']);
                     var complete;
                     if (val['status'] != 4) {
                         complete = '<a title="Complete" class="btn btn-primary btn-sm jmaorder_completed" data-row_id="'+val['id']+'" data-ship-status="'+val['status']+'" href="javascript:void(0)"><i class="fa fa-check" aria-hidden="true"></i></a>';
@@ -1085,13 +1091,13 @@
                             '<input type="text" id="comment_'+val['id']+'" name="comment" class="form-control jma_comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
+                            '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
+                            '<input type="hidden" name="order_po" class="order_po" value="'+jma_order_po+'">'+
                             '<a title="Update" href="javascript:void(0)" class="btn btn-info btn-sm update_jma_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_jma_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
-                    '</tr>'+
-                    '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
-                    '<input type="hidden" name="order_po" class="order_po" value="'+jma_order_po+'">';
+                    '</tr>';
                 });
                 output_arr += '</tbody>'+
                     '</table>'+
@@ -1110,7 +1116,9 @@
 
                 var arr = JSON.parse(total_warrpo_result);
                 var output_arr = [];
+                tempArrWarranties = [];
                 $.each(arr, function (key, val) {
+                    tempArrWarranties.push(val['id']);
                     var location_list = '';
                     var manager_list = '';
                     var location_selected;
@@ -1332,6 +1340,7 @@
                     async: false,
                     success: function (response) {
                         total_po_result = response;
+
                         flagBool = true;
                     },
                     error: function (xhr) {
@@ -1420,6 +1429,7 @@
             });
 
             $(document).on('click', '.delete', function () {
+                var $this = $( this );
                 var row_id = $(this).data('row_id');
                 if (row_id) {
                     swal({
@@ -1430,26 +1440,34 @@
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: false
                     },
-                    function() {
+                    function() {                       
                         $.ajax({
                             type: "GET",
                             url: "/orders/delete/" + row_id,
-                            success: function (response) {
+                            success: function (response) {                               
                                 if (response.success === "1") {
                                     sweetalertDeletePopUp();
+
+                                    $this.closest('tr').remove();
+                                    tempArr.splice( $.inArray(row_id, tempArr), 1 );
+                                    if(!tempArr.length) {                                       
+                                        $('.details-row').remove();
+                                        $(".shown").remove();
+                                    }
                                 } else {
                                     alert("error");
                                 }
                             },
                             error: function (xhr) {
-
                             }
                         });
                     });
                 }
             });
+            
 
             $(document).on('click', '.delete_jma_po', function () {
+                var $this = $( this );
                 var row_id = $(this).data('row_id');
                 if (row_id) {
                     swal({
@@ -1467,6 +1485,13 @@
                             success: function (response) {
                                 if (response.success === "1") {
                                     sweetalertDeletePopUp();
+
+                                    $this.closest('tr').remove();
+                                    tempArrJMA.splice( $.inArray(row_id, tempArrJMA), 1 );
+                                    if(!tempArrJMA.length) {                                       
+                                        $('.details-row').remove();
+                                        $(".shown").remove();
+                                    }
                                 } else {
                                     alert("error");
                                 }
@@ -1480,6 +1505,7 @@
             });
 
             $(document).on('click', '.delete_warr_po', function () {
+                var $this = $( this );
                 var row_id = $(this).data('row_id');
                 if (row_id) {
                     swal({
@@ -1497,6 +1523,13 @@
                             success: function (response) {
                                 if (response.success === "1") {
                                     sweetalertDeletePopUp();
+
+                                    $this.closest('tr').remove();
+                                    tempArrWarranties.splice( $.inArray(row_id, tempArrWarranties), 1 );
+                                    if(!tempArrWarranties.length) {                                       
+                                        $('.details-row').remove();
+                                        $(".shown").remove();
+                                    }
                                 } else {
                                     alert("error");
                                 }
@@ -1775,7 +1808,7 @@
                 confirmButtonText: "OK"
             },  function() {
                 $("#LoadingImage").hide();
-                // window.location.reload();
+
             });
         }
 
