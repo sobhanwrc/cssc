@@ -195,7 +195,7 @@
             $('.core_ret_date').val(current_date);
 
             var count = 1;
-
+            
             $(document).on("click", ".add", function (e) {
                 $("#order-table > tbody").append('<tr>' +
                     '<td><input type="text" id="pn" name="pn[]" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product"></td>' +
@@ -203,7 +203,7 @@
                     '<td><select class="form-control location" name="location[]" required="required"></select></td>' +
                     '<td><select class="form-control managers" name="managers[]" required="required"></select></td>' +
                     '<td><input type="text" id="order_date" name="order_date[]" class="form-control  order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date"></td>' +
-                    '<td><input type="text" id="due_date" name="due_date[]" class="form-control datepicker due_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter due date"></td>' +
+                    '<td><input type="text" id="due_date" name="due_date[]" class="form-control due_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter due date"></td>' +
                     '<td><input type="text" id="ship_date" name="ship_date[]" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date"></td>' +
                     '<td><input type="text" id="comment" name="comment[]" class="form-control" data-parsley-required-message="Please enter comment" placeholder="Please enter comment"></td>' +
                     '<td><a href="javascript:void(0)" class="add"><i class="ion-plus-circled add_data"></i></a> ' +
@@ -215,12 +215,24 @@
                 var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
                 var current_date = $.datepicker.formatDate('mm-dd-yy', new Date());
                 var current_plus_seven_date = dateMsg;
-                $('.order_date').val(current_date);
-                $('.ship_date').val(current_date);
-                $('.due_date').val(current_plus_seven_date);
                 $("#po").trigger("keyup");
+                $(".order_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_date);
+                    }
+                });
+                $(".due_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_plus_seven_date);
+                    }
+                });
+                $(".ship_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_date);
+                    }
+                });
             });
-
+            
             $(document).on("click", ".add_waranties_data", function (e) {
                 count = count + 1;
                 $("#warranty_form").append('<div id="div-'+count+'" class="warranty_form_left"><div class="box"><div class="row">' +
@@ -247,13 +259,37 @@
                 var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
                 var current_date = $.datepicker.formatDate('mm-dd-yy', new Date());
                 var current_plus_seven_date = dateMsg;
-                $('.order_date').val(current_date);
-                $('.due_date').val(current_plus_seven_date);
-                $('.ship_date').val(current_date);
-                $('.ret_date').val(current_date);
-                $('.rep_date').val(current_date);
-                $('.ready_date').val(current_date);
                 $("#po").trigger("keyup");
+                $(".order_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_date);
+                    }
+                });
+                $(".due_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_plus_seven_date);
+                    }
+                });
+                $(".ship_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_date);
+                    }
+                });
+                $(".ret_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_date);
+                    }
+                });
+                $(".rep_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_plus_seven_date);
+                    }
+                });
+                $(".ready_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_date);
+                    }
+                });
             });
 
             $(document).on("click", ".remove-warranty", function (e) {
@@ -289,9 +325,21 @@
                 var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
                 var current_date = $.datepicker.formatDate('mm-dd-yy', new Date());
                 var current_plus_seven_date = dateMsg;
-                $('.order_date').val(current_date);
-                $('.due_date').val(current_plus_seven_date);
-                $('.core_ret_date').val(current_date);
+                $(".order_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_date);
+                    }
+                });
+                $(".due_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_plus_seven_date);
+                    }
+                });
+                $(".core_ret_date").each(function(index) {
+                    if ($(this).val() === "") {
+                        $(this).val(current_date);
+                    }
+                });
             });
 
             $(document).on("click", ".packing", function (e) {
@@ -352,7 +400,6 @@
                     return false;
                 } else {
                     $("#LoadingImage").show();
-
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
@@ -786,7 +833,6 @@
             });
         });
 
-
         $(document).on("keyup", "#po", function (e) {
             //$("#po").keyup(function (e) {
             //if(this.value.length =='2') {
@@ -1085,7 +1131,7 @@
                             '<input type="text" id="comment_'+val['id']+'" name="comment" class="form-control jma_comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-info btn-sm update_jma_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_jma_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_jma_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
@@ -1288,7 +1334,7 @@
                             '</div>'+
                         '</div>'+
                         '<div class="warranty_form_right" style="width:7%;">'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-info btn-sm update_warr_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_warr_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_warr_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</div>'+
