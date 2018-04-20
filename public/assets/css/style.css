@@ -1014,6 +1014,12 @@ File: Main Css File
   width: 3%;
 }
 
+.warranty_form_left .form-control {
+    display: block;
+    width: 100%;
+    vertical-align: middle;
+}
+
 .warranty_form_left .row {
   clear: both;
   overflow: hidden;
@@ -3182,6 +3188,18 @@ tr.shown td.remove-control-warr {
     width: 100%;
     table-layout: fixed;
 }
+
+
+.order-table > tbody {
+    display: block;
+    overflow-x: auto;
+}
+.order-table  > thead, .order-table > tbody > tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
 
 /*Ends css on 2018-04-17*/
 
