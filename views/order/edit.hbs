@@ -77,10 +77,10 @@
                                                     {{#if_eq results.0.status '3'}}
                                                     <button type="button" id="order_completed" data-ship-status="{{results.0.status}}" class="btn btn-primary waves-effect waves-light"> Complete </button>
                                                     {{/if_eq}}
-                                                    <a title="Delete" href="/orders/delete/{{order_id}}/" onclick="return confirm('Do you really want to delete the current record ?');"><button type="button" class="btn btn-primary waves-effect waves-light"> Delete </button></a>
-                                                    <a title="Packing List" id="packing" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>
-                                                    <a title="Invoice" id="invoice" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>
-                                                    <a title="Delivery Confirmation" id="delivery" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>
+                                                    <a title="Delete" href="javascript:void(0);"><button type="button" class="btn btn-primary waves-effect waves-light delete" data-row_id="{{order_id}}" data-status="{{results.0.status}}"> Delete </button></a>
+                                                    <a title="Packing List" class="packing" data-po="{{results.0.po}}" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>
+                                                    <a title="Invoice" class="invoice" data-po="{{results.0.po}}" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>
+                                                    <a title="Delivery Confirmation" class="delivery" data-po="{{results.0.po}}" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>
                                                 </div>
                                             </div>
                                         </div>

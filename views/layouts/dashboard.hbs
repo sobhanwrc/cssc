@@ -250,7 +250,7 @@
                     '<div class="col-20"><div class="form-group"><label>Date Ready</label><div><input type="text" id="ready_date" name="ready_date[]" class="form-control ready_date" required="required" data-parsley-required-message="Please enter date ready" placeholder="Please enter date ready"></div></div></div>' +
                     '<div class="col-20"><div class="form-group"><label>Comment</label><div><textarea id="comment" name="comment[]" class="form-control comment" data-parsley-required-message="Please enter comment" placeholder="Please enter comment"></textarea></div></div></div>' +
                     '<div class="col-20"><div class="form-group"><label>Details</label><div><textarea id="details" name="details[]" class="form-control details" data-parsley-required-message="Please enter details" placeholder="Please enter details"></textarea></div></div></div>' +
-                    '<div class="col-20"><div class="form-group"><label>Status</label><div><select class="form-control" name="invoice_status" id="invoice_status" required="required"><option value="">Select One</option><option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option></select></div></div></div>' +
+                    '<div class="col-20"><div class="form-group"><label>Status</label><div><select class="form-control" name="invoice_status" id="invoice_status"><option value="">Select One</option><option value="1">Burnt</option><option value="2">No Defects Found</option><option value="3">Warranty Expired</option><option value="4">Honored</option><option value="5">Others</option></select></div></div></div>' +
                     '</div></div></div>');
                 
                 $('.remove-warranty').css('visibility', 'visible');
@@ -1057,7 +1057,7 @@
                         '<td>'+
                             '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
                             '<input type="hidden" name="order_po" class="order_po" value="'+order_po+'">'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_po" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_po" data-row_id="'+val['id']+'" data-status="'+val['status']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-row_id="'+val['id']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
@@ -1139,9 +1139,9 @@
                         '<td>'+
                             '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
                             '<input type="hidden" name="order_po" class="order_po" value="'+jma_order_po+'">'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_jma_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_jma_po" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
-                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_jma_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_jma_po" data-row_id="'+val['id']+'" data-status="'+val['status']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
                     '</tr>';
                 });
@@ -1329,7 +1329,7 @@
                                         '<div class="form-group">'+
                                             '<label>Status</label>'+
                                             '<div>'+
-                                                '<select class="form-control invoice_status" name="invoice_status" id="invoice_status_'+val['id']+'" required="required">'+
+                                                '<select class="form-control invoice_status" name="invoice_status" id="invoice_status_'+val['id']+'">'+
                                                     '<option value="">Select One</option>'+
                                                     invoice_option+
                                                 '</select>'+
@@ -1342,9 +1342,9 @@
                             '</div>'+
                         '</div>'+
                         '<div class="warranty_form_right" style="width:7%;">'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_warr_po" data-row_id='+val['id']+'><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_warr_po" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
-                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_warr_po" data-row_id='+val['id']+'><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                            '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_warr_po" data-row_id="'+val['id']+'" data-status="'+val['status']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</div>'+
                     '</div>';
                 });
@@ -1477,6 +1477,7 @@
             $(document).on('click', '.delete', function () {
                 var $this = $( this );
                 var row_id = $(this).data('row_id');
+                var status = $(this).data('status');
                 if (row_id) {
                     swal({
                         title: "Do you really want to delete the current record ?",
@@ -1486,18 +1487,22 @@
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: false
                     },
-                    function() {                       
+                    function() {
                         $.ajax({
                             type: "GET",
                             url: "/orders/delete/" + row_id,
-                            success: function (response) {                               
+                            success: function (response) {
                                 if (response.success === "1") {
                                     sweetalertDeletePopUp();
-                                    $this.closest('tr').remove();
-                                    tempArr.splice( $.inArray(row_id, tempArr), 1 );
-                                    if (!tempArr.length) {                                       
-                                        $('.details-row').remove();
-                                        $(".shown").remove();
+                                    if (status === 4) {
+                                        window.location.href = "/complete-orders";
+                                    } else {
+                                        $this.closest('tr').remove();
+                                        tempArr.splice( $.inArray(row_id, tempArr), 1 );
+                                        if (!tempArr.length) {
+                                            $('.details-row').remove();
+                                            $(".shown").remove();
+                                        }
                                     }
                                 } else {
                                     alert("error");
@@ -1513,6 +1518,7 @@
             $(document).on('click', '.delete_jma_po', function () {
                 var $this = $( this );
                 var row_id = $(this).data('row_id');
+                var status = $(this).data('status');
                 if (row_id) {
                     swal({
                         title: "Do you really want to delete the current record ?",
@@ -1529,11 +1535,15 @@
                             success: function (response) {
                                 if (response.success === "1") {
                                     sweetalertDeletePopUp();
-                                    $this.closest('tr').remove();
-                                    tempArrJMA.splice( $.inArray(row_id, tempArrJMA), 1 );
-                                    if (!tempArrJMA.length) {                                       
-                                        $('.details-row').remove();
-                                        $(".shown").remove();
+                                    if (status === 4) {
+                                        window.location.href = "/complete-jma-orders";
+                                    } else {
+                                        $this.closest('tr').remove();
+                                        tempArrJMA.splice( $.inArray(row_id, tempArrJMA), 1 );
+                                        if (!tempArrJMA.length) {
+                                            $('.details-row').remove();
+                                            $(".shown").remove();
+                                        }
                                     }
                                 } else {
                                     alert("error");
@@ -1550,6 +1560,7 @@
             $(document).on('click', '.delete_warr_po', function () {
                 var $this = $( this );
                 var row_id = $(this).data('row_id');
+                var status = $(this).data('status');
                 if (row_id) {
                     swal({
                         title: "Do you really want to delete the current record ?",
@@ -1566,11 +1577,15 @@
                             success: function (response) {
                                 if (response.success === "1") {
                                     sweetalertDeletePopUp();
-                                    $this.closest('tr').remove();
-                                    tempArrWarranties.splice( $.inArray(row_id, tempArrWarranties), 1 );
-                                    if (!tempArrWarranties.length) {                                       
-                                        $('.details-row').remove();
-                                        $(".shown").remove();
+                                    if (status === 4) {
+                                        window.location.href = "/complete-warranties";
+                                    } else {
+                                        $this.closest('tr').remove();
+                                        tempArrWarranties.splice( $.inArray(row_id, tempArrWarranties), 1 );
+                                        if (!tempArrWarranties.length) {                                       
+                                            $('.details-row').remove();
+                                            $(".shown").remove();
+                                        }
                                     }
                                 } else {
                                     alert("error");

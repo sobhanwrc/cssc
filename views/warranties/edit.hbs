@@ -103,7 +103,7 @@
                                             <div class="form-group">
                                                 <label>Status</label>
                                                 <div>
-                                                    <select class="form-control" name="invoice_status" id="invoice_status" required="required">
+                                                    <select class="form-control" name="invoice_status" id="invoice_status">
                                                         <option value="1" {{#if_eq results.0.invoice_status '1'}} selected {{/if_eq}}>Burnt</option>
                                                         <option value="2" {{#if_eq results.0.invoice_status '2'}} selected {{/if_eq}}>No Defects Found</option>
                                                         <option value="3" {{#if_eq results.0.invoice_status '3'}} selected {{/if_eq}}>Warranty Expired</option>
@@ -125,16 +125,16 @@
                                             <div>
                                                 <div class="btn-group">
                                                     <button type="submit" class="btn btn-primary waves-effect waves-light"> Update </button>
-                                                    <a title="Delete" href="/warranties/delete/{{warr_id}}/" onclick="return confirm('Do you really want to delete the current record ?');"><button type="button" class="btn btn-primary waves-effect waves-light"> Delete </button></a>
+                                                    <a title="Delete" href="javascript:void(0);"><button type="button" class="btn btn-primary waves-effect waves-light delete_warr_po" data-row_id="{{warr_id}}" data-status="{{results.0.status}}"> Delete </button></a>
                                                     {{#if_eq results.0.status '2'}}
                                                     <button type="button" id="warranties_completed" data-ship-status="{{results.0.status}}" class="btn btn-primary waves-effect waves-light"> Complete </button>
                                                     {{/if_eq}}
                                                     {{#if_eq results.0.status '3'}}
                                                     <button type="button" id="warranties_completed" data-ship-status="{{results.0.status}}" class="btn btn-primary waves-effect waves-light"> Complete </button>
                                                     {{/if_eq}}
-                                                    <a title="Packing List" id="packing_warranties" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>
-                                                    <a title="Invoice" id="invoice_warranties" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>
-                                                    <a title="Delivery Confirmation" id="delivery_warranties" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>
+                                                    <a title="Packing List" class="packing_warranties" data-po="{{results.0.po}}" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Packing List </button></a>
+                                                    <a title="Invoice" class="invoice_warranties" data-po="{{results.0.po}}" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Invoice </button></a>
+                                                    <a title="Delivery Confirmation" class="delivery_warranties" data-po="{{results.0.po}}" href="javascript:void(0)"><button type="button" class="btn btn-primary waves-effect waves-light"> Delivery Confirmation </button></a>
                                                 </div>
                                             </div>
                                         </div>

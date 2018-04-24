@@ -374,7 +374,10 @@ module.exports = function (app, connection) {
 			new_rep_date = rep_date[2] + "-" + rep_date[0] + "-" + rep_date[1];
 			ready_date = req.body.ready_date[i].split("-");
 			new_ready_date = ready_date[2] + "-" + ready_date[0] + "-" + ready_date[1];
-			var sql = "INSERT INTO warranties SET po = '" + req.body.po + "', pn = '" + req.body.pn[i] + "', qty = '" + req.body.qty[i] + "', location = '" + req.body.location[i] + "', manager = '" + req.body.managers[i] + "', ordered = '" + new_order_date + "', comment = '" + req.body.comment[i]+ "', itemcomment = '" + req.body.details[i]+ "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', returned = '" + new_ret_date + "', reported = '" + new_rep_date + "', ready = '" + new_ready_date + "', freight_bill = '" + req.body.f_bill[i] + "', serial_no = '" + req.body.serial_no[i] + "', invoice_status = '" + req.body.invoice_status[i] + "'";
+
+			invoice_status = (req.body.invoice_status[i] != "" && req.body.invoice_status[i] != undefined) ? req.body.invoice_status[i] : 0;
+
+			var sql = "INSERT INTO warranties SET po = '" + req.body.po + "', pn = '" + req.body.pn[i] + "', qty = '" + req.body.qty[i] + "', location = '" + req.body.location[i] + "', manager = '" + req.body.managers[i] + "', ordered = '" + new_order_date + "', comment = '" + req.body.comment[i]+ "', itemcomment = '" + req.body.details[i]+ "', due = '" + new_due_date + "', shipped = '" + new_ship_date + "', returned = '" + new_ret_date + "', reported = '" + new_rep_date + "', ready = '" + new_ready_date + "', freight_bill = '" + req.body.f_bill[i] + "', serial_no = '" + req.body.serial_no[i] + "', invoice_status = '" + invoice_status + "'";
 			if (req.body.f_bill[i] != '') {
 				sql += ", status = 3";
 			} else {
@@ -542,16 +545,16 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function(req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.due, o.location, o.invoice_no,o.freight_bill, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.ordered, o.shipped, o.due, o.location, o.invoice_no,o.freight_bill, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
-						var tempArray='';
+						var tempArray = "";
 						results.forEach(function(val) {
-							if(val['freight_bill'] != ""){
+							if (val['freight_bill'] != "") {
 								tempArray += val['freight_bill']+", ";
 							}
 						});
-						var n=tempArray.lastIndexOf(",");
-    					var tempArray1=tempArray.substring(0,n);
+						var n = tempArray.lastIndexOf(",");
+    					var tempArray1 = tempArray.substring(0, n);
 
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -569,7 +572,7 @@ module.exports = function (app, connection) {
 							total_taxed_value = parseFloat(sub_total + (sub_total * 8.5) / 100).toFixed(2);
 						}
 						order_date = results[0].ordered;
-						bill_date = results[0].due;
+						bill_date = results[0].shipped;
 						person_name = results[0].person;
 						name = results[0].name;
 						street = results[0].street;
@@ -597,16 +600,16 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE orders SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.freight_bill, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.freight_bill, o.qty, o.ordered, o.shipped, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, orders o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
-						var tempArray='';
+						var tempArray = "";
 						results.forEach(function(val) {
-							if(val['freight_bill'] != ""){
+							if (val['freight_bill'] != "") {
 								tempArray += val['freight_bill']+", ";
 							}
 						});
-						var n=tempArray.lastIndexOf(",");
-    					var tempArray1=tempArray.substring(0,n);
+						var n = tempArray.lastIndexOf(",");
+    					var tempArray1 = tempArray.substring(0, n);
 
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -624,7 +627,7 @@ module.exports = function (app, connection) {
 							total_taxed_value = parseFloat(sub_total + (sub_total * 8.5) / 100).toFixed(2);
 						}
 						order_date = results[0].ordered;
-						bill_date = results[0].due;
+						bill_date = results[0].shipped;
 						person_name = results[0].person;
 						name = results[0].name;
 						street = results[0].street;
@@ -733,14 +736,14 @@ module.exports = function (app, connection) {
 				connection.query(sql3, function (req3, res3) {
 					sql = "SELECT p.price, p.description, p.pn, o.po, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.freight_bill, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
-						var tempArray='';
+						var tempArray = "";
 						results.forEach(function(val) {
-							if(val['freight_bill'] != ""){
+							if (val['freight_bill'] != "") {
 								tempArray += val['freight_bill']+", ";
 							}
 						});
-						var n=tempArray.lastIndexOf(",");
-    					var tempArray1=tempArray.substring(0,n);
+						var n = tempArray.lastIndexOf(",");
+    					var tempArray1 = tempArray.substring(0, n);
 
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -788,14 +791,14 @@ module.exports = function (app, connection) {
 				connection.query(sql3, function (req3, res3) {
 					sql = "SELECT p.price, p.description, p.pn, o.po, o.freight_bill, o.jmapo, o.qty, o.ordered, o.due, o.location, o.customer, o.shipping_cost, o.invoice_no FROM products p INNER JOIN jma_orders o ON o.pn = p.pn WHERE o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
-						var tempArray='';
+						var tempArray = "";
 						results.forEach(function(val) {
-							if(val['freight_bill'] != ""){
+							if (val['freight_bill'] != "") {
 								tempArray += val['freight_bill']+", ";
 							}
 						});
-						var n=tempArray.lastIndexOf(",");
-    					var tempArray1=tempArray.substring(0,n);
+						var n = tempArray.lastIndexOf(",");
+    					var tempArray1 = tempArray.substring(0, n);
 
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -884,16 +887,16 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE warranties SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.freight_bill, o.qty, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.freight_bill, o.qty, o.ordered, o.shipped, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
-						var tempArray='';
+						var tempArray = "";
 						results.forEach(function(val) {
-							if(val['freight_bill'] != ""){
-								tempArray += val['freight_bill']+", ";
+							if (val['freight_bill'] != "") {
+								tempArray += val['freight_bill'] + ", ";
 							}
 						});
-						var n=tempArray.lastIndexOf(",");
-    					var tempArray1=tempArray.substring(0,n);
+						var n = tempArray.lastIndexOf(",");
+    					var tempArray1 = tempArray.substring(0, n);
 
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -911,7 +914,7 @@ module.exports = function (app, connection) {
 							total_taxed_value = parseFloat(sub_total + (sub_total * 8.5) / 100).toFixed(2);
 						}
 						order_date = results[0].ordered;
-						bill_date = results[0].due;
+						bill_date = results[0].shipped;
 						person_name = results[0].person;
 						name = results[0].name;
 						street = results[0].street;
@@ -939,16 +942,16 @@ module.exports = function (app, connection) {
 				}
 				var sql3 = "UPDATE warranties SET invoice_no = '" + new_inv + "' WHERE po = '" + req.params['id'] + "'";
 				connection.query(sql3, function (req3, res3) {
-					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.freight_bill, o.ordered, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
+					sql = "SELECT p.price, p.description, p.pn, o.po, o.qty, o.freight_bill, o.ordered, o.shipped, o.due, o.location, o.invoice_no, l.sum, l.name, l.street, l.city, l.person, l.phone, l.fax, l.tax_status FROM products p, warranties o, locations l WHERE l.sum = o.location AND o.pn = p.pn AND o.po = '" + req.params['id'] + "'";
 					connection.query(sql, function (err, results) {
-						var tempArray='';
+						var tempArray = "";
 						results.forEach(function(val) {
-							if(val['freight_bill'] != ""){
+							if (val['freight_bill'] != "") {
 								tempArray += val['freight_bill']+", ";
 							}
 						});
-						var n=tempArray.lastIndexOf(",");
-    					var tempArray1=tempArray.substring(0,n);
+						var n = tempArray.lastIndexOf(",");
+    					var tempArray1 = tempArray.substring(0, n);
 
 						sub_total = 0;
 						total_taxed_value = 0;
@@ -966,7 +969,7 @@ module.exports = function (app, connection) {
 							total_taxed_value = parseFloat(sub_total + (sub_total * 8.5) / 100).toFixed(2);
 						}
 						order_date = results[0].ordered;
-						bill_date = results[0].due;
+						bill_date = results[0].shipped;
 						person_name = results[0].person;
 						name = results[0].name;
 						street = results[0].street;
@@ -1111,13 +1114,15 @@ module.exports = function (app, connection) {
 		}
 		sql += " WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			sql2 = "UPDATE orders SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.jma_order_po + "' AND status = 2";
-			connection.query(sql2);
+			if (req.body.f_bill != '') {
+				sql2 = "UPDATE orders SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.jma_order_po + "' AND status = 2";
+				connection.query(sql2);
+			}
 			req.flash('orderMessage', 'JMA order updated successfully');
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-jma-orders');
 			} else {
-				if(results){
+				if (results) {
 					res.json({
 						success: 1
 					});
@@ -1139,13 +1144,15 @@ module.exports = function (app, connection) {
 		}
 		sql += " WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			sql2 = "UPDATE orders SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.order_po + "' AND status = 2";
-			connection.query(sql2);
+			if (req.body.f_bill != '') {
+				sql2 = "UPDATE orders SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.order_po + "' AND status = 2";
+				connection.query(sql2);
+			}
 			req.flash('orderMessage', 'Order updated successfully');
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-orders');
 			} else {
-				if(results){
+				if (results) {
 					res.json({
 						success: 1
 					});
@@ -1163,7 +1170,8 @@ module.exports = function (app, connection) {
 	});
 
 	app.post('/warranties/edit/:id', function (req, res) {
-		sql = "UPDATE warranties SET invoice_status = '" + req.body.invoice_status + "', serial_no = '" + req.body.serial_no + "', comment = '" + req.body.comment + "', itemcomment = '" + req.body.itemcomment + "', freight_bill = '" + req.body.f_bill + "', pn = '" + req.body.pn + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', location = '" + req.body.location + "', manager = '" + req.body.managers + "'";
+		invoice_status = (req.body.invoice_status[i] != "" && req.body.invoice_status[i] != undefined) ? req.body.invoice_status[i] : 0;
+		sql = "UPDATE warranties SET invoice_status = '" + invoice_status + "', serial_no = '" + req.body.serial_no + "', comment = '" + req.body.comment + "', itemcomment = '" + req.body.itemcomment + "', freight_bill = '" + req.body.f_bill + "', pn = '" + req.body.pn + "', qty = '" + req.body.qty + "', n_comp = '" + req.user.id + "', location = '" + req.body.location + "', manager = '" + req.body.managers + "'";
 		if (req.body.ready != 'invalid date') {
 			ready_date = req.body.ready.split("-");
 			new_ready_date = ready_date[2] + "-" + ready_date[0] + "-" + ready_date[1];
@@ -1198,15 +1206,16 @@ module.exports = function (app, connection) {
 			sql += ", status = 3";
 		}
 		sql += " WHERE id = '" + req.params['id'] + "'";
-
 		connection.query(sql, function (err, results) {
-			sql2 = "UPDATE warranties SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.warr_po + "' AND status = 2";
-			connection.query(sql2);
+			if (req.body.f_bill != '') {
+				sql2 = "UPDATE warranties SET freight_bill = '" + req.body.f_bill + "', status = 3 WHERE po = '" + req.body.warr_po + "' AND status = 2";
+				connection.query(sql2);
+			}
 			req.flash('orderMessage', 'Warranty updated successfully');
 			if (req.body.curr_status == 4) {
 				res.redirect('/complete-warranties');
 			} else {
-				if(results){
+				if (results) {
 					res.json({
 						success: 1
 					});
@@ -1218,12 +1227,11 @@ module.exports = function (app, connection) {
 	app.get('/orders/delete/:id', function (req, res) {
 		sql = "DELETE FROM orders WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			if(results){
+			if (results) {
 				res.json({
 					success: "1"
 				});
 			}
-			
 		});
 	});
 
@@ -1238,9 +1246,7 @@ module.exports = function (app, connection) {
 	app.get('/jma-orders/delete/:id', function (req, res) {
 		sql = "DELETE FROM jma_orders WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			// req.flash('orderMessage', 'JMA order deleted successfully');
-			// res.redirect('/jma-orders');
-			if(results){
+			if (results) {
 				res.json({
 					success: "1"
 				});
@@ -1251,9 +1257,7 @@ module.exports = function (app, connection) {
 	app.get('/warranties/delete/:id', function (req, res) {
 		sql = "DELETE FROM warranties WHERE id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			// req.flash('orderMessage', 'Warranties deleted successfully');
-			// res.redirect('/warranties');
-			if(results){
+			if (results) {
 				res.json({
 					success: "1"
 				});
