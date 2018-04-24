@@ -42,8 +42,9 @@
                                 <div class="col-md-12">
                                     <address style="font-size: 13px;">
                                         Number of components on P.O: {{number_of_components}}
-                                        <br>Ship Date: {{dateFormat bill_date "MM/DD/YY"}}
-                                        <br>Freight Bill # {{f_bill}}
+                                        {{#each orders}}
+                                            <br>Freight Bill # {{this.freight_bill}} &nbsp;&nbsp;&nbsp;&nbsp; Ship Date: {{dateFormat this.shipped "MM/DD/YY"}}
+                                        {{/each}}
                                         <br>P.O. # {{order_id}}
                                     </address>
                                     <div class="table-responsive">
