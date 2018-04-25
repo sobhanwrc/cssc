@@ -89,7 +89,6 @@ module.exports = function (app, connection) {
 	app.get('/orders', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
 		var sql = "SELECT po, count(id), sum(qty) as qty, status FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
-		console.log(sql);
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
