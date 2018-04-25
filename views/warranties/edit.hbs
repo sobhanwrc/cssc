@@ -20,10 +20,22 @@
                                                     <input type="hidden" id="po" value="{{results.0.po}}">
                                                     <input type="hidden" id="row_id" value="{{warr_id}}">
                                                     <input type="hidden" name="curr_status" value="{{results.0.status}}">
-                                                    <input type="text" id="pn" name="pn" class="form-control" required="required" data-parsley-required-message="Please enter part number of the product"
+                                                    <input type="text" id="pn" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product"
                                                     placeholder="Please enter part number of the product" value="{{results.0.pn}}">
                                                 </div>
                                             </div>
+
+                                            <div class="form-group">
+                                                <label>Managers</label>
+                                                <div>
+                                                    <select class="form-control managers" id="managers" name="managers" required="required">
+                                                        {{#each locations}}
+                                                            <option value="{{this.person}}" {{#if_eq this.person ../results.0.manager}}selected="selected"{{/if_eq}}>{{this.person}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label>Serial No#</label>
                                                 <div>
@@ -73,7 +85,11 @@
                                             <div class="form-group">
                                                 <label>Location</label>
                                                 <div>
-                                                    <input type="text" readonly="readonly" name="location" class="form-control location" value="{{results.0.street}} {{results.0.city}} {{results.0.sum}}">
+                                                    <select class="form-control location" id="location" name="location" required="required">
+                                                        {{#each locations}}
+                                                            <option value="{{this.sum}}" {{#if_eq this.sum ../results.0.location}}selected="selected"{{/if_eq}}>{{this.street}}, {{this.city}}, {{this.sum}}</option>
+                                                        {{/each}}
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">

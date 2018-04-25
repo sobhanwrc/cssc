@@ -17,7 +17,7 @@
                                             <div class="form-group">
                                                 <label>JMA PO</label>
                                                 <div>
-                                                    <input type="text" id="jmapo" name="jmapo" class="form-control" required="required" data-parsley-required-message="Please enter JMA PO" placeholder="Please enter JMA PO" value="{{results.0.jmapo}}">
+                                                    <input disabled="disabled" type="text" id="jmapo" name="jmapo" class="form-control pn" required="required" data-parsley-required-message="Please enter JMA PO" placeholder="Please enter JMA PO" value="{{results.0.jmapo}}">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -35,12 +35,6 @@
                                                     <input type="text" id="order_date" name="order_date" class="form-control datepicker" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="{{dateFormat results.0.ordered "MM-DD-YYYY"}}">
                                                 </div>
                                             </div>
-                                            <!-- <div class="form-group">
-                                                <label>Serial no</label>
-                                                <div>
-                                                    <input type="text" id="serial_no" name="serial_no" class="form-control" required="required" data-parsley-required-message="Please enter serial no" placeholder="Please enter serial no" value="{{results.0.serial}}">
-                                                </div>
-                                            </div> -->
                                             <div class="form-group">
                                                 <label>Quantity</label>
                                                 <div>
@@ -51,6 +45,13 @@
                                                 <label>Shipping Cost</label>
                                                 <div>
                                                     <input type="text" id="s_cost" name="s_cost" class="form-control" placeholder="Please enter shipping cost" value="{{results.0.shipping_cost}}">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Comment</label>
+                                                <div>
+                                                    <textarea id="comment" name="comment" class="form-control" data-parsley-required-message="Please enter Comment" placeholder="Please enter Comment">{{results.0.comment}}</textarea>
                                                 </div>
                                             </div>
                                         </div>

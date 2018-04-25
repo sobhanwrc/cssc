@@ -1100,7 +1100,13 @@ module.exports = function (app, connection) {
 	app.get('/warranties/edit/:id', function (req, res) {
 		sql = "SELECT * FROM warranties w, locations l WHERE w.location = l.sum AND w.id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			res.render('warranties/edit', { layout: 'dashboard', results: results, warr_id: req.params['id'] });
+			var mystr = results[0].po;
+			var substr = mystr.substr(0, 2);
+			var sql1 = "SELECT * FROM locations WHERE init LIKE '"+ substr +"%'";
+
+			connection.query(sql1, function (err1, res1) {
+				res.render('warranties/edit', { layout: 'dashboard', results: results, warr_id: req.params['id'], locations: res1 });
+			});
 		});
 	});
 
