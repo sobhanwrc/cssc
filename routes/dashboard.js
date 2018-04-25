@@ -1131,7 +1131,15 @@ module.exports = function (app, connection) {
 			}
 			req.flash('orderMessage', 'JMA order updated successfully');
 			if (req.body.curr_status == 4) {
-				res.redirect('/complete-jma-orders');
+				if(results){
+					if(req.body.completed == 1){
+						res.redirect('/complete-jma-orders');
+					}else{						
+						res.json({
+							success: 1
+						});
+					}
+				}
 			} else {
 				if (results) {
 					res.json({
@@ -1161,7 +1169,15 @@ module.exports = function (app, connection) {
 			}
 			req.flash('orderMessage', 'Order updated successfully');
 			if (req.body.curr_status == 4) {
-				res.redirect('/complete-orders');
+				if (results) {
+					if(req.body.completed == 1){
+						res.redirect('/complete-orders');
+					}else{						
+						res.json({
+							success: 1
+						});
+					}
+				}
 			} else {
 				if (results) {
 					res.json({
@@ -1224,7 +1240,15 @@ module.exports = function (app, connection) {
 			}
 			req.flash('orderMessage', 'Warranty updated successfully');
 			if (req.body.curr_status == 4) {
-				res.redirect('/complete-warranties');
+				if(results){
+					if(req.body.completed == 1){
+						res.redirect('/complete-warranties');
+					}else{						
+						res.json({
+							success: 1
+						});
+					}
+				}
 			} else {
 				if (results) {
 					res.json({
