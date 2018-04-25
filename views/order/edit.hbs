@@ -25,21 +25,31 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                                <label>Managers</label>
+                                                <div>
+                                                    <select class="form-control managers" id="managers" name="managers" required="required">
+                                                        {{#each locations}}
+                                                            <option value="{{this.person}}" {{#if_eq this.person ../results.0.manager}}selected="selected"{{/if_eq}}>{{this.person}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label>Order Date</label>
                                                 <div>
                                                     <input type="text" id="order_date" name="order_date" class="form-control datepicker" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="{{dateFormat results.0.ordered "MM-DD-YYYY"}}">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Quantity</label>
-                                                <div>
-                                                    <input type="text" id="qty" name="qty" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity"   data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="{{results.0.qty}}">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <label>Date Shipped</label>
                                                 <div>
                                                     <input type="text" id="ship_date" name="ship_date" class="form-control datepicker" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" {{#if (ne results.0.shipped null)}} value="{{dateFormat results.0.shipped "MM-DD-YYYY"}}" {{/if}}>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Comment</label>
+                                                <div>
+                                                    <textarea id="comment" name="comment" class="form-control" data-parsley-required-message="Please enter Comment" placeholder="Please enter Comment">{{results.0.comment}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -49,7 +59,18 @@
                                             <div class="form-group">
                                                 <label>Location</label>
                                                 <div>
-                                                    <input type="text" readonly="readonly" name="location" class="form-control location" value="{{results.0.street}} {{results.0.city}} {{results.0.sum}}">
+                                                    <!-- <input type="text" readonly="readonly" name="location" class="form-control location" value="{{results.0.street}} {{results.0.city}} {{results.0.sum}}"> -->
+                                                    <select class="form-control location" id="location" name="location" required="required">
+                                                        {{#each locations}}
+                                                            <option value="{{this.sum}}" {{#if_eq this.sum ../results.0.location}}selected="selected"{{/if_eq}}>{{this.street}}, {{this.city}}, {{this.sum}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quantity</label>
+                                                <div>
+                                                    <input type="text" id="qty" name="qty" class="form-control" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity"   data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="{{results.0.qty}}">
                                                 </div>
                                             </div>
                                             <div class="form-group">
