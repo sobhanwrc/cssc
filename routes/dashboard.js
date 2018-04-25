@@ -1032,7 +1032,12 @@ module.exports = function (app, connection) {
 	app.get('/orders/edit/:id', function (req, res) {
 		var sql = "SELECT * FROM orders o, locations l WHERE o.location = l.sum AND o.id = '" + req.params['id'] + "'";
 		connection.query(sql, function (err, results) {
-			res.render('order/edit', { layout: 'dashboard', results: results, order_id: req.params['id'] });
+			var mystr = results[0].po;
+			var substr = mystr.substr(0, 2);
+			var sql1 = "SELECT * FROM locations WHERE init LIKE '"+ substr +"%'";
+			connection.query(sql1, function (err1, res1) {
+				res.render('order/edit', { layout: 'dashboard', results: results, order_id: req.params['id'], locations: res1 });
+			});
 		});
 	});
 
