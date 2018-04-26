@@ -372,3 +372,24 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* amader css */
+.bootstrap-datetimepicker-widget table {
+    margin-bottom: 10px !important;
+}
+
+.bootstrap-datetimepicker-widget table {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.bootstrap-datetimepicker-widget table>tbody>tr>td,
+.bootstrap-datetimepicker-widget table>tbody>tr>th,
+.bootstrap-datetimepicker-widget table>tfoot>tr>td,
+.bootstrap-datetimepicker-widget table>tfoot>tr>th, 
+.bootstrap-datetimepicker-widget table>thead>tr>td,
+.bootstrap-datetimepicker-widget table>thead>tr>th {
+    padding: 8px !important;
+    line-height: 1.42857143 !important;
+    vertical-align: top !important;
+}
