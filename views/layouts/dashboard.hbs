@@ -146,16 +146,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
         <script type="text/javascript" src="/assets/js/bootstrap-datetimepicker.min.js"></script>
 
-        <script type="text/javascript">
-            /*$(function () {
-                $(document).on('focus', '.order_date', function() {
-                    $(this).datetimepicker({
-                        format: 'MM-DD-YYYY'
-                    });
-                });
-            });*/
-        </script>
-
         <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
 
         <script type="text/javascript">
@@ -164,20 +154,6 @@
         var warranty_arr = [];
         var editor;
         $(document).ready(function () {
-            /*var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    // document.getElementById("demo").innerHTML = this.responseText;
-                    console.log(JSON.parse(this.responseText));
-                    // $('.part_no').text("");
-                    $.each(JSON.parse(this.responseText), function (value, key) {
-                        $('.part_no').append($("<option></option>").attr("value", key.value).text(key.label));
-                    });
-                }
-            };
-            xhttp.open("GET", "/get-part_no", true);
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.send();*/
             $('form').parsley();
             $(".alert").fadeTo(2000, 500).slideUp(500, function () {
                 $(".alert").slideUp(500);
@@ -189,10 +165,6 @@
             $('#datatable').dataTable();
             /* Formatting function for row details - modify as you need */
 
-            /*$(".datepicker").datepicker({
-                autoclose: !0,
-                format: "mm-dd-yyyy"
-            });*/
             var date = new Date();
             date.setDate(date.getDate() + 10);
             var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
