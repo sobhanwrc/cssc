@@ -162,7 +162,11 @@
             $("#datatable-filter").dataTable();
             $("#datatable_1").dataTable();
             $(".others").dataTable();
-            $('#datatable').dataTable();
+            
+            $('#datatable').dataTable({
+                "aaSorting": []
+            });
+            
             $('.datepicker').datetimepicker({
                 format: "MM-DD-YYYY"
             });
@@ -1006,40 +1010,41 @@
                     }
                     output_arr += '<tr>'+
                         '<td>'+
-                            '<input type="text" id="pn_'+val['id']+'" data-row_id="'+val['id']+'" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
+                            '<input disabled type="text" id="pn_'+val['id']+'" data-row_id="'+val['id']+'" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="qty_'+val['id']+'" name="qty" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
+                            '<input disabled type="text" id="qty_'+val['id']+'" name="qty" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<select class="form-control location" id="location_'+val['id']+'" name="location" required="required">'+
+                            '<select disabled class="form-control location" id="location_'+val['id']+'" name="location" required="required">'+
                                 location_list+
                             '</select>'+
                         '</td>'+
                         '<td>'+
-                            '<select class="form-control managers" id="managers_'+val['id']+'" name="managers" required="required">'+
+                            '<select disabled class="form-control managers" id="managers_'+val['id']+'" name="managers" required="required">'+
                                 manager_list+
                             '</select>'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="order_date_'+val['id']+'" name="order_date" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
+                            '<input disabled type="text" id="order_date_'+val['id']+'" name="order_date" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="due_date_'+val['id']+'" name="due_date" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
+                            '<input disabled type="text" id="due_date_'+val['id']+'" name="due_date" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="ship_date_'+val['id']+'" name="ship_date" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value="'+getFormattedDate(val['shipped'])+'">'+
+                            '<input disabled type="text" id="ship_date_'+val['id']+'" name="ship_date" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value="'+getFormattedDate(val['shipped'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="f_bill_'+val['id']+'" name="f_bill" class="form-control f_bill"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
+                            '<input disabled type="text" id="f_bill_'+val['id']+'" name="f_bill" class="form-control f_bill"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="comment_'+val['id']+'" name="comment" class="form-control comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
+                            '<input disabled type="text" id="comment_'+val['id']+'" name="comment" class="form-control comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
                             '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
                             '<input type="hidden" name="order_po" class="order_po" value="'+order_po+'">'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_po" data-row_id="'+val['id']+'" data-status="'+val['status']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<input type="hidden" name="edit_from_listings" value="1">'+
+                            '<a title="Update" href="/orders/edit/'+val['id']+'" class="btn btn-primary btn-sm update_po" data-row_id="'+val['id']+'" data-status="'+val['status']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete" data-row_id="'+val['id']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
@@ -1089,39 +1094,39 @@
                     }
                     output_arr += '<tr>'+
                         '<td>'+
-                            '<input type="text" id="pn_'+val['id']+'" name="pn" class="form-control jma_pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
+                            '<input disabled type="text" id="pn_'+val['id']+'" name="pn" class="form-control jma_pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">' +
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="qty_'+val['id']+'" name="qty" class="form-control jma_qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
+                            '<input disabled type="text" id="qty_'+val['id']+'" name="qty" class="form-control jma_qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="location_'+val['id']+'" name="location" class="form-control jma_location" required="required" data-parsley-required-message="Please enter location" placeholder="Please enter location" value="'+val['location']+'">'+
+                            '<input disabled type="text" id="location_'+val['id']+'" name="location" class="form-control jma_location" required="required" data-parsley-required-message="Please enter location" placeholder="Please enter location" value="'+val['location']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="customer_'+val['id']+'" name="customer" class="form-control jma_customer" required="required" data-parsley-required-message="Please enter customer name" placeholder="Please enter customer name" value="'+val['customer']+'">'+
+                            '<input disabled type="text" id="customer_'+val['id']+'" name="customer" class="form-control jma_customer" required="required" data-parsley-required-message="Please enter customer name" placeholder="Please enter customer name" value="'+val['customer']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="order_date_'+val['id']+'" name="order_date" class="form-control jma_order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
+                            '<input disabled type="text" id="order_date_'+val['id']+'" name="order_date" class="form-control jma_order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="due_date_'+val['id']+'" name="due_date" class="form-control jma_due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
+                            '<input disabled type="text" id="due_date_'+val['id']+'" name="due_date" class="form-control jma_due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="s_cost_'+val['id']+'" name="s_cost" class="form-control jma_s_cost" placeholder="Please enter shipping cost" value="'+val['shipping_cost']+'">'+
+                            '<input disabled type="text" id="s_cost_'+val['id']+'" name="s_cost" class="form-control jma_s_cost" placeholder="Please enter shipping cost" value="'+val['shipping_cost']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="core_ret_date_'+val['id']+'" name="core_ret_date" class="form-control jma_core_ret_date" required="required" data-parsley-required-message="Please enter core return date" placeholder="Please enter core return date" value="'+getFormattedDate(val['core_returned'])+'">'+
+                            '<input disabled type="text" id="core_ret_date_'+val['id']+'" name="core_ret_date" class="form-control jma_core_ret_date" required="required" data-parsley-required-message="Please enter core return date" placeholder="Please enter core return date" value="'+getFormattedDate(val['core_returned'])+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="f_bill_'+val['id']+'" name="f_bill" class="form-control jma_f_bill"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
+                            '<input disabled type="text" id="f_bill_'+val['id']+'" name="f_bill" class="form-control jma_f_bill"  data-parsley-required-message="Please enter freight bill" placeholder="Please enter freight bill" value="'+val['freight_bill']+'">'+
                         '</td>'+
                         '<td>'+
-                            '<input type="text" id="comment_'+val['id']+'" name="comment" class="form-control jma_comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
+                            '<input disabled type="text" id="comment_'+val['id']+'" name="comment" class="form-control jma_comment"  data-parsley-required-message="Please enter comment" placeholder="Please enter comment" value="'+val['comment']+'">'+
                         '</td>'+
                         '<td>'+
                             '<input type="hidden" name="curr_status" class="curr_status" value="'+val['status']+'">'+
                             '<input type="hidden" name="order_po" class="order_po" value="'+jma_order_po+'">'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_jma_po" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="/jma-orders/edit/'+val['id']+'" class="btn btn-primary btn-sm" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_jma_po" data-row_id="'+val['id']+'" data-status="'+val['status']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</td>'+
@@ -1195,7 +1200,7 @@
                                         '<div class="form-group">'+
                                             '<label>Part Number</label>'+
                                             '<div>'+
-                                                '<input type="text" id="pn_'+val['id']+'" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">'+
+                                                '<input disabled type="text" id="pn_'+val['id']+'" name="pn" class="form-control pn" required="required" data-parsley-required-message="Please enter part number of the product" placeholder="Please enter part number of the product" value="'+val['pn']+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1203,7 +1208,7 @@
                                         '<div class="form-group">'+
                                             '<label>Location</label>'+
                                             '<div>'+
-                                                '<select class="form-control location" name="location" id="location_'+val['id']+'" required="required" style="width: 95%">'+
+                                                '<select disabled class="form-control location" name="location" id="location_'+val['id']+'" required="required" style="width: 95%">'+
                                                     location_list+
                                                 '</select>'+
                                             '</div>'+
@@ -1213,7 +1218,7 @@
                                         '<div class="form-group">'+
                                             '<label>Managers</label>'+
                                             '<div>'+
-                                                '<select class="form-control managers" name="managers" id="managers_'+val['id']+'" required="required" style="width: 95%">'+
+                                                '<select disabled class="form-control managers" name="managers" id="managers_'+val['id']+'" required="required" style="width: 95%">'+
                                                     manager_list+
                                                 '</select>'+
                                             '</div>'+
@@ -1223,7 +1228,7 @@
                                         '<div class="form-group">'+
                                             '<label>Serial No#</label>'+
                                             '<div>'+
-                                                '<input type="text" id="serial_no_'+val['id']+'" name="serial_no" class="form-control serial_no"  placeholder="Please enter serial no of the product" value="'+val['serial_no']+'">'+
+                                                '<input disabled type="text" id="serial_no_'+val['id']+'" name="serial_no" class="form-control serial_no"  placeholder="Please enter serial no of the product" value="'+val['serial_no']+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1231,7 +1236,7 @@
                                         '<div class="form-group">'+
                                             '<label>Freight Bill#</label>'+
                                             '<div>'+
-                                                '<input type="text" id="f_bill_'+val['id']+'" name="f_bill" class="form-control f_bill" placeholder="Please enter freight bill of the product" value="'+val['freight_bill']+'">'+
+                                                '<input disabled type="text" id="f_bill_'+val['id']+'" name="f_bill" class="form-control f_bill" placeholder="Please enter freight bill of the product" value="'+val['freight_bill']+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1239,7 +1244,7 @@
                                         '<div class="form-group">'+
                                             '<label>Order Date</label>'+
                                             '<div>'+
-                                                '<input type="text" id="order_date_'+val['id']+'" name="order_date" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
+                                                '<input disabled type="text" id="order_date_'+val['id']+'" name="order_date" class="form-control order_date" required="required" data-parsley-required-message="Please enter order date" placeholder="Please enter order date" value="'+getFormattedDate(val['ordered'])+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1247,7 +1252,7 @@
                                         '<div class="form-group">'+
                                             '<label>Due Date</label>'+
                                             '<div>'+
-                                                '<input type="text" id="due_date_'+val['id']+'" name="due_date" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
+                                                '<input disabled type="text" id="due_date_'+val['id']+'" name="due_date" class="form-control due_date" required="required" data-parsley-required-message="Please enter due date" placeholder="Please enter due date" value="'+getFormattedDate(val['due'])+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1255,7 +1260,7 @@
                                         '<div class="form-group">'+
                                             '<label>Qty</label>'+
                                             '<div>'+
-                                                '<input type="text" id="qty_'+val['id']+'" name="qty" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
+                                                '<input disabled type="text" id="qty_'+val['id']+'" name="qty" class="form-control qty" minlength="1" maxlength="10" required="required" data-parsley-required-message="Please enter quantity" data-parsley-type="number" data-parsley-type-message="Must be number" data-parsley-minlength="1" data-parsley-maxlength="10" placeholder="Please enter quantity" value="'+val['qty']+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1263,7 +1268,7 @@
                                         '<div class="form-group">'+
                                             '<label>Date Shipped</label>'+
                                             '<div>'+
-                                                '<input type="text" id="ship_date_'+val['id']+'" name="ship_date" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value="'+getFormattedDate(val['shipped'])+'">'+
+                                                '<input disabled type="text" id="ship_date_'+val['id']+'" name="ship_date" class="form-control ship_date" required="required" data-parsley-required-message="Please enter ship date" placeholder="Please enter ship date" value="'+getFormattedDate(val['shipped'])+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1271,7 +1276,7 @@
                                         '<div class="form-group">'+
                                             '<label>Date Returned</label>'+
                                             '<div>'+
-                                                '<input type="text" id="ret_date_'+val['id']+'" name="ret_date" class="form-control ret_date" required="required" data-parsley-required-message="Please enter date returned" placeholder="Please enter date returned" value="'+getFormattedDate(val['returned'])+'">'+
+                                                '<input disabled type="text" id="ret_date_'+val['id']+'" name="ret_date" class="form-control ret_date" required="required" data-parsley-required-message="Please enter date returned" placeholder="Please enter date returned" value="'+getFormattedDate(val['returned'])+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1279,7 +1284,7 @@
                                         '<div class="form-group">'+
                                             '<label>Date Reported</label>'+
                                             '<div>'+
-                                                '<input type="text" id="rep_date_'+val['id']+'" name="rep_date" class="form-control rep_date" required="required" data-parsley-required-message="Please enter date reported" placeholder="Please enter date reported" value="'+getFormattedDate(val['reported'])+'">'+
+                                                '<input disabled type="text" id="rep_date_'+val['id']+'" name="rep_date" class="form-control rep_date" required="required" data-parsley-required-message="Please enter date reported" placeholder="Please enter date reported" value="'+getFormattedDate(val['reported'])+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1287,7 +1292,7 @@
                                         '<div class="form-group">'+
                                             '<label>Date Ready</label>'+
                                             '<div>'+
-                                                '<input type="text" id="ready_date_'+val['id']+'" name="ready_date" class="form-control ready_date" required="required" data-parsley-required-message="Please enter date ready" placeholder="Please enter date ready" value="'+getFormattedDate(val['ready'])+'">'+
+                                                '<input disabled type="text" id="ready_date_'+val['id']+'" name="ready_date" class="form-control ready_date" required="required" data-parsley-required-message="Please enter date ready" placeholder="Please enter date ready" value="'+getFormattedDate(val['ready'])+'">'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1295,7 +1300,7 @@
                                         '<div class="form-group">'+
                                             '<label>Comment</label>'+
                                             '<div>'+
-                                                '<textarea id="comment_'+val['id']+'" name="comment" class="form-control comment" data-parsley-required-message="Please enter comment" placeholder="Please enter comment">'+val['comment']+'</textarea>'+
+                                                '<textarea disabled id="comment_'+val['id']+'" name="comment" class="form-control comment" data-parsley-required-message="Please enter comment" placeholder="Please enter comment">'+val['comment']+'</textarea>'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1303,7 +1308,7 @@
                                         '<div class="form-group">'+
                                             '<label>Details</label>'+
                                             '<div>'+
-                                                '<textarea id="details_'+val['id']+'" name="details" class="form-control details" data-parsley-required-message="Please enter details" placeholder="Please enter details">'+val['itemcomment']+'</textarea>'+
+                                                '<textarea disabled id="details_'+val['id']+'" name="details" class="form-control details" data-parsley-required-message="Please enter details" placeholder="Please enter details">'+val['itemcomment']+'</textarea>'+
                                             '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -1311,7 +1316,7 @@
                                         '<div class="form-group">'+
                                             '<label>Status</label>'+
                                             '<div>'+
-                                                '<select class="form-control invoice_status" name="invoice_status" id="invoice_status_'+val['id']+'">'+
+                                                '<select disabled class="form-control invoice_status" name="invoice_status" id="invoice_status_'+val['id']+'">'+
                                                     '<option value="">Select One</option>'+
                                                     invoice_option+
                                                 '</select>'+
@@ -1324,7 +1329,7 @@
                             '</div>'+
                         '</div>'+
                         '<div class="warranty_form_right" style="width:7%;">'+
-                            '<a title="Update" href="javascript:void(0)" class="btn btn-primary btn-sm update_warr_po" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
+                            '<a title="Update" href="/warranties/edit/'+val['id']+'" class="btn btn-primary btn-sm" data-row_id="'+val['id']+'"><i class="fa fa-pencil" aria-hidden="true"></i></a>'+
                             complete +
                             '<a title="Delete" href="javascript:void(0)" class="btn btn-danger btn-sm delete_warr_po" data-row_id="'+val['id']+'" data-status="'+val['status']+'"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                         '</div>'+
