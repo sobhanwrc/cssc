@@ -1134,18 +1134,10 @@ module.exports = function (app, connection) {
 				if(results){
 					if(req.body.completed == 1){
 						res.redirect('/complete-jma-orders');
-					}else{						
-						res.json({
-							success: 1
-						});
 					}
 				}
 			} else {
-				if (results) {
-					res.json({
-						success: 1
-					});
-				}
+				res.redirect('/jma-orders');
 			}
 		});
 	});
@@ -1172,17 +1164,11 @@ module.exports = function (app, connection) {
 				if (results) {
 					if(req.body.completed == 1){
 						res.redirect('/complete-orders');
-					}else{						
-						res.json({
-							success: 1
-						});
 					}
 				}
 			} else {
 				if (results) {
-					res.json({
-						success: 1
-					});
+					res.redirect('/orders');
 				}
 			}
 		});
@@ -1243,18 +1229,10 @@ module.exports = function (app, connection) {
 				if(results){
 					if(req.body.completed == 1){
 						res.redirect('/complete-warranties');
-					}else{						
-						res.json({
-							success: 1
-						});
 					}
 				}
 			} else {
-				if (results) {
-					res.json({
-						success: 1
-					});
-				}
+				res.redirect('/warranties');
 			}
 		});
 	});
