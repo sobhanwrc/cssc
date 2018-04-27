@@ -163,11 +163,9 @@
             $("#datatable_1").dataTable();
             $(".others").dataTable();
             $('#datatable').dataTable();
-
             $('.datepicker').datetimepicker({
                 format: "MM-DD-YYYY"
             });
-
             var date = new Date();
             date.setDate(date.getDate() + 10);
             var dateMsg = (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear();
@@ -180,7 +178,6 @@
             $('.ready_date').val(current_date);
             $('.due_date').val(current_plus_seven_date);
             $('.core_ret_date').val(current_date);
-
             var count = 1;
             
             $(document).on("click", ".add", function (e) {
