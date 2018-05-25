@@ -22,7 +22,6 @@
                                                         <tr>
                                                             <td><strong>Purchase Order</strong></td>
                                                             <td><strong>Part No</strong></td>
-                                                            <td><strong>Code</strong></td>
                                                             <td><strong>Comp #</strong></td>
                                                             <td class="text-center"><strong>Ordered</strong></td>
                                                             <td class="text-center"><strong>Due Date</strong></td>
@@ -35,7 +34,6 @@
                                                         <tr>
                                                             <td>{{this.po}}</td>
                                                             <td>{{this.pn}}</td>
-                                                            <td>{{this.j}}</td>
                                                             <td>{{this.n_comp}}</td>
                                                             <td class="text-center">{{dateFormat this.ordered "MM-DD-YYYY"}}</td>
                                                             <td class="text-center">{{dateFormat this.due "MM-DD-YYYY"}}</td>
@@ -46,7 +44,6 @@
                                                     {{/each}}
                                                     <tr>
                                                         <td class="thick-line text-center"><strong>Total PO Quantity</strong></td>
-                                                        <td class="thick-line"></td>
                                                         <td class="thick-line"></td>
                                                         <td class="thick-line"></td>
                                                         <td class="thick-line"></td>

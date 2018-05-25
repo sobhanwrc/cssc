@@ -9,7 +9,8 @@ module.exports = function (app, connection) {
 
 	var async = require('async');
 	var dateFormat = require('dateformat');
-
+	var _ = require('lodash');
+	var dateFormat = require('dateformat');
 	app.get('/dashboard', function (req, res) {
 		var msg = req.flash('loginMessage')[0];
 		res.render('dashboard', { layout: 'dashboard', message: msg });
@@ -88,7 +89,8 @@ module.exports = function (app, connection) {
 
 	app.get('/orders', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		var sql = "SELECT po, count(id), sum(qty) as qty, status FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		//var sql = "SELECT po, count(id), sum(qty) as qty, status FROM orderview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		var sql = "SELECT po, count(id), sum(qty) as qty, status FROM orderview WHERE status != 4 GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -109,7 +111,8 @@ module.exports = function (app, connection) {
 
 	app.get('/warranties', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		var sql = "SELECT po, count(id), sum(qty) as qty, status FROM warrantyview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		//var sql = "SELECT po, count(id), sum(qty) as qty, status FROM warrantyview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
+		var sql = "SELECT po, count(id), sum(qty) as qty, status FROM warrantyview WHERE status != 4 GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
 				var msg = req.flash('orderMessage')[0];
@@ -1010,6 +1013,11 @@ module.exports = function (app, connection) {
 	app.get('/jma-orders/details/:po', function (req, res) {
 	  	var sql = "SELECT * FROM jma_orders WHERE po = '" + req.params['po'] + "'";
 	  	connection.query(sql, function (err, results) {
+			for(var i=0;i<results.length;i++) {
+				results[i].ordered = (results[i].ordered === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].ordered, "mm-dd-yyyy");
+				results[i].due = (results[i].due === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].due, "mm-dd-yyyy");
+				results[i].core_returned = (results[i].core_returned === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].core_returned, "mm-dd-yyyy");
+			}
 	   		sendJSON(res, 200, results);
 	  	});
  	});
@@ -1022,8 +1030,14 @@ module.exports = function (app, connection) {
 	});
 
 	app.get('/orders/details/:po', function (req, res) {
-	  	var sql = "SELECT l.*, o.* FROM orders as o, locations as l WHERE o.location = l.sum AND o.po = '" + req.params['po'] + "'";
+	  	var sql = "SELECT o.* FROM orders as o WHERE  o.po = '" + req.params['po'] + "'";
 	  	connection.query(sql, function (err, results) {
+			for(var i=0;i<results.length;i++) {
+				results[i].ordered = (results[i].ordered === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].ordered, "mm-dd-yyyy");
+				results[i].due = (results[i].due === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].due, "mm-dd-yyyy");
+				results[i].shipped = (results[i].shipped === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].shipped, "mm-dd-yyyy");
+			}
+			
    			sendJSON(res, 200, results);
 	  	});
  	});
@@ -1091,8 +1105,16 @@ module.exports = function (app, connection) {
 	});
 
 	app.get('/warranties/details/:po', function (req, res) {
-	  	var sql = "SELECT l.*, w.* FROM warranties as w, locations as l WHERE w.location = l.sum AND w.po = '" + req.params['po'] + "'";
+	  	var sql = "SELECT  w.* FROM warranties as w WHERE  w.po = '" + req.params['po'] + "'";
 	  	connection.query(sql, function (err, results) {
+			for(var i=0;i<results.length;i++) {
+				results[i].ordered = (results[i].ordered === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].ordered, "mm-dd-yyyy");
+				results[i].due = (results[i].due === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].due, "mm-dd-yyyy");
+				results[i].shipped = (results[i].shipped === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].shipped, "mm-dd-yyyy");
+				results[i].returned = (results[i].returned === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].returned, "mm-dd-yyyy");
+				results[i].reported = (results[i].reported === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].reported, "mm-dd-yyyy");
+				results[i].ready = (results[i].ready === '0000-00-00 00:00:00') ? '' : dateFormat(results[i].ready, "mm-dd-yyyy");
+			}
    			sendJSON(res, 200, results);
 	  	});
  	});
@@ -1132,12 +1154,18 @@ module.exports = function (app, connection) {
 			req.flash('orderMessage', 'JMA order updated successfully');
 			if (req.body.curr_status == 4) {
 				if(results){
-					if(req.body.completed == 1){
-						res.redirect('/complete-jma-orders');
-					}
+					res.json({
+						success: "1"
+					});
+					//if(req.body.completed == 1){
+						//res.redirect('/complete-jma-orders');
+					//}
 				}
 			} else {
-				res.redirect('/jma-orders');
+				res.json({
+					success: "1"
+				});
+				//res.redirect('/jma-orders');
 			}
 		});
 	});
@@ -1162,13 +1190,19 @@ module.exports = function (app, connection) {
 			req.flash('orderMessage', 'Order updated successfully');
 			if (req.body.curr_status == 4) {
 				if (results) {
-					if(req.body.completed == 1){
-						res.redirect('/complete-orders');
-					}
+					//if(req.body.completed == 1){
+						res.json({
+							success: "1"
+						});
+						//res.redirect('/complete-orders');
+					//}
 				}
 			} else {
 				if (results) {
-					res.redirect('/orders');
+					res.json({
+						success: "1"
+					});
+					//res.redirect('/orders');
 				}
 			}
 		});
@@ -1227,12 +1261,18 @@ module.exports = function (app, connection) {
 			req.flash('orderMessage', 'Warranty updated successfully');
 			if (req.body.curr_status == 4) {
 				if(results){
-					if(req.body.completed == 1){
-						res.redirect('/complete-warranties');
-					}
+					//if(req.body.completed == 1){
+						//res.redirect('/complete-warranties');
+					//}
+					res.json({
+						success: "1"
+					});
 				}
 			} else {
-				res.redirect('/warranties');
+				res.json({
+					success: "1"
+				});
+				//res.redirect('/warranties');
 			}
 		});
 	});
@@ -1366,7 +1406,7 @@ module.exports = function (app, connection) {
 			if (res1[0].count > 0) {
 				res.send("0");
 			} else {
-				var sql = "UPDATE orders SET invoice_no = '" + req.body.value + "' WHERE id = '" + req.body.id + "'";
+				var sql = "UPDATE orders SET invoice_no = '" + req.body.value + "' WHERE po = '" + req.body.id + "'";
 				connection.query(sql, function (err, result) {
 					if (!err) {
 						res.send("1");
@@ -1381,7 +1421,7 @@ module.exports = function (app, connection) {
 			if (res1[0].count > 0) {
 				res.send("0");
 			} else {
-				var sql = "UPDATE jma_orders SET invoice_no = '" + req.body.value + "' WHERE id = '" + req.body.id + "'";
+				var sql = "UPDATE jma_orders SET invoice_no = '" + req.body.value + "' WHERE po = '" + req.body.id + "'";
 				connection.query(sql, function (err, result) {
 					if (!err) {
 						res.send("1");
@@ -1396,7 +1436,7 @@ module.exports = function (app, connection) {
 			if (res1[0].count > 0) {
 				res.send("0");
 			} else {
-				var sql = "UPDATE warranties SET invoice_no = '" + req.body.value + "' WHERE id = '" + req.body.id + "'";
+				var sql = "UPDATE warranties SET invoice_no = '" + req.body.value + "' WHERE po = '" + req.body.id + "'";
 				connection.query(sql, function (err, result) {
 					if (!err) {
 						res.send("1");
