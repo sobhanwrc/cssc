@@ -47,6 +47,7 @@
                                     <thead>
                                         <tr>
                                             <th>Purchase Orders</th>
+                                            <th>Part Number</th>
                                             <th>No. of Parts</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -56,6 +57,7 @@
                                         {{#each orders}}
                                         <tr>
                                             <td>{{this.po}}</td>
+                                            <td>{{ get_po this.po ../total_pn }}</td>
                                             <td>{{this.qty}}</td>
                                             <td>
                                                 {{#if_eq this.status '1'}}

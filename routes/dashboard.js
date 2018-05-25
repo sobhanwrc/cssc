@@ -111,12 +111,14 @@ module.exports = function (app, connection) {
 
 	app.get('/warranties', function (req, res) {
 		var msg = req.flash('orderMessage')[0];
-		//var sql = "SELECT po, count(id), sum(qty) as qty, status FROM warrantyview WHERE status != 4 AND ordered >= DATE(NOW()) - INTERVAL 7 DAY GROUP BY `po` ORDER BY `id` DESC";
 		var sql = "SELECT po, count(id), sum(qty) as qty, status FROM warrantyview WHERE status != 4 GROUP BY `po` ORDER BY `id` DESC";
 		connection.query(sql, function (err, rows) {
+			
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
-				var msg = req.flash('orderMessage')[0];
-				res.render('warranties/index', { layout: 'dashboard', orders: rows, message: msg, part_nos: all_pn });
+				connection.query("SELECT pn, po FROM warrantyview" , function(err, total_pn) {
+					var msg = req.flash('orderMessage')[0];
+					res.render('warranties/index', { layout: 'dashboard', orders: rows, message: msg, part_nos: all_pn,  total_pn: total_pn});
+				});
 			});
 		});
 	});

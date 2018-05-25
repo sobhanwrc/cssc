@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var lodash = require('lodash');
 
 var exphbs = require('express-handlebars');
 
@@ -148,6 +149,9 @@ var hbs = exphbs.create({
       else {
         return "/admin/assets/img/pattern-cover.png";
       }
+    },
+    get_po: function(value, array) {
+      return lodash.filter(array, x => x.po === value).map(e => e.pn).join(',');
     }
   }
 });
