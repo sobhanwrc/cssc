@@ -418,7 +418,10 @@ module.exports = function (app, connection) {
 				sub_total += parseInt(rows[i].price);
 			}
 			connection.query("SELECT DISTINCT(pn) FROM products", function (err, all_pn) {
-				res.render('warranties/index', { layout: 'dashboard', orders: rows, start_date: req.body.start_date, end_date: req.body.end_date, part_no: req.body.part_no, sub_total: sub_total, part_nos: all_pn });
+				connection.query("SELECT pn, po FROM warrantyview" , function(err, total_pn) {
+					var msg = req.flash('orderMessage')[0];
+					res.render('warranties/index', { layout: 'dashboard', orders: rows, start_date: req.body.start_date, end_date: req.body.end_date, part_no: req.body.part_no, sub_total: sub_total, part_nos: all_pn, total_pn: total_pn });
+				});
 			});
 		});
    	});
